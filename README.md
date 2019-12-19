@@ -20,3 +20,10 @@ The following technologies should be installed on your system.
 ### Nexus
 
 ``mvn deploy``
+
+###TODO
+
+``API methods for creating applications
+  API methods for granting applications
+ ``
+
