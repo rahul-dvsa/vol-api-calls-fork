@@ -127,12 +127,9 @@ public class RegisterUser {
     private ValidatableResponse apiResponse;
 
     public void registerUser() {
-        setTitle(getTitle());
-        setForeName(getForeName());
-        setFamilyName(getFamilyName());
-        String registerResource = URL.build(env, "user/selfserve/register").toString();
         Headers.headers.put("api", "dvsa");
-        setLoginId(getLoginId());
+
+        String registerResource = URL.build(env, "user/selfserve/register").toString();
 
         PersonBuilder personBuilder = new PersonBuilder().withTitle(getTitle()).withForename(getForeName()).withFamilyName(getFamilyName()).withBirthDate(getBirthDate());
         ContactDetailsBuilder contactDetailsBuilder = new ContactDetailsBuilder().withEmailAddress(getEmailAddress()).withPerson(personBuilder);
