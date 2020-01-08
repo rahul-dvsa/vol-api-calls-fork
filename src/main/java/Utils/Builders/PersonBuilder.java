@@ -25,12 +25,10 @@ public class PersonBuilder {
     @JsonProperty("birthDate")
     private String birthDate;
 
-    @JsonProperty("id")
     public String getId() {
         return id;
     }
 
-    @JsonProperty("id")
     public void setId(String title) {
         this.id = id;
     }
@@ -40,12 +38,10 @@ public class PersonBuilder {
         return this;
     }
 
-    @JsonProperty("title")
     public String getTitle() {
         return title;
     }
 
-    @JsonProperty("title")
     public void setTitle(String title) {
         this.title = title;
     }
@@ -55,12 +51,10 @@ public class PersonBuilder {
         return this;
     }
 
-    @JsonProperty("forename")
     public String getForename() {
         return forename;
     }
 
-    @JsonProperty("forename")
     public void setForename(String forename) {
         this.forename = forename;
     }
@@ -70,12 +64,10 @@ public class PersonBuilder {
         return this;
     }
 
-    @JsonProperty("familyName")
     public String getFamilyName() {
         return familyName;
     }
 
-    @JsonProperty("familyName")
     public void setFamilyName(String familyName) {
         this.familyName = familyName;
     }
@@ -85,12 +77,10 @@ public class PersonBuilder {
         return this;
     }
 
-    @JsonProperty("birthDate")
     public String getBirthDate() {
         return birthDate;
     }
 
-    @JsonProperty("birthDate")
     public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
@@ -107,7 +97,7 @@ public class PersonBuilder {
         .append("title",  getTitle())
                 .append("forename",  getForename())
                 .append("familyName", getFamilyName())
-                .append("birthDat", getBirthDate())
+                .append("birthDate", getBirthDate())
                 .append("id", getId()).toString();
     }
 }

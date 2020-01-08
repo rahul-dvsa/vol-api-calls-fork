@@ -6,7 +6,6 @@ import Utils.Builders.SelfServeUserRegistrationDetailsBuilder;
 import activesupport.http.RestUtils;
 
 import activesupport.system.Properties;
-import enums.UserRoles;
 
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
@@ -146,27 +145,5 @@ public class RegisterUser {
         } else {
             userId = apiResponse.extract().jsonPath().getString("id.user");
         }
-    }
-
-    public ValidatableResponse getUserDetails(String userType, String userId, String header) {
-        String userDetailsResource;
-        Headers.headers.put("x-pid", header);
-
-        if (userType.equals(UserRoles.EXTERNAL.asString())) {
-            userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, this.userId)).toString();
-            apiResponse = RestUtils.get(userDetailsResource, getHeaders());
-            setPid(apiResponse.extract().jsonPath().getString("pid"));
-            setOrganisationId(apiResponse.extract().jsonPath().prettyPeek().getString("organisationUsers.organisation.id"));
-        } else if (userType.equals(UserRoles.INTERNAL.asString())) {
-            userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, userId)).toString();
-            apiResponse = RestUtils.get(userDetailsResource, getHeaders());
-        }
-
-        if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
-            LOGGER.info("ERROR CODE: ".concat(Integer.toString(apiResponse.extract().statusCode())));
-            LOGGER.info("RESPONSE MESSAGE: ".concat(apiResponse.extract().response().asString()));
-            throw new HTTPException(apiResponse.extract().statusCode());
-        }
-        return apiResponse;
     }
 }

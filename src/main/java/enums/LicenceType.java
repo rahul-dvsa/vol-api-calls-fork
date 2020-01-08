@@ -4,7 +4,7 @@ public enum LicenceType {
     RESTRICTED("ltyp_r"),
     STANDARD_NATIONAL("ltyp_sn"),
     STANDARD_INTERNATIONAL("ltyp_si"),
-    STANDARD_RESTRICTED("standard restricted");
+    STANDARD_RESTRICTED("ltyp_sr");
 
     private final String licenceTypes;
 

@@ -30,12 +30,10 @@ public class AddressBuilder {
     @JsonProperty("countryCode")
     private String countryCode;
 
-    @JsonProperty("version")
     public String getVersion() {
         return version;
     }
 
-    @JsonProperty("version")
     public void setVersion(String version) {
         this.version = version;
     }
@@ -45,7 +43,6 @@ public class AddressBuilder {
         return this;
     }
 
-    @JsonProperty("addressLine1")
     public String getAddressLine1() {
         return addressLine1;
     }

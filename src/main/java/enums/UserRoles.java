@@ -5,9 +5,7 @@ public enum UserRoles {
     INTERNAL_ADMIN("internal-admin"),
     INTERNAL_LIMITED_READ_ONLY("internal-limited-read-only"),
     INTERNAL_READ_ONLY("internal-read-only"),
-    INTERNAL_CASE_WORKER("internal-case-worker"),
-    INTERNAL("internal"),
-    EXTERNAL("selfserve");
+    INTERNAL_CASE_WORKER("internal-case-worker");
 
     private final String userRoles;
 
