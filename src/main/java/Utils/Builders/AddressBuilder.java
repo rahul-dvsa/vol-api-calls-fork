@@ -7,13 +7,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.platform.commons.util.ToStringBuilder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "version",
-        "addressLine1",
-        "addressLine2",
-        "town",
-        "postcode",
-        "countryCode"})
 
 public class AddressBuilder {
 
@@ -30,10 +23,12 @@ public class AddressBuilder {
     @JsonProperty("countryCode")
     private String countryCode;
 
+    @JsonProperty("version")
     public String getVersion() {
         return version;
     }
 
+    @JsonProperty("version")
     public void setVersion(String version) {
         this.version = version;
     }
@@ -43,11 +38,12 @@ public class AddressBuilder {
         return this;
     }
 
+    @JsonProperty("addressLine1")
     public String getAddressLine1() {
         return addressLine1;
     }
 
-
+    @JsonProperty("addressLine1")
     public void setAddressLine1(String addressLine1) {
         this.addressLine1 = addressLine1;
     }
@@ -57,10 +53,12 @@ public class AddressBuilder {
         return this;
     }
 
+    @JsonProperty("addressLine2")
     public String getAddressLine2() {
         return addressLine2;
     }
 
+    @JsonProperty("addressLine2")
     public void setAddressLine2(String addressLine2) {
         this.addressLine2 = addressLine2;
     }
@@ -70,10 +68,12 @@ public class AddressBuilder {
         return this;
     }
 
+    @JsonProperty("town")
     public String getTown() {
         return town;
     }
 
+    @JsonProperty("town")
     public void setTown(String town) {
         this.town = town;
     }
@@ -83,10 +83,12 @@ public class AddressBuilder {
         return this;
     }
 
+    @JsonProperty("postcode")
     public String getPostcode() {
         return postcode;
     }
 
+    @JsonProperty("postcode")
     public void setPostcode(String postcode) {
         this.postcode = postcode;
     }
@@ -96,10 +98,12 @@ public class AddressBuilder {
         return this;
     }
 
+    @JsonProperty("countryCode")
     public String getCountryCode() {
         return countryCode;
     }
 
+    @JsonProperty("countryCode")
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }

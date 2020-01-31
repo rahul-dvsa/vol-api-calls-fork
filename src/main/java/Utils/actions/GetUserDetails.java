@@ -1,8 +1,8 @@
-package Utils;
+package Utils.actions;
 
+import Utils.generic.Headers;
 import activesupport.http.RestUtils;
 import activesupport.system.Properties;
-import enums.UserRoles;
 import enums.UserType;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
@@ -13,7 +13,7 @@ import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
 import javax.xml.ws.http.HTTPException;
 
-import static Utils.Headers.getHeaders;
+import static Utils.generic.Headers.getHeaders;
 
 public class GetUserDetails {
 
@@ -54,7 +54,7 @@ public class GetUserDetails {
 
     public ValidatableResponse getUserDetails(String userType, String userId, String header) {
         String userDetailsResource;
-        Headers.headers.put("x-pid", header);
+        Headers.getHeaders().put("x-pid", header);
 
         if (userType.equals(UserType.EXTERNAL.asString())) {
             userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, this.userId)).toString();

@@ -1,8 +1,9 @@
-package Utils;
+package Utils.actions;
 
 import Utils.Builders.ContactDetailsBuilder;
 import Utils.Builders.PersonBuilder;
 import Utils.Builders.SelfServeUserRegistrationDetailsBuilder;
+import Utils.generic.Headers;
 import activesupport.http.RestUtils;
 
 import activesupport.system.Properties;
@@ -15,7 +16,7 @@ import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
 import javax.xml.ws.http.HTTPException;
 
-import static Utils.Headers.getHeaders;
+import static Utils.generic.Headers.getHeaders;
 
 public class RegisterUser {
 
@@ -126,7 +127,7 @@ public class RegisterUser {
     private ValidatableResponse apiResponse;
 
     public void registerUser() {
-        Headers.headers.put("api", "dvsa");
+        Headers.getHeaders().put("api", "dvsa");
 
         String registerResource = URL.build(env, "user/selfserve/register").toString();
 

@@ -2,17 +2,11 @@ package Utils.Builders;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "loginId",
-        "contactDetails",
-        "organisationName",
-        "businessType"
-})
+
 public class SelfServeUserRegistrationDetailsBuilder {
 
     @JsonProperty("loginId")
@@ -24,10 +18,12 @@ public class SelfServeUserRegistrationDetailsBuilder {
     @JsonProperty("businessType")
     private String businessType;
 
+    @JsonProperty("loginId")
     public String getLoginId() {
         return loginId;
     }
 
+    @JsonProperty("loginId")
     public void setLoginId(String loginId) {
         this.loginId = loginId;
     }
@@ -37,10 +33,12 @@ public class SelfServeUserRegistrationDetailsBuilder {
         return this;
     }
 
+    @JsonProperty("contactDetails")
     public ContactDetailsBuilder getContactDetailsBuilder() {
         return contactDetailsBuilder;
     }
 
+    @JsonProperty("contactDetails")
     public void setContactDetailsBuilder(ContactDetailsBuilder contactDetailsBuilder) {
         this.contactDetailsBuilder = contactDetailsBuilder;
     }
@@ -50,10 +48,12 @@ public class SelfServeUserRegistrationDetailsBuilder {
         return this;
     }
 
+    @JsonProperty("organisationName")
     public String getOrganisationName() {
         return organisationName;
     }
 
+    @JsonProperty("organisationName")
     public void setOrganisationName(String organisationName) {
         this.organisationName = organisationName;
     }
@@ -63,10 +63,12 @@ public class SelfServeUserRegistrationDetailsBuilder {
         return this;
     }
 
+    @JsonProperty("businessType")
     public String getBusinessType() {
         return businessType;
     }
 
+    @JsonProperty("businessType")
     public void setBusinessType(String businessType) {
         this.businessType = businessType;
     }

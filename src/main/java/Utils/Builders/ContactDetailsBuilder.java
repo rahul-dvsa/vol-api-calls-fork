@@ -7,13 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "emailAddress",
-        "person",
-        "fao",
-        "phone_primary",
-        "address"
-})
+
 public class ContactDetailsBuilder {
 
     @JsonProperty("email")
@@ -42,10 +36,12 @@ public class ContactDetailsBuilder {
         return this;
     }
 
+    @JsonProperty("emailAddress")
     public String getEmailAddress() {
         return emailAddress;
     }
 
+    @JsonProperty("emailAddress")
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
@@ -55,10 +51,12 @@ public class ContactDetailsBuilder {
         return this;
     }
 
+    @JsonProperty("person")
     public PersonBuilder getPersonBuilder() {
         return personBuilder;
     }
 
+    @JsonProperty("person")
     public void setPersonBuilder(PersonBuilder personBuilder) {
         this.personBuilder = personBuilder;
     }
@@ -68,10 +66,12 @@ public class ContactDetailsBuilder {
         return this;
     }
 
+    @JsonProperty("fao")
     public String getFao() {
         return fao;
     }
 
+    @JsonProperty("fao")
     public void setFao(String fao) {
         this.fao = fao;
     }
@@ -81,10 +81,12 @@ public class ContactDetailsBuilder {
         return this;
     }
 
+    @JsonProperty("address")
     public AddressBuilder getAddress() {
         return address;
     }
 
+    @JsonProperty("address")
     public void setAddress(AddressBuilder address) {
         this.address = address;
     }

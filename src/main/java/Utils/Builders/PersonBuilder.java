@@ -2,17 +2,11 @@ package Utils.Builders;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "title",
-        "forename",
-        "familyName",
-        "birthDate"
-})
+
 public class PersonBuilder {
     @JsonProperty("id")
     private String id;
@@ -25,10 +19,12 @@ public class PersonBuilder {
     @JsonProperty("birthDate")
     private String birthDate;
 
+    @JsonProperty("id")
     public String getId() {
         return id;
     }
 
+    @JsonProperty("id")
     public void setId(String title) {
         this.id = id;
     }
@@ -38,10 +34,12 @@ public class PersonBuilder {
         return this;
     }
 
+    @JsonProperty("title")
     public String getTitle() {
         return title;
     }
 
+    @JsonProperty("title")
     public void setTitle(String title) {
         this.title = title;
     }
@@ -51,10 +49,12 @@ public class PersonBuilder {
         return this;
     }
 
+    @JsonProperty("forename")
     public String getForename() {
         return forename;
     }
 
+    @JsonProperty("forename")
     public void setForename(String forename) {
         this.forename = forename;
     }
@@ -64,10 +64,12 @@ public class PersonBuilder {
         return this;
     }
 
+    @JsonProperty("familyName")
     public String getFamilyName() {
         return familyName;
     }
 
+    @JsonProperty("familyName")
     public void setFamilyName(String familyName) {
         this.familyName = familyName;
     }
@@ -77,10 +79,12 @@ public class PersonBuilder {
         return this;
     }
 
+    @JsonProperty("birthDate")
     public String getBirthDate() {
         return birthDate;
     }
 
+    @JsonProperty("birthDate")
     public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }

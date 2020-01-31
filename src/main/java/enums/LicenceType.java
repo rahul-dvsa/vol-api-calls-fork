@@ -1,6 +1,7 @@
 package enums;
 
 public enum LicenceType {
+
     RESTRICTED("ltyp_r"),
     STANDARD_NATIONAL("ltyp_sn"),
     STANDARD_INTERNATIONAL("ltyp_si"),

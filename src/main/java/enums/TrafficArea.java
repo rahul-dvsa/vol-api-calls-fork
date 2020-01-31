@@ -1,6 +1,7 @@
 package enums;
 
 public enum TrafficArea {
+
     NORTH_EAST("B"),
     NORTH_WEST("C"),
     MIDLANDS("D"),
