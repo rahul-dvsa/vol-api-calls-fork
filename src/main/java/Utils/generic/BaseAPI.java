@@ -24,7 +24,7 @@ public class BaseAPI {
         return retrieveAPIData(url, jsonPath, defaultReturn);
     }
 
-    protected String fetchTMApplicationInformation(String applicationNumber, String jsonPath, String defaultReturn) {
+    public String fetchTMApplicationInformation(String applicationNumber, String jsonPath, String defaultReturn) {
         String url = URL.build(env, String.format("transport-manager-application/%s", applicationNumber)).toString();
         return retrieveAPIData(url, jsonPath, defaultReturn);
     }
