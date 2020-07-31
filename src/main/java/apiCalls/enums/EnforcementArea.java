@@ -15,7 +15,7 @@ public enum EnforcementArea {
     private final String trafficAreas;
 
     private EnforcementArea(String trafficAreas) {
-        this.trafficAreas = trafficAreas;
+        this.trafficAreas = trafficAreas.toUpperCase();
     }
 
     public String asString() {

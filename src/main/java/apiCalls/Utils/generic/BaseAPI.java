@@ -36,8 +36,8 @@ public class BaseAPI {
 
     public static String retrieveAPIData(String url, String jsonPath, String defaultReturn) {
         Headers headers = new Headers();
-        Headers.headers.put("x-pid", headers.getAPI_HEADER());
-        ValidatableResponse response = RestUtils.get(url, Headers.getHeaders());
+        headers.headers.put("x-pid", headers.getAPI_HEADER());
+        ValidatableResponse response = RestUtils.get(url, headers.getHeaders());
         try {
             return response.extract().response().jsonPath().getString(jsonPath);
         } catch (NullPointerException ne) {

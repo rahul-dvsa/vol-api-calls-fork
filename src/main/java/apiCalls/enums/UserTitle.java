@@ -13,6 +13,6 @@ public enum UserTitle {
     }
 
     public String asString() {
-        return userTitles;
+        return this.userTitles;
     }
 }

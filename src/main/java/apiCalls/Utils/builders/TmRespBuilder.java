@@ -40,19 +40,19 @@ public class TmRespBuilder {
     @JsonProperty("isOwner")
     private String isOwner;
     @JsonProperty("hoursMon")
-    private String hoursMon;
+    private double hoursMon;
     @JsonProperty("hoursTue")
-    private String hoursTue;
+    private double hoursTue;
     @JsonProperty("hoursWed")
-    private String hoursWed;
+    private double hoursWed;
     @JsonProperty("hoursThu")
-    private String hoursThu;
+    private double hoursThu;
     @JsonProperty("hoursFri")
-    private String hoursFri;
+    private double hoursFri;
     @JsonProperty("hoursSat")
-    private String hoursSat;
+    private double hoursSat;
     @JsonProperty("hoursSun")
-    private String hoursSun;
+    private double hoursSun;
     @JsonProperty("additionalInfo")
     private String additionalInfo;
     @JsonProperty("dob")
@@ -125,72 +125,72 @@ public class TmRespBuilder {
     }
 
     @JsonProperty("hoursMon")
-    public String getHoursMon() {
+    public double getHoursMon() {
         return hoursMon;
     }
 
     @JsonProperty("hoursMon")
-    public void setHoursMon(String hoursMon) {
+    public void setHoursMon(double hoursMon) {
         this.hoursMon = hoursMon;
     }
 
     @JsonProperty("hoursTue")
-    public String getHoursTue() {
+    public double getHoursTue() {
         return hoursTue;
     }
 
     @JsonProperty("hoursTue")
-    public void setHoursTue(String hoursTue) {
+    public void setHoursTue(double hoursTue) {
         this.hoursTue = hoursTue;
     }
 
     @JsonProperty("hoursWed")
-    public String getHoursWed() {
+    public double getHoursWed() {
         return hoursWed;
     }
 
     @JsonProperty("hoursWed")
-    public void sethoursWed(String hoursWed) {
+    public void sethoursWed(double hoursWed) {
         this.hoursWed = hoursWed;
     }
 
     @JsonProperty("hoursThu")
-    public String getHoursThu() {
+    public double getHoursThu() {
         return hoursThu;
     }
 
     @JsonProperty("hoursThu")
-    public void setHoursThu(String hoursThu) {
+    public void setHoursThu(double hoursThu) {
         this.hoursThu = hoursThu;
     }
 
     @JsonProperty("hoursFri")
-    public String getHoursFri() {
+    public double getHoursFri() {
         return hoursFri;
     }
 
     @JsonProperty("hoursFri")
-    public void setHoursFri(String hoursFri) {
+    public void setHoursFri(double hoursFri) {
         this.hoursFri = hoursFri;
     }
 
     @JsonProperty("hoursSat")
-    public String getHoursSat() {
+    public double getHoursSat() {
         return hoursSat;
     }
 
     @JsonProperty("hoursSat")
-    public void setHoursSat(String hoursSat) {
+    public void setHoursSat(double hoursSat) {
         this.hoursSat = hoursSat;
     }
 
     @JsonProperty("hoursSun")
-    public String getHoursSun() {
+    public double getHoursSun() {
         return hoursSun;
     }
 
     @JsonProperty("hoursSun")
-    public void setHoursSun(String hoursSun) {
+    public void setHoursSun(double hoursSun) {
         this.hoursSun = hoursSun;
     }
 
@@ -267,26 +267,26 @@ public class TmRespBuilder {
     public TmRespBuilder withIsOwner(String isOwner) {
         this.isOwner = isOwner;
         return this;
-    } public TmRespBuilder withHoursMon(String hoursMon) {
+    } public TmRespBuilder withHoursMon(double hoursMon) {
         this.hoursMon = hoursMon;
         return this;
-    } public TmRespBuilder withHoursTue(String hoursTue) {
+    } public TmRespBuilder withHoursTue(double hoursTue) {
         this.hoursTue = hoursTue;
         return this;
-    } public TmRespBuilder withHoursWed(String hoursWed) {
+    } public TmRespBuilder withHoursWed(double hoursWed) {
         this.hoursWed = hoursWed;
         return this;
 
-    } public TmRespBuilder withHoursThu(String hoursThu) {
+    } public TmRespBuilder withHoursThu(double hoursThu) {
         this.hoursThu = hoursThu;
         return this;
-    } public TmRespBuilder withHoursFri(String hoursFri) {
+    } public TmRespBuilder withHoursFri(double hoursFri) {
         this.hoursFri = hoursFri;
         return this;
-    } public TmRespBuilder withHoursSat(String hoursSat) {
+    } public TmRespBuilder withHoursSat(double hoursSat) {
         this.hoursSat = hoursSat;
         return this;
-    } public TmRespBuilder withHoursSun(String hoursSun) {
+    } public TmRespBuilder withHoursSun(double hoursSun) {
         this.hoursSun = hoursSun;
         return this;
     }

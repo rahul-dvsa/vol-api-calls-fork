@@ -14,9 +14,9 @@ import org.apache.logging.log4j.*;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
+
 import javax.xml.ws.http.HTTPException;
 
-import static apiCalls.Utils.generic.Headers.getHeaders;
 
 public class RegisterUser {
 
@@ -126,10 +126,11 @@ public class RegisterUser {
 
     private ValidatableResponse apiResponse;
 
-    public void registerUser() {
-        Headers.getHeaders().put("api", "dvsa");
+    private Headers apiHeaders = new Headers();
 
+    public ValidatableResponse registerUser() {
         String registerResource = URL.build(env, "user/selfserve/register").toString();
+        apiHeaders.getHeaders().put("api", "dvsa");
 
         PersonBuilder personBuilder = new PersonBuilder().withTitle(getTitle()).withForename(getForeName()).withFamilyName(getFamilyName()).withBirthDate(getBirthDate());
         ContactDetailsBuilder contactDetailsBuilder = new ContactDetailsBuilder().withEmailAddress(getEmailAddress()).withPerson(personBuilder);
@@ -137,7 +138,7 @@ public class RegisterUser {
         SelfServeUserRegistrationDetailsBuilder selfServeUserRegistrationDetailsBuilder = new SelfServeUserRegistrationDetailsBuilder().withLoginId(getLoginId()).withContactDetails(contactDetailsBuilder)
                 .withOrganisationName(getOrganisationName()).withBusinessType(getBusinessType());
 
-        apiResponse = RestUtils.post(selfServeUserRegistrationDetailsBuilder, registerResource, getHeaders());
+        apiResponse = RestUtils.post(selfServeUserRegistrationDetailsBuilder, registerResource, apiHeaders.getHeaders());
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {
             LOGGER.info("ERROR CODE: ".concat(Integer.toString(apiResponse.extract().statusCode())));
@@ -146,5 +147,6 @@ public class RegisterUser {
         } else {
             userId = apiResponse.extract().jsonPath().getString("id.user");
         }
+        return apiResponse;
     }
 }

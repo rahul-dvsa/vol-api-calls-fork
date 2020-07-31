@@ -4,6 +4,7 @@ import activesupport.http.RestUtils;
 import activesupport.system.Properties;
 
 
+import apiCalls.Utils.generic.Headers;
 import apiCalls.enums.UserType;
 import io.restassured.response.ValidatableResponse;
 
@@ -13,10 +14,8 @@ import org.apache.logging.log4j.Logger;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
+
 import javax.xml.ws.http.HTTPException;
-
-import static apiCalls.Utils.generic.Headers.getHeaders;
-
 
 public class GetUserDetails {
 
@@ -54,19 +53,20 @@ public class GetUserDetails {
     private EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
 
     private ValidatableResponse apiResponse;
+    private Headers apiHeaders = new Headers();
 
     public ValidatableResponse getUserDetails(String userType, String userId, String header) {
         String userDetailsResource;
-        getHeaders().put("x-pid", header);
+        apiHeaders.getHeaders().put("x-pid", header);
 
         if (userType.equals(UserType.EXTERNAL.asString())) {
-            userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, this.userId)).toString();
-            apiResponse = RestUtils.get(userDetailsResource, getHeaders());
+            userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, userId)).toString();
+            apiResponse = RestUtils.get(userDetailsResource, apiHeaders.getHeaders());
             setPid(apiResponse.extract().jsonPath().getString("pid"));
             setOrganisationId(apiResponse.extract().jsonPath().prettyPeek().getString("organisationUsers.organisation.id"));
         } else if (userType.equals(UserType.INTERNAL.asString())) {
             userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, userId)).toString();
-            apiResponse = RestUtils.get(userDetailsResource, getHeaders());
+            apiResponse = RestUtils.get(userDetailsResource, apiHeaders.getHeaders());
         }
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
