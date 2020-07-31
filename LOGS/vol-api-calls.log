@@ -1,8 +1,0 @@
-INFO  | 2020-06-24 14:21:53 | [main] actions.RegisterUser (RegisterUser.java:143) - ERROR CODE: 400
-INFO  | 2020-06-24 14:21:53 | [main] actions.RegisterUser (RegisterUser.java:144) - RESPONSE MESSAGE: {"messages":["User must be linked to an organisation"]}
-INFO  | 2020-06-24 14:23:45 | [main] actions.RegisterUser (RegisterUser.java:143) - ERROR CODE: 400
-INFO  | 2020-06-24 14:23:45 | [main] actions.RegisterUser (RegisterUser.java:144) - RESPONSE MESSAGE: {"messages":["User must be linked to an organisation"]}
-INFO  | 2020-06-24 14:25:31 | [main] actions.RegisterUser (RegisterUser.java:143) - ERROR CODE: 500
-INFO  | 2020-06-24 14:25:31 | [main] actions.RegisterUser (RegisterUser.java:144) - RESPONSE MESSAGE: {"messages":["Read timed out after 10 seconds"]}
-INFO  | 2020-07-20 17:44:28 | [main] actions.RegisterUser (RegisterUser.java:143) - ERROR CODE: 500
-INFO  | 2020-07-20 17:44:28 | [main] actions.RegisterUser (RegisterUser.java:144) - RESPONSE MESSAGE: {"messages":["Invalid response from OpenAm service: fb\r\n{\u0022code\u0022:412,\u0022reason\u0022:\u0022Precondition Failed\u0022,\u0022message\u0022:\u0022Entry Already Exists: The entry uid=9f542590100424c92a6ae40860f7017ac5dfbcff3cb49b36eace29b068e0d8e1,ou=people,o=olcs,dc=dvla,dc=gov cannot be added because an entry with that name already exists\u0022}\r\n0\r\n\r\n"]}
