@@ -2,15 +2,15 @@ package apiCalls.enums;
 
 public enum TrafficAreaPostCodes {
 
-    NORTH_EAST("BD162UA"),
-    NORTH_WEST("M446TL"),
-    MIDLANDS("B440TA"),
-    EAST("IP138ES"),
-    WALES("CF116EE"),
-    WEST("OX11BY"),
-    LONDON("E72EW"),
-    SCOTLAND("EH139DY"),
-    NORTHERN_IRELAND("BT28HQ");
+    NORTH_EAST("BD"),
+    NORTH_WEST("M"),
+    MIDLANDS("B"),
+    EAST("IP"),
+    WALES("CF"),
+    WEST("OX"),
+    LONDON("E"),
+    SCOTLAND("EH"),
+    NORTHERN_IRELAND("BT");
 
     private final String trafficAreas;
 
