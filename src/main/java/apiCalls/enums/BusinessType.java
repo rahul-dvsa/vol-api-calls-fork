@@ -1,7 +1,6 @@
 package apiCalls.enums;
 
 public enum BusinessType {
-
     LIMITED_COMPANY("org_t_rc"),
     SOLE_TRADER("org_t_st"),
     PARTNERSHIP("org_t_p"),

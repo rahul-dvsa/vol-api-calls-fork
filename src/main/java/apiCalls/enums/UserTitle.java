@@ -1,7 +1,6 @@
 package apiCalls.enums;
 
 public enum UserTitle {
-
     MR("title_mr"),
     MRS("title_mrs"),
     MS("title_ms");

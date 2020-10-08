@@ -1,7 +1,6 @@
 package apiCalls.enums;
 
 public enum OperatorType {
-
     GOODS("lcat_gv"),
     PUBLIC("lcat_psv");
 

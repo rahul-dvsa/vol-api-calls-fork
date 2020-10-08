@@ -5,7 +5,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import java.util.Random;
 
 public enum TrafficArea {
-
     NORTH_EAST("B"),
     NORTH_WEST("C"),
     MIDLANDS("D"),
@@ -27,30 +26,40 @@ public enum TrafficArea {
     }
 
     Random random = new Random();
+
     public String getPostCode() {
-        var result = switch (trafficAreas) {
+        switch (trafficAreas) {
             case "B" :
-                yield "BD".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
+                 "BD".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
+                 break;
             case "C":
-                yield "M".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
+                 "M".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
+                break;
             case "D":
-                yield "B".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
+                "B".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
+                break;
             case "F":
-                yield "IP".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
+                "IP".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
+                break;
             case "G":
-                yield "CF".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
+               "CF".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
+                break;
             case "H":
-                yield "OX".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
+                "OX".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
+                break;
             case "K":
-                yield "E".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
+                "E".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
+                break;
             case "M":
-                yield  "EH".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
+                 "EH".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
+                break;
             case "N":
-                yield "BT".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
+                "BT".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + trafficAreas);
         };
-        return result;
+        return getPostCode();
     }
 
     public String randomString() {

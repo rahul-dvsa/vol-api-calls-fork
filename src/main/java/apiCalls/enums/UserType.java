@@ -1,7 +1,6 @@
 package apiCalls.enums;
 
 public enum UserType {
-
     INTERNAL("internal"),
     EXTERNAL("selfserve");
 

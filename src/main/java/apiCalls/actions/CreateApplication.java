@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
-
 import javax.xml.ws.http.HTTPException;
 
 public class CreateApplication extends BaseAPI {

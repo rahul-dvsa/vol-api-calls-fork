@@ -3,7 +3,6 @@ package apiCalls.actions;
 import activesupport.http.RestUtils;
 import activesupport.system.Properties;
 
-
 import apiCalls.Utils.generic.Headers;
 import apiCalls.enums.UserType;
 import io.restassured.response.ValidatableResponse;

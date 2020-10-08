@@ -10,9 +10,7 @@ import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 import org.apache.logging.log4j.Logger;
 
-
 import javax.xml.ws.http.HTTPException;
-
 
 public class GetApplicationDetails {
 

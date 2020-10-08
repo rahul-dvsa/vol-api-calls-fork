@@ -1,7 +1,6 @@
 package apiCalls.enums;
 
 public enum EnforcementArea {
-
     NORTH_EAST("EA-B"),
     NORTH_WEST("EA-C"),
     MIDLANDS("EA-D"),
