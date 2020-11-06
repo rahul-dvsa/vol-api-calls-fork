@@ -10,6 +10,7 @@ import activesupport.http.RestUtils;
 
 import activesupport.system.Properties;
 
+import apiCalls.enums.BusinessType;
 import apiCalls.enums.UserTitle;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
@@ -137,14 +138,15 @@ public class RegisterUser {
         String lastName = faker.generateLastName().concat(String.valueOf(Int.random(100, 999)));
         String dateOfBirth = Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28);
         String loginName = String.format("%s.%s%s", firstName, lastName, Int.random(1000,9999));
+        String email = String.format("%s_%s%s.tester@dvsa.com", firstName, lastName, Int.random(10000, 99999));
 
         this.loginId = loginId == null ? loginName : getLoginId();
         this.title = title == null ? UserTitle.MR.asString() : getTitle();
-        this.emailAddress = emailAddress == null ? "2" : getEmailAddress();
+        this.emailAddress = emailAddress == null ? email : getEmailAddress();
         this.foreName = foreName == null ? firstName : getForeName();
         this.familyName = familyName == null ? lastName : getFamilyName();
-        this.organisationName = organisationName == null ? "Y" : getOrganisationName();
-        this.businessType = businessType == null ? "limited_company" : getBusinessType();
+        this.organisationName = organisationName == null ? faker.generateCompanyName() : getOrganisationName();
+        this.businessType = businessType == null ? BusinessType.LIMITED_COMPANY.asString() : getBusinessType();
         this.birthDate = birthDate == null ? dateOfBirth : getBirthDate();
     }
 
