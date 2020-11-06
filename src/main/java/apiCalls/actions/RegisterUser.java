@@ -1,5 +1,7 @@
 package apiCalls.actions;
 
+import activesupport.faker.FakerUtils;
+import activesupport.number.Int;
 import apiCalls.Utils.builders.ContactDetailsBuilder;
 import apiCalls.Utils.builders.PersonBuilder;
 import apiCalls.Utils.builders.SelfServeUserRegistrationDetailsBuilder;
@@ -8,6 +10,7 @@ import activesupport.http.RestUtils;
 
 import activesupport.system.Properties;
 
+import apiCalls.enums.UserTitle;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.*;
@@ -127,6 +130,21 @@ public class RegisterUser {
     private ValidatableResponse apiResponse;
 
     private Headers apiHeaders = new Headers();
+
+    public RegisterUser() {
+        FakerUtils faker = new FakerUtils();
+        String firstName = faker.generateFirstName().concat(String.valueOf(Int.random(100, 999)));
+        String lastName = faker.generateLastName().concat(String.valueOf(Int.random(100, 999)));
+        String dateOfBirth = Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28);
+
+        this.title = title == null ? UserTitle.MR.asString() : getTitle();
+        this.emailAddress = emailAddress == null ? "2" : getEmailAddress();
+        this.foreName = foreName == null ? firstName : getForeName();
+        this.familyName = familyName == null ? lastName : getFamilyName();
+        this.organisationName = organisationName == null ? "Y" : getOrganisationName();
+        this.businessType = businessType == null ? "limited_company" : getBusinessType();
+        this.birthDate = birthDate == null ? dateOfBirth : getBirthDate();
+    }
 
     public ValidatableResponse registerUser() {
         String registerResource = URL.build(env, "user/selfserve/register").toString();
