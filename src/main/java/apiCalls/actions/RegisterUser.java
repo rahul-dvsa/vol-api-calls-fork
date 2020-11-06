@@ -136,7 +136,7 @@ public class RegisterUser {
         String firstName = faker.generateFirstName().concat(String.valueOf(Int.random(100, 999)));
         String lastName = faker.generateLastName().concat(String.valueOf(Int.random(100, 999)));
         String dateOfBirth = Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28);
-        String loginName = String.format("%s.%s%s", getForeName(), getFamilyName(), Int.random(1000,9999));
+        String loginName = String.format("%s.%s%s", firstName, lastName, Int.random(1000,9999));
 
         this.loginId = loginId == null ? loginName : getLoginId();
         this.title = title == null ? UserTitle.MR.asString() : getTitle();
