@@ -169,7 +169,9 @@ public class CreateApplication extends BaseAPI {
         return businessAddressLine1;
     }
 
-    public void setBusinessAddressLine1(String businessAddressLine1) { this.businessAddressLine1 = businessAddressLine1; }
+    public void setBusinessAddressLine1(String businessAddressLine1) {
+        this.businessAddressLine1 = businessAddressLine1;
+    }
 
     public String getTown() {
         return town;
@@ -211,7 +213,9 @@ public class CreateApplication extends BaseAPI {
         return restrictedVehicles;
     }
 
-    public void setTransManEmailAddress(String transManEmailAddress) { this.transManEmailAddress = transManEmailAddress; }
+    public void setTransManEmailAddress(String transManEmailAddress) {
+        this.transManEmailAddress = transManEmailAddress;
+    }
 
     public String getTrafficArea() {
         return trafficArea;
@@ -281,7 +285,9 @@ public class CreateApplication extends BaseAPI {
         return businessEmailAddress;
     }
 
-    public void setBusinessEmailAddress(String businessEmailAddress) { this.businessEmailAddress = businessEmailAddress; }
+    public void setBusinessEmailAddress(String businessEmailAddress) {
+        this.businessEmailAddress = businessEmailAddress;
+    }
 
     public String getUsername() {
         return username;
@@ -311,7 +317,9 @@ public class CreateApplication extends BaseAPI {
         this.userId = userId;
     }
 
-    public void setTransportManagerApplicationId(String transportManagerApplicationId) { this.transportManagerApplicationId = transportManagerApplicationId; }
+    public void setTransportManagerApplicationId(String transportManagerApplicationId) {
+        this.transportManagerApplicationId = transportManagerApplicationId;
+    }
 
     public String getTitle() {
         return title;
@@ -369,7 +377,9 @@ public class CreateApplication extends BaseAPI {
         return psvNoSmallVhlConfirmation;
     }
 
-    public void setPsvNoSmallVhlConfirmation(String psvNoSmallVhlConfirmation) { this.psvNoSmallVhlConfirmation = psvNoSmallVhlConfirmation; }
+    public void setPsvNoSmallVhlConfirmation(String psvNoSmallVhlConfirmation) {
+        this.psvNoSmallVhlConfirmation = psvNoSmallVhlConfirmation;
+    }
 
     public String getPsvOperateSmallVhl() {
         return psvOperateSmallVhl;
@@ -391,71 +401,127 @@ public class CreateApplication extends BaseAPI {
         return psvLimousines;
     }
 
-    public void setPsvLimousines(String psvLimousines) { this.psvLimousines = psvLimousines; }
+    public void setPsvLimousines(String psvLimousines) {
+        this.psvLimousines = psvLimousines;
+    }
 
     public String getPsvNoLimousineConfirmation() {
         return psvNoLimousineConfirmation;
     }
 
-    public void setPsvNoLimousineConfirmation(String psvNoLimousineConfirmation) { this.psvNoLimousineConfirmation = psvNoLimousineConfirmation; }
+    public void setPsvNoLimousineConfirmation(String psvNoLimousineConfirmation) {
+        this.psvNoLimousineConfirmation = psvNoLimousineConfirmation;
+    }
 
     public String getPsvOnlyLimousinesConfirmation() {
         return psvOnlyLimousinesConfirmation;
     }
 
-    public void setPsvOnlyLimousinesConfirmation(String psvOnlyLimousinesConfirmation) { this.psvOnlyLimousinesConfirmation = psvOnlyLimousinesConfirmation; }
+    public void setPsvOnlyLimousinesConfirmation(String psvOnlyLimousinesConfirmation) {
+        this.psvOnlyLimousinesConfirmation = psvOnlyLimousinesConfirmation;
+    }
 
-    public String getEstablishmentAddressLine1() { return establishmentAddressLine1; }
+    public String getEstablishmentAddressLine1() {
+        return establishmentAddressLine1;
+    }
 
-    public void setEstablishmentAddressLine1(String establishmentAddressLine1) { this.establishmentAddressLine1 = establishmentAddressLine1; }
+    public void setEstablishmentAddressLine1(String establishmentAddressLine1) {
+        this.establishmentAddressLine1 = establishmentAddressLine1;
+    }
 
-    public String getBusinessTown() { return businessTown; }
+    public String getBusinessTown() {
+        return businessTown;
+    }
 
-    public void setBusinessTown(String businessTown) { this.businessTown = businessTown; }
+    public void setBusinessTown(String businessTown) {
+        this.businessTown = businessTown;
+    }
 
-    public String getBusinessPostCode() { return businessPostCode; }
+    public String getBusinessPostCode() {
+        return businessPostCode;
+    }
 
-    public void setBusinessPostCode(String businessPostCode) { this.businessPostCode = businessPostCode; }
+    public void setBusinessPostCode(String businessPostCode) {
+        this.businessPostCode = businessPostCode;
+    }
 
-    public String getEstablishmentTown() { return establishmentTown; }
+    public String getEstablishmentTown() {
+        return establishmentTown;
+    }
 
-    public void setEstablishmentTown(String establishmentTown) { this.establishmentTown = establishmentTown; }
+    public void setEstablishmentTown(String establishmentTown) {
+        this.establishmentTown = establishmentTown;
+    }
 
-    public String getEstablishmentPostCode() { return establishmentPostCode; }
+    public String getEstablishmentPostCode() {
+        return establishmentPostCode;
+    }
 
-    public void setEstablishmentPostCode(String establishmentPostCode) { this.establishmentPostCode = establishmentPostCode; }
+    public void setEstablishmentPostCode(String establishmentPostCode) {
+        this.establishmentPostCode = establishmentPostCode;
+    }
 
-    public String getOperatingCentreTown() { return operatingCentreTown; }
+    public String getOperatingCentreTown() {
+        return operatingCentreTown;
+    }
 
-    public void setOperatingCentreTown(String operatingCentreTown) { this.operatingCentreTown = operatingCentreTown; }
+    public void setOperatingCentreTown(String operatingCentreTown) {
+        this.operatingCentreTown = operatingCentreTown;
+    }
 
-    public String getOperatingCentrePostCode() { return operatingCentrePostCode; }
+    public String getOperatingCentrePostCode() {
+        return operatingCentrePostCode;
+    }
 
-    public void setOperatingCentrePostCode(String operatingCentrePostCode) { this.operatingCentrePostCode = operatingCentrePostCode; }
+    public void setOperatingCentrePostCode(String operatingCentrePostCode) {
+        this.operatingCentrePostCode = operatingCentrePostCode;
+    }
 
-    public void setOperatingCentreAddressLine1(String operatingCentreAddressLine1) { this.operatingCentreAddressLine1 = operatingCentreAddressLine1; }
+    public void setOperatingCentreAddressLine1(String operatingCentreAddressLine1) {
+        this.operatingCentreAddressLine1 = operatingCentreAddressLine1;
+    }
 
-    public String getBusinessAddressLine2() { return businessAddressLine2; }
+    public String getBusinessAddressLine2() {
+        return businessAddressLine2;
+    }
 
-    public void setBusinessAddressLine2(String businessAddressLine2) { this.businessAddressLine2 = businessAddressLine2; }
+    public void setBusinessAddressLine2(String businessAddressLine2) {
+        this.businessAddressLine2 = businessAddressLine2;
+    }
 
-    public String getEstablishmentAddressLine2() { return establishmentAddressLine2; }
+    public String getEstablishmentAddressLine2() {
+        return establishmentAddressLine2;
+    }
 
-    public void setEstablishmentAddressLine2(String establishmentAddressLine2) { this.establishmentAddressLine2 = establishmentAddressLine2; }
+    public void setEstablishmentAddressLine2(String establishmentAddressLine2) {
+        this.establishmentAddressLine2 = establishmentAddressLine2;
+    }
 
-    public void setTransportConsultantAddressLine1(String transportConsultantAddressLine1) { this.transportConsultantAddressLine1 = transportConsultantAddressLine1; }
+    public void setTransportConsultantAddressLine1(String transportConsultantAddressLine1) {
+        this.transportConsultantAddressLine1 = transportConsultantAddressLine1;
+    }
 
-    public void setTransportConsultantTown(String transportConsultantTown) { this.transportConsultantTown = transportConsultantTown; }
+    public void setTransportConsultantTown(String transportConsultantTown) {
+        this.transportConsultantTown = transportConsultantTown;
+    }
 
-    public void setTransportConsultantPhone(String transportConsultantPhone) { this.transportConsultantPhone = transportConsultantPhone; }
+    public void setTransportConsultantPhone(String transportConsultantPhone) {
+        this.transportConsultantPhone = transportConsultantPhone;
+    }
 
-    public void setTransportConsultantName(String transportConsultantName) { this.transportConsultantName = transportConsultantName; }
+    public void setTransportConsultantName(String transportConsultantName) {
+        this.transportConsultantName = transportConsultantName;
+    }
 
-    public void setTransportConsultantEmail(String transportConsultantEmail) { this.transportConsultantEmail = transportConsultantEmail; }
+    public void setTransportConsultantEmail(String transportConsultantEmail) {
+        this.transportConsultantEmail = transportConsultantEmail;
+    }
 
     private Headers apiHeaders = new Headers();
 
     public CreateApplication() {
+        FakerUtils faker = new FakerUtils();
+
         this.hours = hours == 0.0 ? 2.0 : hours;
         this.restrictedVehicles = restrictedVehicles == null ? "2" : restrictedVehicles;
         this.noOfVehiclesRequired = noOfVehiclesRequired == 0 ? 5 : noOfVehiclesRequired;
@@ -473,37 +539,26 @@ public class CreateApplication extends BaseAPI {
         this.isInterim = isInterim == null ? "N" : isInterim;
         this.isOwner = isOwner == null ? "Y" : isOwner;
 
-        FakerUtils faker = new FakerUtils();
+        this.transportConsultantName = transportConsultantName == null ? String.format("%s %s", faker.generateFirstName(), faker.generateLastName()) : transportConsultantName;
+        this.transportConsultantEmail = transportConsultantEmail == null ? String.format("%s.volTConsultant@dvsa.com", transportConsultantName.replace(" ", "_").replace(",", "")) : transportConsultantEmail;
+
         LinkedHashMap<String, String> operatingCentreAddress = faker.generateAddress();
-        this.operatingCentreAddressLine1 =  operatingCentreAddressLine1 == null ? operatingCentreAddress.get("addressLine1") : operatingCentreAddressLine1;
+        this.operatingCentreAddressLine1 = operatingCentreAddressLine1 == null ? operatingCentreAddress.get("addressLine1") : operatingCentreAddressLine1;
         this.operatingCentreTown = operatingCentreTown == null ? operatingCentreAddress.get("town") : operatingCentreTown;
 
-//        private LinkedHashMap<String, String> registeredAddress = faker.generateAddress();
-//        private String registeredAddressLine1 = registeredAddress.get("addressLine1");
-//        private String registeredAddressLine2 = registeredAddress.get("addressLine2");
-//        private String registeredAddressLine3 = registeredAddress.get("addressLine3");
-//        private String registeredAddressLine4 = registeredAddress.get("addressLine4");
-//        private String registeredTown = faker.generateAddress().get("town");
-//        private LinkedHashMap<String, String> address = faker.generateAddress();
-//        private String addressLine1 = address.get("addressLine1");
-//        private String addressLine2 = address.get("addressLine2");
-//        private String addressLine3 = address.get("addressLine3");
-//        private String addressLine4 = address.get("addressLine4");
-//        private String town = faker.generateAddress().get("town");
-//        private String postcode = PostCode.getRandomRealNottinghamPostcode();
-//        private String countryCode = "GB";
-//        private LinkedHashMap<String, String> establishmentAddress = faker.generateAddress();
-//        private String establishmentAddressLine1 = establishmentAddress.get("addressLine1");
-//        private String establishmentAddressLine2 = establishmentAddress.get("addressLine2");
-//        private String establishmentAddressLine3 = establishmentAddress.get("addressLine3");
-//        private String establishmentAddressLine4 = establishmentAddress.get("addressLine4");
-//        private String establishmentTown = faker.generateAddress().get("town");
-//        private LinkedHashMap<String, String> transportConsultantAddress = faker.generateAddress();
-//        private String transportConsultantAddressLine1 = transportConsultantAddress.get("addressLine1");
-//        private String transportConsultantAddressLine2 = transportConsultantAddress.get("addressLine2");
-//        private String transportConsultantAddressLine3 = transportConsultantAddress.get("addressLine3");
-//        private String transportConsultantAddressLine4 = transportConsultantAddress.get("addressLine4");
-//        private String transportConsultantTown = faker.generateAddress().get("town");
+        LinkedHashMap<String, String> registeredAddress = faker.generateAddress();
+        this.businessAddressLine1 = businessAddressLine1 == null ? registeredAddress.get("addressLine1") : businessAddressLine1;
+        this.businessAddressLine2 = businessAddressLine2 == null ? registeredAddress.get("addressLine2") : businessAddressLine2;
+        this.businessTown = businessTown == null ? faker.generateAddress().get("town") : businessTown;
+
+        LinkedHashMap<String, String> establishmentAddress = faker.generateAddress();
+        this.establishmentAddressLine1 = establishmentAddressLine1 == null ? establishmentAddress.get("addressLine1") : establishmentAddressLine1;
+        this.establishmentAddressLine2 = establishmentAddressLine2 == null ? establishmentAddress.get("addressLine2") : establishmentAddressLine2;
+        this.establishmentTown = establishmentTown == null ? faker.generateAddress().get("town") : establishmentTown;
+
+        LinkedHashMap<String, String> transportConsultantAddress = faker.generateAddress();
+        this.transportConsultantAddressLine1 = transportConsultantAddressLine1 == null ? transportConsultantAddress.get("addressLine1") : transportConsultantAddressLine1;
+        this.transportConsultantTown = transportConsultantTown == null ? faker.generateAddress().get("town") : transportConsultantTown;
     }
 
     public ValidatableResponse startApplication() {
