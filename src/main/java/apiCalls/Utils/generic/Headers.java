@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class Headers {
 
-    private String API_HEADER;
+    private static String API_HEADER;
 
     public HashMap<String, String> headers = new HashMap<>();
 
@@ -12,11 +12,11 @@ public class Headers {
         return headers;
     }
 
-    public String getAPI_HEADER() {
+    public static String getAPI_HEADER() {
         return API_HEADER;
     }
 
-    public void setAPI_HEADER(String API_HEADER) {
-        this.API_HEADER = API_HEADER;
+    public static void setAPI_HEADER(String api_header) {
+        API_HEADER = api_header;
     }
 }

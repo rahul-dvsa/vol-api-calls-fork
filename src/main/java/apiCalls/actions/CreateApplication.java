@@ -23,6 +23,8 @@ import java.util.LinkedHashMap;
 
 public class CreateApplication extends BaseAPI {
 
+    FakerUtils faker = new FakerUtils();
+
     private static int version = 1;
 
     private String title;
@@ -32,7 +34,7 @@ public class CreateApplication extends BaseAPI {
     private String town;
     private String postcode;
     private String countryCode;
-    private String organisationName;
+    private String organisationName = faker.generateCompanyName();
     private String transManEmailAddress;
     private String applicationNumber;
     private String userId;
@@ -520,8 +522,6 @@ public class CreateApplication extends BaseAPI {
     private Headers apiHeaders = new Headers();
 
     public CreateApplication() {
-        FakerUtils faker = new FakerUtils();
-
         this.hours = hours == 0.0 ? 2.0 : hours;
         this.restrictedVehicles = restrictedVehicles == null ? "2" : restrictedVehicles;
         this.noOfVehiclesRequired = noOfVehiclesRequired == 0 ? 5 : noOfVehiclesRequired;
@@ -570,7 +570,7 @@ public class CreateApplication extends BaseAPI {
         apiResponse = RestUtils.post(applicationBuilder, createApplicationResource, apiHeaders.getHeaders());
         setApplicationNumber(apiResponse.extract().jsonPath().getString("id.application"));
         licenceNumber = apiResponse.extract().jsonPath().getString("id.licence");
-        setApplicationNumber(getApplicationNumber());
+        setApplicationNumber(applicationNumber);
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {
             LOGGER.info("ERROR CODE: ".concat(Integer.toString(apiResponse.extract().statusCode())));
@@ -598,7 +598,7 @@ public class CreateApplication extends BaseAPI {
 
     public ValidatableResponse addBusinessDetails() {
         String organisationVersion = fetchApplicationInformation(getApplicationNumber(), "licence.organisation.version", "1");
-        String natureOfBusiness = "apiTesting";
+        String natureOfBusiness = faker.generateNatureOfBusiness();
         String updateBusinessDetailsResource = URL.build(env, String.format("organisation/business-details/application/%s", getApplicationNumber())).toString();
 
         AddressBuilder address = new AddressBuilder().withAddressLine1(getBusinessAddressLine1()).withTown(getBusinessTown()).withPostcode(getBusinessPostCode());
