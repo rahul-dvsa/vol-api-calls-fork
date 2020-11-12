@@ -1,5 +1,6 @@
 package apiCalls.actions;
 
+import activesupport.faker.FakerUtils;
 import apiCalls.Utils.builders.*;
 import apiCalls.Utils.generic.BaseAPI;
 import apiCalls.Utils.generic.Headers;
@@ -7,6 +8,9 @@ import activesupport.http.RestUtils;
 import activesupport.number.Int;
 import activesupport.string.Str;
 import activesupport.system.Properties;
+import apiCalls.enums.BusinessType;
+import apiCalls.enums.LicenceType;
+import apiCalls.enums.OperatorType;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +19,7 @@ import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
 import javax.xml.ws.http.HTTPException;
+import java.util.LinkedHashMap;
 
 public class CreateApplication extends BaseAPI {
 
@@ -71,7 +76,7 @@ public class CreateApplication extends BaseAPI {
     private String establishmentPostCode;
     private String operatingCentreTown;
     private String operatingCentrePostCode;
-    private String operatingCentreAddress;
+    private String operatingCentreAddressLine1;
     private String transportConsultantAddressLine1;
     private String transportConsultantTown;
     private String transportConsultantPhone;
@@ -428,7 +433,7 @@ public class CreateApplication extends BaseAPI {
 
     public void setOperatingCentrePostCode(String operatingCentrePostCode) { this.operatingCentrePostCode = operatingCentrePostCode; }
 
-    public void setOperatingCentreAddress(String operatingCentreAddress) { this.operatingCentreAddress = operatingCentreAddress; }
+    public void setOperatingCentreAddressLine1(String operatingCentreAddressLine1) { this.operatingCentreAddressLine1 = operatingCentreAddressLine1; }
 
     public String getBusinessAddressLine2() { return businessAddressLine2; }
 
@@ -461,12 +466,44 @@ public class CreateApplication extends BaseAPI {
         this.psvLimousines = psvLimousines == null ? "Y" : psvLimousines;
         this.psvNoLimousineConfirmation = psvNoLimousineConfirmation == null ? "Y" : psvNoLimousineConfirmation;
         this.psvOnlyLimousinesConfirmation = psvOnlyLimousinesConfirmation == null ? "Y" : psvOnlyLimousinesConfirmation;
-        this.operatorType = operatorType == null ? "goods" : operatorType;
-        this.licenceType = licenceType == null ? "standard_international" : licenceType;
-        this.businessType = businessType == null ? "limited_company" : businessType;
+        this.operatorType = operatorType == null ? OperatorType.valueOf("goods".toUpperCase()).asString() : operatorType;
+        this.licenceType = licenceType == null ? LicenceType.valueOf("standard_international".toUpperCase()).asString() : licenceType;
+        this.businessType = businessType == null ? BusinessType.valueOf("limited_company".toUpperCase()).asString() : businessType;
         this.niFlag = niFlag == null ? "N" : niFlag;
         this.isInterim = isInterim == null ? "N" : isInterim;
         this.isOwner = isOwner == null ? "Y" : isOwner;
+
+        FakerUtils faker = new FakerUtils();
+        LinkedHashMap<String, String> operatingCentreAddress = faker.generateAddress();
+        this.operatingCentreAddressLine1 =  operatingCentreAddressLine1 == null ? operatingCentreAddress.get("addressLine1") : operatingCentreAddressLine1;
+        this.operatingCentreTown = operatingCentreTown == null ? operatingCentreAddress.get("town") : operatingCentreTown;
+
+//        private LinkedHashMap<String, String> registeredAddress = faker.generateAddress();
+//        private String registeredAddressLine1 = registeredAddress.get("addressLine1");
+//        private String registeredAddressLine2 = registeredAddress.get("addressLine2");
+//        private String registeredAddressLine3 = registeredAddress.get("addressLine3");
+//        private String registeredAddressLine4 = registeredAddress.get("addressLine4");
+//        private String registeredTown = faker.generateAddress().get("town");
+//        private LinkedHashMap<String, String> address = faker.generateAddress();
+//        private String addressLine1 = address.get("addressLine1");
+//        private String addressLine2 = address.get("addressLine2");
+//        private String addressLine3 = address.get("addressLine3");
+//        private String addressLine4 = address.get("addressLine4");
+//        private String town = faker.generateAddress().get("town");
+//        private String postcode = PostCode.getRandomRealNottinghamPostcode();
+//        private String countryCode = "GB";
+//        private LinkedHashMap<String, String> establishmentAddress = faker.generateAddress();
+//        private String establishmentAddressLine1 = establishmentAddress.get("addressLine1");
+//        private String establishmentAddressLine2 = establishmentAddress.get("addressLine2");
+//        private String establishmentAddressLine3 = establishmentAddress.get("addressLine3");
+//        private String establishmentAddressLine4 = establishmentAddress.get("addressLine4");
+//        private String establishmentTown = faker.generateAddress().get("town");
+//        private LinkedHashMap<String, String> transportConsultantAddress = faker.generateAddress();
+//        private String transportConsultantAddressLine1 = transportConsultantAddress.get("addressLine1");
+//        private String transportConsultantAddressLine2 = transportConsultantAddress.get("addressLine2");
+//        private String transportConsultantAddressLine3 = transportConsultantAddress.get("addressLine3");
+//        private String transportConsultantAddressLine4 = transportConsultantAddress.get("addressLine4");
+//        private String transportConsultantTown = faker.generateAddress().get("town");
     }
 
     public ValidatableResponse startApplication() {
@@ -476,9 +513,9 @@ public class CreateApplication extends BaseAPI {
         ApplicationBuilder applicationBuilder = new ApplicationBuilder().withOperatorType(getOperatorType())
                 .withLicenceType(getLicenceType()).withNiFlag(getNiFlag()).withOrganisation(getOrganisationId());
         apiResponse = RestUtils.post(applicationBuilder, createApplicationResource, apiHeaders.getHeaders());
-        applicationNumber = apiResponse.extract().jsonPath().getString("id.application");
+        setApplicationNumber(apiResponse.extract().jsonPath().getString("id.application"));
         licenceNumber = apiResponse.extract().jsonPath().getString("id.licence");
-        setApplicationNumber(applicationNumber);
+        setApplicationNumber(getApplicationNumber());
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {
             LOGGER.info("ERROR CODE: ".concat(Integer.toString(apiResponse.extract().statusCode())));
@@ -575,18 +612,18 @@ public class CreateApplication extends BaseAPI {
         OperatingCentreBuilder operatingCentreBuilder = new OperatingCentreBuilder();
 
         if (operatorType.equals("goods")) {
-            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddress).withTown(getOperatingCentreTown()
+            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getOperatingCentreTown()
             ).withPostcode(getOperatingCentrePostCode()).withCountryCode(getCountryCode());
             operatingCentreBuilder.withApplication(getApplicationNumber()).withNoOfVehiclesRequired(String.valueOf(getNoOfVehiclesRequired()))
                     .withNoOfTrailersRequired(String.valueOf(getNoOfVehiclesRequired())).withPermission(permissionOption).withAddress(address);
         }
         if (operatorType.equals("public") && (!licenceType.equals("special_restricted"))) {
-            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddress).withTown(getTown()).withPostcode(getPostCode()).withCountryCode(getCountryCode());
+            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getTown()).withPostcode(getPostCode()).withCountryCode(getCountryCode());
             operatingCentreBuilder.withApplication(getApplicationNumber()
             ).withNoOfVehiclesRequired(String.valueOf(getNoOfVehiclesRequired())).withPermission(permissionOption).withAddress(address);
         }
         if (operatorType.equals("public") && (licenceType.equals("restricted"))) {
-            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddress).withTown(getTown()).withPostcode(getPostCode()).withCountryCode(getCountryCode());
+            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getTown()).withPostcode(getPostCode()).withCountryCode(getCountryCode());
             operatingCentreBuilder.withApplication(getApplicationNumber()).withNoOfVehiclesRequired(String.valueOf(getRestrictedVehicles())).withPermission(permissionOption).withAddress(address);
         }
         if (!licenceType.equals("special_restricted")) {
@@ -774,9 +811,10 @@ public class CreateApplication extends BaseAPI {
         }
 
         String vehicleDeclarationResource = URL.build(env, String.format(String.format("application/%s/vehicle-declaration", applicationNumber))).toString();
-        int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationNumber, "version", "1"));
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationNumber(), "version", "1"));
 
-        VehicleDeclarationBuilder vehicleDeclarationBuilder = new VehicleDeclarationBuilder().withId(applicationNumber).withPsvVehicleSize(psvVehicleSize)
+        VehicleDeclarationBuilder vehicleDeclarationBuilder = new VehicleDeclarationBuilder().withId(getApplicationNumber()
+        ).withPsvVehicleSize(psvVehicleSize)
                 .withPsvLimousines(psvLimousines).withPsvNoSmallVhlConfirmation(psvNoSmallVhlConfirmation).withPsvOperateSmallVhl(psvOperateSmallVhl).withPsvSmallVhlNotes(psvSmallVhlNotes)
                 .withPsvNoLimousineConfirmation(psvNoLimousineConfirmation).withPsvOnlyLimousinesConfirmation(psvOnlyLimousinesConfirmation).withVersion(applicationVersion);
         apiResponse = RestUtils.put(vehicleDeclarationBuilder, vehicleDeclarationResource, apiHeaders.getHeaders());
@@ -795,10 +833,10 @@ public class CreateApplication extends BaseAPI {
         }
         String financialHistoryAnswer = "N";
         String insolvencyAnswer = "false";
-        String financialHistoryResource = URL.build(env, String.format("application/%s/financial-history", applicationNumber)).toString();
-        int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationNumber, "version", "1"));
+        String financialHistoryResource = URL.build(env, String.format("application/%s/financial-history", getApplicationNumber())).toString();
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationNumber(), "version", "1"));
 
-        FinancialHistoryBuilder financialHistoryBuilder = new FinancialHistoryBuilder().withId(applicationNumber).withVersion(String.valueOf(applicationVersion)).withBankrupt(financialHistoryAnswer)
+        FinancialHistoryBuilder financialHistoryBuilder = new FinancialHistoryBuilder().withId(getApplicationNumber()).withVersion(String.valueOf(applicationVersion)).withBankrupt(financialHistoryAnswer)
                 .withLiquidation(financialHistoryAnswer).withReceivership(financialHistoryAnswer).withAdministration(financialHistoryAnswer).withAdministration(financialHistoryAnswer)
                 .withDisqualified(financialHistoryAnswer).withInsolvencyDetails(insolvencyAnswer).withInsolvencyConfirmation(insolvencyAnswer);
         apiResponse = RestUtils.put(financialHistoryBuilder, financialHistoryResource, apiHeaders.getHeaders());
@@ -818,12 +856,12 @@ public class CreateApplication extends BaseAPI {
         String tachographIns = "tach_na";
         String safetyInsVaries = "N";
         String safetyConfirmationOption = "Y";
-        String applicationSafetyResource = URL.build(env, String.format("application/%s/safety", applicationNumber)).toString();
-        int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationNumber, "version", "1"));
+        String applicationSafetyResource = URL.build(env, String.format("application/%s/safety", getApplicationNumber())).toString();
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationNumber(), "version", "1"));
 
         LicenceBuilder licence = new LicenceBuilder().withId(licenceNumber).withVersion(version).withSafetyInsVaries(safetyInsVaries).withSafetyInsVehicles(String.valueOf(noOfVehiclesRequired))
                 .withSafetyInsTrailers(String.valueOf(noOfVehiclesRequired)).withTachographIns(tachographIns);
-        ApplicationSafetyBuilder applicationSafetyBuilder = new ApplicationSafetyBuilder().withId(applicationNumber).withVersion(applicationVersion)
+        ApplicationSafetyBuilder applicationSafetyBuilder = new ApplicationSafetyBuilder().withId(getApplicationNumber()).withVersion(applicationVersion)
                 .withSafetyConfirmation(safetyConfirmationOption).withLicence(licence);
         apiResponse = RestUtils.put(applicationSafetyBuilder, applicationSafetyResource, apiHeaders.getHeaders());
 
@@ -839,7 +877,8 @@ public class CreateApplication extends BaseAPI {
         if (operatorType.equals("public") && (licenceType.equals("special_restricted"))) {
             return null;
         }
-        String safetyInspectorResource = URL.build(env, String.format("application/%s/workshop", applicationNumber)).toString();
+        String safetyInspectorResource = URL.build(env, String.format("application/%s/workshop", getApplicationNumber()
+        )).toString();
         AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(businessAddressLine1).withTown(town).withPostcode(postcode).withCountryCode(countryCode);
         ContactDetailsBuilder contactDetailsBuilder = new ContactDetailsBuilder().withFao(foreName).withAddress(addressBuilder);
         SafetyInspectorBuilder safetyInspectorBuilder = new SafetyInspectorBuilder().withApplication(applicationNumber).withLicence(licenceNumber).withIsExternal("N")
