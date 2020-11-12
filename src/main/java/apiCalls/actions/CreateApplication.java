@@ -34,7 +34,7 @@ public class CreateApplication extends BaseAPI {
     private String town;
     private String postcode;
     private String countryCode;
-    private String organisationName = faker.generateCompanyName();
+    private String organisationName;
     private String transManEmailAddress;
     private String applicationNumber;
     private String userId;
@@ -45,7 +45,7 @@ public class CreateApplication extends BaseAPI {
     private String organisationId;
     private String licenceNumber;
     private String transportManagerApplicationId;
-    private String companyNumber = String.valueOf(Int.random(00000000, 99999999));
+    private String companyNumber;
     private String licenceType;
     private String businessType;
     private String operatorType;
@@ -55,7 +55,7 @@ public class CreateApplication extends BaseAPI {
     private String restrictedVehicles;
     private String applicationStatus;
     private String licenceId;
-    private String businessName = faker.generateCompanyName();
+    private String businessName;
     private String isInterim;
     private String isOwner;
     private String tmType;
@@ -522,6 +522,14 @@ public class CreateApplication extends BaseAPI {
     private Headers apiHeaders = new Headers();
 
     public CreateApplication() {
+        this.businessName = businessName == null ? faker.generateCompanyName() : businessName;
+        this.organisationName = organisationName == null ? faker.generateCompanyName() : organisationName;
+        this.companyNumber = companyNumber == null ? String.valueOf(Int.random(00000000, 99999999)) : companyNumber;
+
+        this.foreName = foreName == null ? faker.generateFirstName().concat(String.valueOf(Int.random(100, 999))) : foreName;
+        this.familyName = familyName == null ? faker.generateLastName().concat(String.valueOf(Int.random(100, 999))) : familyName;
+        this.birthDate = birthDate == null ? Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28) : birthDate;
+
         this.hours = hours == 0.0 ? 2.0 : hours;
         this.restrictedVehicles = restrictedVehicles == null ? "2" : restrictedVehicles;
         this.noOfVehiclesRequired = noOfVehiclesRequired == 0 ? 5 : noOfVehiclesRequired;
