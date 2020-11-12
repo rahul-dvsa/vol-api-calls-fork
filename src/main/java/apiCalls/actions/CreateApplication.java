@@ -674,22 +674,22 @@ public class CreateApplication extends BaseAPI {
 
         OperatingCentreBuilder operatingCentreBuilder = new OperatingCentreBuilder();
 
-        if (operatorType.equals("goods")) {
+        if (operatorType.equals(OperatorType.GOODS.asString())) {
             AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getOperatingCentreTown()
             ).withPostcode(getOperatingCentrePostCode()).withCountryCode(getCountryCode());
             operatingCentreBuilder.withApplication(getApplicationNumber()).withNoOfVehiclesRequired(String.valueOf(getNoOfVehiclesRequired()))
                     .withNoOfTrailersRequired(String.valueOf(getNoOfVehiclesRequired())).withPermission(permissionOption).withAddress(address);
         }
-        if (operatorType.equals("public") && (!licenceType.equals("special_restricted"))) {
+        if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getTown()).withPostcode(getPostCode()).withCountryCode(getCountryCode());
             operatingCentreBuilder.withApplication(getApplicationNumber()
             ).withNoOfVehiclesRequired(String.valueOf(getNoOfVehiclesRequired())).withPermission(permissionOption).withAddress(address);
         }
-        if (operatorType.equals("public") && (licenceType.equals("restricted"))) {
+        if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
             AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getTown()).withPostcode(getPostCode()).withCountryCode(getCountryCode());
             operatingCentreBuilder.withApplication(getApplicationNumber()).withNoOfVehiclesRequired(String.valueOf(getRestrictedVehicles())).withPermission(permissionOption).withAddress(address);
         }
-        if (!licenceType.equals("special_restricted")) {
+        if (!licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             apiResponse = RestUtils.post(operatingCentreBuilder, operatingCentreResource, apiHeaders.getHeaders());
         }
 
@@ -703,24 +703,24 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse updateOperatingCentre() {
-        if (licenceType.equals("special_restricted")) {
+        if (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
         }
         String updateOperatingCentreResource = URL.build(env, String.format("application/%s/operating-centres", getApplicationNumber())).toString();
         OperatingCentreUpdater updateOperatingCentre = new OperatingCentreUpdater();
         int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationNumber(), "version", "1"));
 
-        if (operatorType.equals("goods")) {
+        if (operatorType.equals(OperatorType.GOODS.asString())) {
             updateOperatingCentre.withId(getApplicationNumber()).withTotAuthVehicles(getNoOfVehiclesRequired())
                     .withTrafficArea(getTrafficArea()).withEnforcementArea(getEnforcementArea()).withTotCommunityLicences(1)
                     .withTAuthTrailers(Integer.parseInt(String.valueOf(getNoOfVehiclesRequired()))).withVersion(applicationVersion);
         }
-        if (operatorType.equals("public") && (!licenceType.equals("restricted"))) {
+        if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.RESTRICTED.asString()))) {
             updateOperatingCentre.withId(getApplicationNumber()).withTotAuthVehicles(getNoOfVehiclesRequired())
                     .withTrafficArea(getTrafficArea()).withEnforcementArea(getEnforcementArea()).withTotCommunityLicences(1).withVersion(applicationVersion);
         }
 
-        if (operatorType.equals("public") && (licenceType.equals("restricted"))) {
+        if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
             updateOperatingCentre.withId(getApplicationNumber()).withTotAuthVehicles(Integer.valueOf(String.valueOf(getRestrictedVehicles())))
                     .withTrafficArea(getTrafficArea()).withEnforcementArea(getEnforcementArea()).withVersion(applicationVersion);
         }
@@ -737,7 +737,7 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse addFinancialEvidence() {
-        if (operatorType.equals("public") && (licenceType.equals("special_restricted"))) {
+        if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
             return null;
         }
 
@@ -757,7 +757,7 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse addTransportManager() {
-        if (operatorType.equals("public") && (licenceType.equals("special_restricted"))) {
+        if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
             return null;
         }
         int randNumber = Int.random(0, 2000);
@@ -778,7 +778,7 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse submitTransport() {
-        if (operatorType.equals("public") && (licenceType.equals("special_restricted"))) {
+        if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
         String submitTransportManager = URL.build(env, String.format("transport-manager-application/%s/submit", getApplicationNumber())).toString();
@@ -793,7 +793,7 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse addTmResponsibilities() {
-        if (getOperatorType().equals("public") && (getLicenceType().equals("special_restricted"))) {
+        if (getOperatorType().equals(OperatorType.PUBLIC.asString()) && (getLicenceType().equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
         String tmApplicationNo = transportManagerApplicationId;
@@ -815,7 +815,7 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse submitTmResponsibilities() {
-        if (getOperatorType().equals("public") && (getLicenceType().equals("special_restricted"))) {
+        if (getOperatorType().equals(OperatorType.PUBLIC.asString()) && (getLicenceType().equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
         String tmApplicationNo = transportManagerApplicationId;
@@ -834,16 +834,16 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse addVehicleDetails() {
-        if (getOperatorType().equals("special_restricted")) {
+        if (getOperatorType().equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
         }
         String vehiclesResource = null;
         String vrm;
 
-        if (getOperatorType().equals("goods")) {
+        if (getOperatorType().equals(OperatorType.GOODS.asString())) {
             vehiclesResource = URL.build(env, String.format("application/%s/goods-vehicles", getApplicationNumber())).toString();
         }
-        if (getOperatorType().equals("public")) {
+        if (getOperatorType().equals(OperatorType.PUBLIC.asString())) {
             vehiclesResource = URL.build(env, String.format("application/%s/psv-vehicles", getApplicationNumber())).toString();
         }
         do {
@@ -869,7 +869,7 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse submitVehicleDeclaration() {
-        if (licenceType.equals("special_restricted")) {
+        if (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
         }
 
@@ -891,7 +891,7 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse addFinancialHistory() {
-        if (operatorType.equals("public") && (licenceType.equals("special_restricted"))) {
+        if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
         String financialHistoryAnswer = "N";
@@ -913,7 +913,7 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse addApplicationSafetyAndComplianceDetails() {
-        if (operatorType.equals("public") && (licenceType.equals("special_restricted"))) {
+        if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
         String tachographIns = "tach_na";
@@ -937,7 +937,7 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse addSafetyInspector() {
-        if (operatorType.equals("public") && (licenceType.equals("special_restricted"))) {
+        if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
         String safetyInspectorResource = URL.build(env, String.format("application/%s/workshop", getApplicationNumber()
@@ -956,7 +956,7 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse addConvictionsDetails() {
-        if (operatorType.equals("public") && (licenceType.equals("special_restricted"))) {
+        if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
         String previousConvictionsResource = URL.build(env, String.format("application/%s/previous-convictions", applicationNumber)).toString();
@@ -975,7 +975,7 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse addLicenceHistory() {
-        if (operatorType.equals("public") && (licenceType.equals("special_restricted"))) {
+        if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
         String optionResponse = "N";
