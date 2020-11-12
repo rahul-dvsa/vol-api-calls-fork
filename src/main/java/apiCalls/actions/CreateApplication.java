@@ -546,6 +546,7 @@ public class CreateApplication extends BaseAPI {
         this.niFlag = niFlag == null ? "N" : niFlag;
         this.isInterim = isInterim == null ? "N" : isInterim;
         this.isOwner = isOwner == null ? "Y" : isOwner;
+        this.countryCode = countryCode == null ? "GB" : countryCode;
 
         this.transportConsultantName = transportConsultantName == null ? String.format("%s %s", faker.generateFirstName(), faker.generateLastName()) : transportConsultantName;
         this.transportConsultantEmail = transportConsultantEmail == null ? String.format("%s.volTConsultant@dvsa.com", transportConsultantName.replace(" ", "_").replace(",", "")) : transportConsultantEmail;
