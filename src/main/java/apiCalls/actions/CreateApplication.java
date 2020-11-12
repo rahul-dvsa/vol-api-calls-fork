@@ -55,7 +55,7 @@ public class CreateApplication extends BaseAPI {
     private String restrictedVehicles;
     private String applicationStatus;
     private String licenceId;
-    private String businessName;
+    private String businessName = faker.generateCompanyName();
     private String isInterim;
     private String isOwner;
     private String tmType;
