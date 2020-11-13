@@ -1046,7 +1046,7 @@ public class CreateApplication extends BaseAPI {
 
     public ValidatableResponse submitApplication() {
         String submitResource = URL.build(env, String.format("application/%s/submit", applicationNumber)).toString();
-        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationNumber(), "version", "1"));
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationNumber, "version", "1"));
 
         GenericBuilder genericBuilder = new GenericBuilder().withId(getApplicationNumber()).withVersion(applicationVersion);
         apiResponse = RestUtils.put(genericBuilder, submitResource, apiHeaders.getHeaders());

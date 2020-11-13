@@ -10,14 +10,16 @@ import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 import org.apache.logging.log4j.Logger;
 
+import javax.swing.text.html.HTMLDocument;
 import javax.xml.ws.http.HTTPException;
 
 public class GetApplicationDetails {
 
     private ValidatableResponse apiResponse;
-    private Headers apiHeaders = new Headers();
 
     private String applicationNumber;
+
+    Headers headers = new Headers();
 
     public void setApplicationNumber(String applicationNumber) {
         this.applicationNumber = applicationNumber;
@@ -28,7 +30,8 @@ public class GetApplicationDetails {
 
     public ValidatableResponse getApplicationLicenceDetails() {
         String getApplicationResource = URL.build(env, String.format("application/%s", applicationNumber)).toString();
-        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
+        headers.getHeaders().put("x-pid",Headers.getAPI_HEADER());
+        apiResponse = RestUtils.get(getApplicationResource, headers.getHeaders());
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
             LOGGER.info("ERROR CODE: ".concat(Integer.toString(apiResponse.extract().statusCode())));
             LOGGER.info("RESPONSE MESSAGE: ".concat(apiResponse.extract().response().asString()));
