@@ -84,6 +84,8 @@ public class CreateApplication extends BaseAPI {
     private String transportConsultantPhone;
     private String transportConsultantName;
     private String transportConsultantEmail;
+    private String transportManagerFirstName;
+    private String transportManagerLastName;
 
     private double hours;
 
@@ -548,8 +550,9 @@ public class CreateApplication extends BaseAPI {
         this.isOwner = isOwner == null ? "Y" : isOwner;
         this.countryCode = countryCode == null ? "GB" : countryCode;
 
-        this.transManEmailAddress = transManEmailAddress ==
-        null ? String.format("%s.volTransportManager@dvsa.com", faker.generateFirstName(),transManEmailAddress.replace(" ", "_").replace(",", "")) : transManEmailAddress;
+        this.transportManagerFirstName = transportManagerFirstName == null ? String.format("%s %s", faker.generateFirstName(), faker.generateLastName()) : transportManagerFirstName;
+        this.transportManagerLastName = transportManagerLastName == null ? faker.generateFirstName() : transportManagerLastName;
+        this.transManEmailAddress = transManEmailAddress == null ? String.format("%s.volTransportManager@dvsa.com", transportManagerFirstName.replace(" ", "_").replace(",", "")) : transportConsultantEmail;
 
         this.transportConsultantName = transportConsultantName == null ? String.format("%s %s", faker.generateFirstName(), faker.generateLastName()) : transportConsultantName;
         this.transportConsultantEmail = transportConsultantEmail == null ? String.format("%s.volTConsultant@dvsa.com", transportConsultantName.replace(" ", "_").replace(",", "")) : transportConsultantEmail;
@@ -768,8 +771,8 @@ public class CreateApplication extends BaseAPI {
         tmUserName = "apiTM".concat(faker.generateFirstName()).concat(String.valueOf(randNumber));
         String hasEmail = "Y";
         String addTransportManager = URL.build(env, "transport-manager/create-new-user/").toString();
-        TransportManagerBuilder transportManagerBuilder = new TransportManagerBuilder().withApplication(getApplicationNumber()).withFirstName(getForeName())
-                .withFamilyName(getFamilyName()).withHasEmail(hasEmail).withUsername(getTmUserName()).withEmailAddress(getTransManEmailAddress()).withBirthDate(getBirthDate());
+        TransportManagerBuilder transportManagerBuilder = new TransportManagerBuilder().withApplication(getApplicationNumber()).withFirstName(transportManagerFirstName)
+                .withFamilyName(transportManagerLastName).withHasEmail(hasEmail).withUsername(getTmUserName()).withEmailAddress(getTransManEmailAddress()).withBirthDate(getBirthDate());
         apiResponse = RestUtils.post(transportManagerBuilder, addTransportManager, apiHeaders.getHeaders());
         setTransportManagerApplicationId(apiResponse.extract().jsonPath().getString("id.transportManagerApplicationId"));
 
