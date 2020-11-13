@@ -18,6 +18,11 @@ public class GetApplicationDetails {
     private Headers apiHeaders = new Headers();
 
     private String applicationNumber;
+
+    public void setApplicationNumber(String applicationNumber) {
+        this.applicationNumber = applicationNumber;
+    }
+
     private EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
     private static Logger LOGGER = LogManager.getLogger(GetApplicationDetails.class);
 
