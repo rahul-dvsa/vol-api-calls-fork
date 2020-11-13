@@ -27,34 +27,34 @@ public enum TrafficArea {
 
     static Random random = new Random();
 
-    public static String getPostCode(String trafficArea) {
+    public static String getPostCode(TrafficArea trafficArea) {
         String postCode;
         switch (trafficArea) {
-            case "B":
+            case NORTH_EAST:
                 postCode = "BD".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
                 break;
-            case "C":
+            case NORTH_WEST:
                 postCode = "M".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
                 break;
-            case "D":
+            case MIDLANDS:
                 postCode = "B".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
                 break;
-            case "F":
+            case EAST:
                 postCode = "IP".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
                 break;
-            case "G":
+            case WALES:
                 postCode = "CF".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
                 break;
-            case "H":
+            case WEST:
                 postCode = "OX".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
                 break;
-            case "K":
+            case LONDON:
                 postCode = "E".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
                 break;
-            case "M":
+            case SCOTLAND:
                 postCode = "EH".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
                 break;
-            case "N":
+            case NORTHERN_IRELAND:
                 postCode = "BT".concat(String.format("%s%s%s", randomTwoDigitInt(), randomOneDigitInt(), randomString()));
                 break;
             default:
