@@ -548,6 +548,8 @@ public class CreateApplication extends BaseAPI {
         this.isOwner = isOwner == null ? "Y" : isOwner;
         this.countryCode = countryCode == null ? "GB" : countryCode;
 
+        this.transManEmailAddress = transManEmailAddress == null ? String.format("%s %s", faker.generateFirstName(), faker.generateLastName()) : transManEmailAddress;
+
         this.transportConsultantName = transportConsultantName == null ? String.format("%s %s", faker.generateFirstName(), faker.generateLastName()) : transportConsultantName;
         this.transportConsultantEmail = transportConsultantEmail == null ? String.format("%s.volTConsultant@dvsa.com", transportConsultantName.replace(" ", "_").replace(",", "")) : transportConsultantEmail;
 
@@ -762,7 +764,7 @@ public class CreateApplication extends BaseAPI {
             return null;
         }
         int randNumber = Int.random(0, 2000);
-        tmUserName = "apiTM".concat(getLoginId()).concat(String.valueOf(randNumber));
+        tmUserName = "apiTM".concat(faker.generateFirstName()).concat(String.valueOf(randNumber));
         String hasEmail = "Y";
         String addTransportManager = URL.build(env, "transport-manager/create-new-user/").toString();
         TransportManagerBuilder transportManagerBuilder = new TransportManagerBuilder().withApplication(getApplicationNumber()).withFirstName(getForeName())
