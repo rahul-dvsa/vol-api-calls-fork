@@ -1048,7 +1048,7 @@ public class CreateApplication extends BaseAPI {
         String submitResource = URL.build(env, String.format("application/%s/submit", applicationNumber)).toString();
         int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationNumber, "version", "1"));
 
-        GenericBuilder genericBuilder = new GenericBuilder().withId(getApplicationNumber()).withVersion(applicationVersion);
+        GenericBuilder genericBuilder = new GenericBuilder().withId(applicationNumber).withVersion(applicationVersion);
         apiResponse = RestUtils.put(genericBuilder, submitResource, apiHeaders.getHeaders());
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {

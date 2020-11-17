@@ -30,7 +30,7 @@ public class GetApplicationDetails {
 
     public ValidatableResponse getApplicationLicenceDetails() {
         String getApplicationResource = URL.build(env, String.format("application/%s", applicationNumber)).toString();
-        headers.getHeaders().put("x-pid",Headers.getAPI_HEADER());
+        headers.getHeaders().put("x-pid", headers.getAPI_HEADER());
         apiResponse = RestUtils.get(getApplicationResource, headers.getHeaders());
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
             LOGGER.info("ERROR CODE: ".concat(Integer.toString(apiResponse.extract().statusCode())));
