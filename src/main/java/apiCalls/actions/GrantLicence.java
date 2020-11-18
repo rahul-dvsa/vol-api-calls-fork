@@ -55,7 +55,9 @@ public class GrantLicence extends BaseAPI{
         return apiResponse;
     }
 
-    public void createOverview(String applicationNumber) {
+    public void createOverview(String volApplicationNumber) {
+        this.applicationNumber = applicationNumber == null ? volApplicationNumber : applicationNumber;
+
         String overviewResource = URL.build(env, String.format("application/%s/overview/", applicationNumber)).toString();
         apiHeaders.headers.put("x-pid", Headers.getAPI_HEADER());
         String status = "1";
@@ -81,7 +83,9 @@ public class GrantLicence extends BaseAPI{
         }
     }
 
-    public void getOutstandingFees(String applicationNumber) {
+    public void getOutstandingFees(String volApplicationNumber) {
+        this.applicationNumber = applicationNumber == null ? volApplicationNumber : applicationNumber;
+
         String getOutstandingFeesResource = URL.build(env, String.format("application/%s/outstanding-fees/", applicationNumber)).toString();
         apiResponse = RestUtils.get(getOutstandingFeesResource, apiHeaders.getHeaders());
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
@@ -101,10 +105,13 @@ public class GrantLicence extends BaseAPI{
         }
     }
 
-    public void payOutstandingFees(String organisationId, String applicationNumber) {
+    public void payOutstandingFees(String organisationNumber, String volApplicationNumber) {
         String payer = faker.generateFirstName() + faker.generateLastName();
         String paymentMethod = "fpm_cash";
         String slipNo = "123456";
+
+        this.organisationId = organisationId == null ? organisationNumber : organisationId;
+        this.applicationNumber = applicationNumber == null ? volApplicationNumber : applicationNumber;
 
         String payOutstandingFeesResource = URL.build(env, "transaction/pay-outstanding-fees/").toString();
         FeesBuilder feesBuilder = new FeesBuilder().withFeeIds(outstandingFeesIds).withOrganisationId(organisationId).withApplicationId(applicationNumber)
@@ -118,7 +125,9 @@ public class GrantLicence extends BaseAPI{
         }
     }
 
-    public void grant(String applicationNumber) {
+    public void grant(String volApplicationNumber) {
+        this.applicationNumber = applicationNumber == null ? volApplicationNumber : applicationNumber;
+
         String grantApplicationResource = URL.build(env, String.format("application/%s/grant/", applicationNumber)).toString();
         GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(applicationNumber).withDuePeriod("9").withCaseworkerNotes("This notes are from the API");
         apiResponse = RestUtils.put(grantApplication, grantApplicationResource, apiHeaders.getHeaders());
@@ -158,7 +167,9 @@ public class GrantLicence extends BaseAPI{
         return apiResponse;
     }
 
-    private void variationGrant(String applicationNumber) {
+    private void variationGrant(String volApplicationNumber) {
+        this.applicationNumber = applicationNumber == null ? volApplicationNumber : applicationNumber;
+
         String grantApplicationResource = URL.build(env, String.format("variation/%s/grant/", applicationNumber)).toString();
         GenericBuilder grantVariationBuilder = new GenericBuilder().withId(applicationNumber);
         apiResponse = RestUtils.put(grantVariationBuilder, grantApplicationResource, apiHeaders.getHeaders());
@@ -171,7 +182,9 @@ public class GrantLicence extends BaseAPI{
         }
     }
 
-    public void refuse(String applicationNumber) {
+    public void refuse(String volApplicationNumber) {
+        this.applicationNumber = applicationNumber == null ? volApplicationNumber : applicationNumber;
+
         String grantApplicationResource = URL.build(env, String.format("application/%s/refuse/", applicationNumber)).toString();
         GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(applicationNumber).withCaseworkerNotes("This notes are from the API");
         apiResponse = RestUtils.put(grantApplication, grantApplicationResource, apiHeaders.getHeaders());
@@ -185,7 +198,9 @@ public class GrantLicence extends BaseAPI{
         }
     }
 
-    public void withdraw(String applicationNumber) {
+    public void withdraw(String volApplicationNumber) {
+        this.applicationNumber = applicationNumber == null ? volApplicationNumber : applicationNumber;
+
         String grantApplicationResource = URL.build(env, String.format("application/%s/withdraw/", applicationNumber)).toString();
         GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(applicationNumber).withReason("reg_in_error");
         apiResponse = RestUtils.put(grantApplication, grantApplicationResource, apiHeaders.getHeaders());
