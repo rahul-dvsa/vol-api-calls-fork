@@ -23,7 +23,8 @@ The following technologies should be installed on your system.
 
 ###TODO
 
-``API methods for creating applications
-  API methods for granting applications
+``API methods for creating cases
+  API methods for creating variations
+  Any other API calls
  ``
 
