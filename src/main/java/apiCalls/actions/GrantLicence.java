@@ -33,7 +33,9 @@ public class GrantLicence extends BaseAPI{
     private String organisationId;
     private String applicationNumber;
 
+
     private List<Double> feesToPay = new ArrayList<>();
+    private String dateState;
 
     private void setFeeId(int feeId){
         this.feeId = feeId;
@@ -45,6 +47,14 @@ public class GrantLicence extends BaseAPI{
 
     public void setApplicationNumber(String applicationNumber) {
         this.applicationNumber = applicationNumber;
+    }
+
+    public String getDateState() {
+        return dateState;
+    }
+
+    public void setDateState(String dateState) {
+        this.dateState = dateState;
     }
 
     public ValidatableResponse grantLicence() {
@@ -115,8 +125,7 @@ public class GrantLicence extends BaseAPI{
 
         String payOutstandingFeesResource = URL.build(env, "transaction/pay-outstanding-fees/").toString();
         FeesBuilder feesBuilder = new FeesBuilder().withFeeIds(outstandingFeesIds).withOrganisationId(organisationId).withApplicationId(applicationNumber)
-                .withPaymentMethod(paymentMethod).withReceived(feesToPay.stream().mapToDouble(Double::doubleValue).sum()).withReceiptDate(DateState
-                        .getDates("current", 0)).withPayer(payer).withSlipNo(slipNo);
+                .withPaymentMethod(paymentMethod).withReceived(feesToPay.stream().mapToDouble(Double::doubleValue).sum()).withReceiptDate(getDateState().toString()).withPayer(payer).withSlipNo(slipNo);
         apiResponse = RestUtils.post(feesBuilder, payOutstandingFeesResource, apiHeaders.getHeaders());
         if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {
             LOGGER.info(apiResponse.extract().statusCode());
@@ -155,8 +164,9 @@ public class GrantLicence extends BaseAPI{
         String slipNo = "123456";
 
         String payOutstandingFeesResource = URL.build(env, "transaction/pay-outstanding-fees/").toString();
+
         FeesBuilder feesBuilder = new FeesBuilder().withFeeIds(Collections.singletonList(feeId)).withOrganisationId(organisationId).withApplicationId(applicationNumber)
-                .withPaymentMethod(paymentMethod).withReceived(grantFees).withReceiptDate(DateState.getDates("current", 0)).withPayer(payer).withSlipNo(slipNo);
+                .withPaymentMethod(paymentMethod).withReceived(grantFees).withReceiptDate(getDateState().toString()).withPayer(payer).withSlipNo(slipNo);
         apiResponse = RestUtils.post(feesBuilder, payOutstandingFeesResource, apiHeaders.getHeaders());
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {

@@ -1,6 +1,7 @@
 package apiCalls.enums;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Test;
 
 import java.util.Random;
 
@@ -62,7 +63,6 @@ public enum TrafficArea {
         }
         return postCode;
     }
-
     public static String randomString() {
         return RandomStringUtils.randomAlphabetic(2);
     }

@@ -11,6 +11,7 @@ import activesupport.system.Properties;
 import apiCalls.enums.BusinessType;
 import apiCalls.enums.LicenceType;
 import apiCalls.enums.OperatorType;
+import apiCalls.enums.TrafficArea;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
@@ -33,6 +34,7 @@ public class CreateApplication extends BaseAPI {
     private String birthDate;
     private String town;
     private String postcode;
+    private String safetInspectorPostCode;
     private String countryCode;
     private String organisationName;
     private String transManEmailAddress;
@@ -83,6 +85,7 @@ public class CreateApplication extends BaseAPI {
     private String transportConsultantTown;
     private String transportConsultantPhone;
     private String transportConsultantName;
+    private String transportConsultantPostCode;
     private String transportConsultantEmail;
     private String transportManagerFirstName;
     private String transportManagerLastName;
@@ -521,6 +524,14 @@ public class CreateApplication extends BaseAPI {
         this.transportConsultantEmail = transportConsultantEmail;
     }
 
+    public void setSafetInspectorPostCode(String safetInspectorPostCode) {
+        this.safetInspectorPostCode = safetInspectorPostCode;
+    }
+
+    public void setTransportConsultantPostCode(String transportConsultantPostCode) {
+        this.transportConsultantPostCode = transportConsultantPostCode;
+    }
+
     private Headers apiHeaders = new Headers();
 
     public CreateApplication() {
@@ -531,6 +542,13 @@ public class CreateApplication extends BaseAPI {
         this.foreName = foreName == null ? faker.generateFirstName().concat(String.valueOf(Int.random(100, 999))) : foreName;
         this.familyName = familyName == null ? faker.generateLastName().concat(String.valueOf(Int.random(100, 999))) : familyName;
         this.birthDate = birthDate == null ? Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28) : birthDate;
+
+        this.postcode = postcode == null ? TrafficArea.getPostCode(TrafficArea.valueOf(getTrafficArea())) : postcode;
+        this.businessPostCode = businessPostCode == null ? TrafficArea.getPostCode(TrafficArea.valueOf(getTrafficArea())) : businessPostCode;
+        this.establishmentPostCode = establishmentPostCode == null ? TrafficArea.getPostCode(TrafficArea.valueOf(getTrafficArea())) : establishmentPostCode;
+        this.operatingCentrePostCode = operatingCentrePostCode == null ? TrafficArea.getPostCode(TrafficArea.valueOf(getTrafficArea())) : operatingCentrePostCode;
+        this.safetInspectorPostCode = safetInspectorPostCode == null ? faker.getRandomRealUKPostcode() : safetInspectorPostCode;
+        this.transportConsultantPostCode = transportConsultantPostCode == null ? faker.getRandomRealUKPostcode() : transportConsultantPostCode;
 
         this.hours = hours == 0.0 ? 2.0 : hours;
         this.restrictedVehicles = restrictedVehicles == null ? "2" : restrictedVehicles;
@@ -640,7 +658,7 @@ public class CreateApplication extends BaseAPI {
         AddressBuilder correspondenceAddress = new AddressBuilder().withAddressLine1(getBusinessAddressLine1()).withAddressLine2(getBusinessAddressLine2()
         ).withTown(getBusinessTown()).withPostcode(getBusinessPostCode()).withCountryCode(getCountryCode());
 
-        AddressBuilder transportConsultantAddress = new AddressBuilder().withAddressLine1(transportConsultantAddressLine1).withTown(transportConsultantTown).withPostcode(postcode).withCountryCode(countryCode);
+        AddressBuilder transportConsultantAddress = new AddressBuilder().withAddressLine1(transportConsultantAddressLine1).withTown(transportConsultantTown).withPostcode(transportConsultantPostCode).withCountryCode(countryCode);
 
         ContactDetailsBuilder transportConsultantContact = new ContactDetailsBuilder().withPhoneNumber(transportConsultantPhone).withEmailAddress(transportConsultantEmail);
 
@@ -949,7 +967,7 @@ public class CreateApplication extends BaseAPI {
         }
         String safetyInspectorResource = URL.build(env, String.format("application/%s/workshop", getApplicationNumber()
         )).toString();
-        AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(businessAddressLine1).withTown(town).withPostcode(postcode).withCountryCode(countryCode);
+        AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(businessAddressLine1).withTown(town).withPostcode(safetInspectorPostCode).withCountryCode(countryCode);
         ContactDetailsBuilder contactDetailsBuilder = new ContactDetailsBuilder().withFao(foreName).withAddress(addressBuilder);
         SafetyInspectorBuilder safetyInspectorBuilder = new SafetyInspectorBuilder().withApplication(applicationNumber).withLicence(licenceNumber).withIsExternal("N")
                 .withContactDetails(contactDetailsBuilder);
