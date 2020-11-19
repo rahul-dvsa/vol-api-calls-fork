@@ -33,6 +33,7 @@ public class CreateApplication extends BaseAPI {
     private String familyName;
     private String birthDate;
     private String town;
+    private TrafficArea postCodeByTrafficArea;
     private String postcode;
     private String safetInspectorPostCode;
     private String countryCode;
@@ -532,6 +533,10 @@ public class CreateApplication extends BaseAPI {
         this.transportConsultantPostCode = transportConsultantPostCode;
     }
 
+    public void setPostCodeByTrafficArea(TrafficArea postCodeByTrafficArea) {
+        this.postCodeByTrafficArea = postCodeByTrafficArea;
+    }
+
     private Headers apiHeaders = new Headers();
 
     public CreateApplication() {
@@ -539,14 +544,13 @@ public class CreateApplication extends BaseAPI {
         this.organisationName = organisationName == null ? faker.generateCompanyName() : organisationName;
         this.companyNumber = companyNumber == null ? String.valueOf(Int.random(00000000, 99999999)) : companyNumber;
 
+        this.phoneNumber = phoneNumber == null ? "0712345678" : phoneNumber;
+        this.businessEmailAddress = businessEmailAddress == null ? String.format("%s.volBusiness@dvsa.com", organisationName.replace(" ", "_").replace(",", "")) : businessEmailAddress;
+
         this.foreName = foreName == null ? faker.generateFirstName().concat(String.valueOf(Int.random(100, 999))) : foreName;
         this.familyName = familyName == null ? faker.generateLastName().concat(String.valueOf(Int.random(100, 999))) : familyName;
         this.birthDate = birthDate == null ? Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28) : birthDate;
 
-        this.postcode = postcode == null ? TrafficArea.getPostCode(TrafficArea.valueOf(getTrafficArea())) : postcode;
-        this.businessPostCode = businessPostCode == null ? TrafficArea.getPostCode(TrafficArea.valueOf(getTrafficArea())) : businessPostCode;
-        this.establishmentPostCode = establishmentPostCode == null ? TrafficArea.getPostCode(TrafficArea.valueOf(getTrafficArea())) : establishmentPostCode;
-        this.operatingCentrePostCode = operatingCentrePostCode == null ? TrafficArea.getPostCode(TrafficArea.valueOf(getTrafficArea())) : operatingCentrePostCode;
         this.safetInspectorPostCode = safetInspectorPostCode == null ? faker.getRandomRealUKPostcode() : safetInspectorPostCode;
         this.transportConsultantPostCode = transportConsultantPostCode == null ? faker.getRandomRealUKPostcode() : transportConsultantPostCode;
 
@@ -634,7 +638,7 @@ public class CreateApplication extends BaseAPI {
         String natureOfBusiness = faker.generateNatureOfBusiness();
         String updateBusinessDetailsResource = URL.build(env, String.format("organisation/business-details/application/%s", getApplicationNumber())).toString();
 
-        AddressBuilder address = new AddressBuilder().withAddressLine1(getBusinessAddressLine1()).withTown(getBusinessTown()).withPostcode(getBusinessPostCode());
+        AddressBuilder address = new AddressBuilder().withAddressLine1(getBusinessAddressLine1()).withTown(getBusinessTown()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea));
         UpdateBusinessDetailsBuilder businessDetails = new UpdateBusinessDetailsBuilder()
                 .withId(getApplicationNumber()).withCompanyNumber(companyNumber).withNatureOfBusiness(natureOfBusiness).withLicence(getLicenceNumber())
                 .withVersion(organisationVersion).withName(getBusinessName()).withAddress(address);
@@ -653,10 +657,10 @@ public class CreateApplication extends BaseAPI {
         String applicationAddressResource = URL.build(env, String.format("application/%s/addresses/", getApplicationNumber())).toString();
 
         AddressBuilder establishmentAddress = new AddressBuilder().withAddressLine1(getEstablishmentAddressLine1()
-        ).withTown(getEstablishmentTown()).withPostcode(getEstablishmentPostCode()).withCountryCode(getCountryCode());
+        ).withTown(getEstablishmentTown()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(getCountryCode());
 
         AddressBuilder correspondenceAddress = new AddressBuilder().withAddressLine1(getBusinessAddressLine1()).withAddressLine2(getBusinessAddressLine2()
-        ).withTown(getBusinessTown()).withPostcode(getBusinessPostCode()).withCountryCode(getCountryCode());
+        ).withTown(getBusinessTown()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(getCountryCode());
 
         AddressBuilder transportConsultantAddress = new AddressBuilder().withAddressLine1(transportConsultantAddressLine1).withTown(transportConsultantTown).withPostcode(transportConsultantPostCode).withCountryCode(countryCode);
 
@@ -667,7 +671,7 @@ public class CreateApplication extends BaseAPI {
 
         ContactDetailsBuilder contactDetailsBuilder = new ContactDetailsBuilder().withPhoneNumber(getPhoneNumber()).withEmailAddress(getBusinessEmailAddress());
 
-        ApplicationAddressBuilder addressBuilder = new ApplicationAddressBuilder().withId(applicationNumber).withConsultant("Consult").withContact(contactDetailsBuilder)
+        ApplicationAddressBuilder addressBuilder = new ApplicationAddressBuilder().withId(applicationNumber).withConsultant(transportConsultant).withContact(contactDetailsBuilder)
                 .withCorrespondenceAddress(correspondenceAddress).withEstablishmentAddress(establishmentAddress);
 
         apiResponse = RestUtils.put(addressBuilder, applicationAddressResource, apiHeaders.getHeaders());
@@ -701,17 +705,17 @@ public class CreateApplication extends BaseAPI {
 
         if (operatorType.equals(OperatorType.GOODS.asString())) {
             AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getOperatingCentreTown()
-            ).withPostcode(getOperatingCentrePostCode()).withCountryCode(getCountryCode());
+            ).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(getCountryCode());
             operatingCentreBuilder.withApplication(getApplicationNumber()).withNoOfVehiclesRequired(String.valueOf(getNoOfVehiclesRequired()))
                     .withNoOfTrailersRequired(String.valueOf(getNoOfVehiclesRequired())).withPermission(permissionOption).withAddress(address);
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
-            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getTown()).withPostcode(getPostCode()).withCountryCode(getCountryCode());
+            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getTown()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(getCountryCode());
             operatingCentreBuilder.withApplication(getApplicationNumber()
             ).withNoOfVehiclesRequired(String.valueOf(getNoOfVehiclesRequired())).withPermission(permissionOption).withAddress(address);
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
-            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getTown()).withPostcode(getPostCode()).withCountryCode(getCountryCode());
+            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getTown()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(getCountryCode());
             operatingCentreBuilder.withApplication(getApplicationNumber()).withNoOfVehiclesRequired(String.valueOf(getRestrictedVehicles())).withPermission(permissionOption).withAddress(address);
         }
         if (!licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
@@ -824,7 +828,7 @@ public class CreateApplication extends BaseAPI {
         String tmApplicationNo = transportManagerApplicationId;
         String addTMresp = URL.build(env, String.format("transport-manager-application/%s/update-details/", tmApplicationNo)).toString();
         int applicationVersion = Integer.parseInt(fetchTMApplicationInformation(tmApplicationNo, "version", "1"));
-        AddressBuilder Address = new AddressBuilder().withAddressLine1(getBusinessAddressLine1()).withPostcode(getPostCode()).withTown(getTown()).withCountryCode(getCountryCode());
+        AddressBuilder Address = new AddressBuilder().withAddressLine1(getBusinessAddressLine1()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withTown(getTown()).withCountryCode(getCountryCode());
         TmRespBuilder tmRespBuilder = new TmRespBuilder().withEmail(getTransManEmailAddress()).withPlaceOfBirth(getTown()).withHomeAddress(Address).withWorkAddress(Address).withTmType(getTmType()).withIsOwner(isOwner)
                 .withHoursMon(hours).withHoursTue(hours).withHoursWed(hours).withHoursThu(hours).withHoursThu(hours).withHoursFri(hours).withHoursSat(hours).withHoursSun(hours).withDob(birthDate)
                 .withId(tmApplicationNo).withVersion(applicationVersion);
@@ -1025,7 +1029,7 @@ public class CreateApplication extends BaseAPI {
         String councilName = "Volhampton";
         if (operatorType.equals("public") && (licenceType.equals("special_restricted"))) {
             String submitResource = URL.build(env, String.format("application/%s/taxi-phv", getApplicationNumber())).toString();
-            AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(businessAddressLine1).withTown(town).withPostcode(postcode).withCountryCode(countryCode);
+            AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(businessAddressLine1).withTown(town).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(countryCode);
             PhvTaxiBuilder taxiBuilder = new PhvTaxiBuilder().withId(applicationNumber).withPrivateHireLicenceNo(phLicenceNumber).withCouncilName(councilName).withLicence(licenceNumber).withAddress(addressBuilder);
             apiResponse = RestUtils.post(taxiBuilder, submitResource, apiHeaders.getHeaders());
             if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {
