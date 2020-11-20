@@ -572,8 +572,8 @@ public class CreateApplication extends BaseAPI {
         this.isOwner = isOwner == null ? "Y" : isOwner;
         this.countryCode = countryCode == null ? "GB" : countryCode;
 
-        this.trafficArea = trafficArea == null ? apiCalls.enums.TrafficArea.NORTH_EAST.name() : trafficArea;
-        this.enforcementArea = enforcementArea == null ? apiCalls.enums.TrafficArea.NORTH_EAST.name() : enforcementArea;
+        this.trafficArea = trafficArea == null ? apiCalls.enums.TrafficArea.NORTH_EAST.asString() : trafficArea;
+        this.enforcementArea = enforcementArea == null ? apiCalls.enums.EnforcementArea.NORTH_EAST.asString() : enforcementArea;
         this.postCodeByTrafficArea = postCodeByTrafficArea == null ? TrafficArea.valueOf(TrafficArea.NORTH_EAST.name()) : postCodeByTrafficArea;
 
         this.transportManagerFirstName = transportManagerFirstName == null ? String.format("%s %s", faker.generateFirstName(), faker.generateLastName()) : transportManagerFirstName;
