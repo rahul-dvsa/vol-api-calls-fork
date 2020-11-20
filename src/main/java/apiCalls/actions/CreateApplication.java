@@ -574,6 +574,7 @@ public class CreateApplication extends BaseAPI {
 
         this.trafficArea = trafficArea == null ? apiCalls.enums.TrafficArea.NORTH_EAST.name() : trafficArea;
         this.enforcementArea = enforcementArea == null ? apiCalls.enums.TrafficArea.NORTH_EAST.name() : enforcementArea;
+        this.postCodeByTrafficArea = postCodeByTrafficArea == null ? TrafficArea.valueOf(TrafficArea.NORTH_EAST.name()) : postCodeByTrafficArea;
 
         this.transportManagerFirstName = transportManagerFirstName == null ? String.format("%s %s", faker.generateFirstName(), faker.generateLastName()) : transportManagerFirstName;
         this.transportManagerLastName = transportManagerLastName == null ? faker.generateFirstName() : transportManagerLastName;
