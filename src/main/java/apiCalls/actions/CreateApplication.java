@@ -710,12 +710,12 @@ public class CreateApplication extends BaseAPI {
                     .withNoOfTrailersRequired(String.valueOf(getNoOfVehiclesRequired())).withPermission(permissionOption).withAddress(address);
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
-            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getTown()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(getCountryCode());
+            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getOperatingCentreTown()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(getCountryCode());
             operatingCentreBuilder.withApplication(getApplicationNumber()
             ).withNoOfVehiclesRequired(String.valueOf(getNoOfVehiclesRequired())).withPermission(permissionOption).withAddress(address);
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
-            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getTown()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(getCountryCode());
+            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getOperatingCentreTown()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(getCountryCode());
             operatingCentreBuilder.withApplication(getApplicationNumber()).withNoOfVehiclesRequired(String.valueOf(getRestrictedVehicles())).withPermission(permissionOption).withAddress(address);
         }
         if (!licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
