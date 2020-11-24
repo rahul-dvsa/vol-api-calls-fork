@@ -90,18 +90,20 @@ public class CreateApplication extends BaseAPI {
     private String transportConsultantEmail;
     private String transportManagerFirstName;
     private String transportManagerLastName;
-
+    private int noOfOperatingCentreVehicles;
+    private int noOfVehiclesRequested;
     private double hours;
 
-    public int getNoOfVehiclesRequired() {
-        return noOfVehiclesRequired;
+
+    public int getNoOfOperatingCentreVehicles() {
+        return noOfOperatingCentreVehicles;
     }
 
-    public void setNoOfVehiclesRequired(int noOfVehiclesRequired) {
-        this.noOfVehiclesRequired = noOfVehiclesRequired;
-    }
+    public void setNoOfOperatingCentreVehicles(int noOfOperatingCentreVehicles) { this.noOfOperatingCentreVehicles = noOfOperatingCentreVehicles; }
 
-    private int noOfVehiclesRequired;
+    public int getNoOfVehiclesRequested() { return noOfVehiclesRequested; }
+
+    public void setNoOfVehiclesRequested(int noOfVehiclesRequested) { this.noOfVehiclesRequested = noOfVehiclesRequested; }
 
     private static final Logger LOGGER = LogManager.getLogger(RegisterUser.class);
 
@@ -556,7 +558,7 @@ public class CreateApplication extends BaseAPI {
 
         this.hours = hours == 0.0 ? 2.0 : hours;
         this.restrictedVehicles = restrictedVehicles == null ? "2" : restrictedVehicles;
-        this.noOfVehiclesRequired = noOfVehiclesRequired == 0 ? 5 : noOfVehiclesRequired;
+        this.noOfOperatingCentreVehicles = noOfOperatingCentreVehicles == 0 ? 5 : noOfOperatingCentreVehicles;
         this.psvVehicleSize = psvVehicleSize == null ? "psvvs_both" : psvVehicleSize;
         this.psvNoSmallVhlConfirmation = psvNoSmallVhlConfirmation == null ? "Y" : psvNoSmallVhlConfirmation;
         this.psvOperateSmallVhl = psvOperateSmallVhl == null ? "Y" : psvOperateSmallVhl;
@@ -710,13 +712,13 @@ public class CreateApplication extends BaseAPI {
         if (operatorType.equals(OperatorType.GOODS.asString())) {
             AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getOperatingCentreTown()
             ).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(getCountryCode());
-            operatingCentreBuilder.withApplication(getApplicationNumber()).withNoOfVehiclesRequired(String.valueOf(getNoOfVehiclesRequired()))
-                    .withNoOfTrailersRequired(String.valueOf(getNoOfVehiclesRequired())).withPermission(permissionOption).withAddress(address);
+            operatingCentreBuilder.withApplication(getApplicationNumber()).withNoOfVehiclesRequired(String.valueOf(getNoOfOperatingCentreVehicles()))
+                    .withNoOfTrailersRequired(String.valueOf(getNoOfOperatingCentreVehicles())).withPermission(permissionOption).withAddress(address);
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getOperatingCentreTown()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(getCountryCode());
             operatingCentreBuilder.withApplication(getApplicationNumber()
-            ).withNoOfVehiclesRequired(String.valueOf(getNoOfVehiclesRequired())).withPermission(permissionOption).withAddress(address);
+            ).withNoOfVehiclesRequired(String.valueOf(getNoOfOperatingCentreVehicles())).withPermission(permissionOption).withAddress(address);
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
             AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getOperatingCentreTown()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(getCountryCode());
@@ -744,12 +746,12 @@ public class CreateApplication extends BaseAPI {
         int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationNumber(), "version", "1"));
 
         if (operatorType.equals(OperatorType.GOODS.asString())) {
-            updateOperatingCentre.withId(getApplicationNumber()).withTotAuthVehicles(getNoOfVehiclesRequired())
+            updateOperatingCentre.withId(getApplicationNumber()).withTotAuthVehicles(getNoOfOperatingCentreVehicles())
                     .withTrafficArea(getTrafficArea()).withEnforcementArea(getEnforcementArea()).withTotCommunityLicences(1)
-                    .withTAuthTrailers(Integer.parseInt(String.valueOf(getNoOfVehiclesRequired()))).withVersion(applicationVersion);
+                    .withTAuthTrailers(Integer.parseInt(String.valueOf(getNoOfOperatingCentreVehicles()))).withVersion(applicationVersion);
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.RESTRICTED.asString()))) {
-            updateOperatingCentre.withId(getApplicationNumber()).withTotAuthVehicles(getNoOfVehiclesRequired())
+            updateOperatingCentre.withId(getApplicationNumber()).withTotAuthVehicles(getNoOfOperatingCentreVehicles())
                     .withTrafficArea(getTrafficArea()).withEnforcementArea(getEnforcementArea()).withTotCommunityLicences(1).withVersion(applicationVersion);
         }
 
@@ -870,6 +872,9 @@ public class CreateApplication extends BaseAPI {
         if (getOperatorType().equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
         }
+        if (getNoOfVehiclesRequested() > getNoOfOperatingCentreVehicles()) {
+            throw new Exception("Cannot have more vehicles requested than available on operating centre");
+        }
         String vehiclesResource = null;
         String vrm;
 
@@ -880,7 +885,7 @@ public class CreateApplication extends BaseAPI {
             vehiclesResource = URL.build(env, String.format("application/%s/psv-vehicles", getApplicationNumber())).toString();
         }
         do {
-            for (int i = 0; i < noOfVehiclesRequired; i++) {
+            for (int i = 0; i < noOfVehiclesRequested; i++) {
                 vrm = Str.randomWord(2).concat(String.valueOf(Int.random(99, 99)).concat(Str.randomWord(3)))
                         .toLowerCase();
                 VehiclesBuilder vehiclesDetails = new VehiclesBuilder().withId(getApplicationNumber()).withApplication(getApplicationNumber()).withHasEnteredReg("Y").withVrm(vrm)
@@ -955,8 +960,8 @@ public class CreateApplication extends BaseAPI {
         String applicationSafetyResource = URL.build(env, String.format("application/%s/safety", getApplicationNumber())).toString();
         int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationNumber(), "version", "1"));
 
-        LicenceBuilder licence = new LicenceBuilder().withId(licenceNumber).withVersion(version).withSafetyInsVaries(safetyInsVaries).withSafetyInsVehicles(String.valueOf(noOfVehiclesRequired))
-                .withSafetyInsTrailers(String.valueOf(noOfVehiclesRequired)).withTachographIns(tachographIns);
+        LicenceBuilder licence = new LicenceBuilder().withId(licenceNumber).withVersion(version).withSafetyInsVaries(safetyInsVaries).withSafetyInsVehicles(String.valueOf(noOfOperatingCentreVehicles))
+                .withSafetyInsTrailers(String.valueOf(noOfOperatingCentreVehicles)).withTachographIns(tachographIns);
         ApplicationSafetyBuilder applicationSafetyBuilder = new ApplicationSafetyBuilder().withId(getApplicationNumber()).withVersion(applicationVersion)
                 .withSafetyConfirmation(safetyConfirmationOption).withLicence(licence);
         apiResponse = RestUtils.put(applicationSafetyBuilder, applicationSafetyResource, apiHeaders.getHeaders());
