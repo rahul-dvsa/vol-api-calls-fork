@@ -566,6 +566,7 @@ public class CreateApplication extends BaseAPI {
         this.hours = hours == 0.0 ? 2.0 : hours;
         this.restrictedVehicles = restrictedVehicles == null ? "2" : restrictedVehicles;
         this.operatingCentreVehicleCap = operatingCentreVehicleCap == 0 ? 5 : operatingCentreVehicleCap;
+        this.noOfVehiclesRequested = noOfVehiclesRequested == 0 ? 5 : noOfVehiclesRequested;
         this.psvVehicleSize = psvVehicleSize == null ? "psvvs_both" : psvVehicleSize;
         this.psvNoSmallVhlConfirmation = psvNoSmallVhlConfirmation == null ? "Y" : psvNoSmallVhlConfirmation;
         this.psvOperateSmallVhl = psvOperateSmallVhl == null ? "Y" : psvOperateSmallVhl;
@@ -619,7 +620,7 @@ public class CreateApplication extends BaseAPI {
                 .withLicenceType(getLicenceType()).withNiFlag(getNiFlag()).withOrganisation(getOrganisationId());
         apiResponse = RestUtils.post(applicationBuilder, createApplicationResource, apiHeaders.getHeaders());
         setApplicationNumber(apiResponse.extract().jsonPath().getString("id.application"));
-        licenceNumber = apiResponse.extract().jsonPath().getString("id.licence");
+        setLicenceId(apiResponse.extract().jsonPath().getString("id.licence"));
         setApplicationNumber(applicationNumber);
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {
@@ -653,7 +654,7 @@ public class CreateApplication extends BaseAPI {
 
         AddressBuilder address = new AddressBuilder().withAddressLine1(getBusinessAddressLine1()).withTown(getBusinessTown()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea));
         UpdateBusinessDetailsBuilder businessDetails = new UpdateBusinessDetailsBuilder()
-                .withId(getApplicationNumber()).withCompanyNumber(companyNumber).withNatureOfBusiness(natureOfBusiness).withLicence(getLicenceNumber())
+                .withId(getApplicationNumber()).withCompanyNumber(companyNumber).withNatureOfBusiness(natureOfBusiness).withLicence(getLicenceId())
                 .withVersion(organisationVersion).withName(getBusinessName()).withAddress(address);
 
         apiResponse = RestUtils.put(businessDetails, updateBusinessDetailsResource, apiHeaders.getHeaders());
@@ -967,7 +968,7 @@ public class CreateApplication extends BaseAPI {
         String applicationSafetyResource = URL.build(env, String.format("application/%s/safety", getApplicationNumber())).toString();
         int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationNumber(), "version", "1"));
 
-        LicenceBuilder licence = new LicenceBuilder().withId(licenceNumber).withVersion(version).withSafetyInsVaries(safetyInsVaries).withSafetyInsVehicles(String.valueOf(operatingCentreVehicleCap))
+        LicenceBuilder licence = new LicenceBuilder().withId(getLicenceId()).withVersion(version).withSafetyInsVaries(safetyInsVaries).withSafetyInsVehicles(String.valueOf(operatingCentreVehicleCap))
                 .withSafetyInsTrailers(String.valueOf(operatingCentreVehicleCap)).withTachographIns(tachographIns);
         ApplicationSafetyBuilder applicationSafetyBuilder = new ApplicationSafetyBuilder().withId(getApplicationNumber()).withVersion(applicationVersion)
                 .withSafetyConfirmation(safetyConfirmationOption).withLicence(licence);
@@ -989,7 +990,7 @@ public class CreateApplication extends BaseAPI {
         )).toString();
         AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(businessAddressLine1).withTown(town).withPostcode(safetInspectorPostCode).withCountryCode(countryCode);
         ContactDetailsBuilder contactDetailsBuilder = new ContactDetailsBuilder().withFao(foreName).withAddress(addressBuilder);
-        SafetyInspectorBuilder safetyInspectorBuilder = new SafetyInspectorBuilder().withApplication(applicationNumber).withLicence(licenceNumber).withIsExternal("N")
+        SafetyInspectorBuilder safetyInspectorBuilder = new SafetyInspectorBuilder().withApplication(applicationNumber).withLicence(getLicenceId()).withIsExternal("N")
                 .withContactDetails(contactDetailsBuilder);
         apiResponse = RestUtils.post(safetyInspectorBuilder, safetyInspectorResource, apiHeaders.getHeaders());
         if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {
@@ -1046,7 +1047,7 @@ public class CreateApplication extends BaseAPI {
         if (operatorType.equals("public") && (licenceType.equals("special_restricted"))) {
             String submitResource = URL.build(env, String.format("application/%s/taxi-phv", getApplicationNumber())).toString();
             AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(businessAddressLine1).withTown(town).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(countryCode);
-            PhvTaxiBuilder taxiBuilder = new PhvTaxiBuilder().withId(applicationNumber).withPrivateHireLicenceNo(phLicenceNumber).withCouncilName(councilName).withLicence(licenceNumber).withAddress(addressBuilder);
+            PhvTaxiBuilder taxiBuilder = new PhvTaxiBuilder().withId(applicationNumber).withPrivateHireLicenceNo(phLicenceNumber).withCouncilName(councilName).withLicence(getLicenceId()).withAddress(addressBuilder);
             apiResponse = RestUtils.post(taxiBuilder, submitResource, apiHeaders.getHeaders());
             if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {
                 LOGGER.info("ERROR CODE: ".concat(Integer.toString(apiResponse.extract().statusCode())));
@@ -1095,5 +1096,18 @@ public class CreateApplication extends BaseAPI {
             throw new HTTPException(apiResponse.extract().statusCode());
         }
         return apiResponse;
+    }
+
+    public void getApplicationLicenceDetails() {
+        String getApplicationResource = URL.build(env, String.format("application/%s", applicationNumber)).toString();
+        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
+        setLicenceId(apiResponse.extract().jsonPath().getString("licence.id"));
+        setLicenceNumber(apiResponse.extract().jsonPath().getString("licence.licNo"));
+        setApplicationStatus(apiResponse.extract().jsonPath().getString("licenceType.status.olbsKey"));
+        if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
+            LOGGER.info("ERROR CODE: ".concat(Integer.toString(apiResponse.extract().statusCode())));
+            LOGGER.info("RESPONSE MESSAGE: ".concat(apiResponse.extract().response().asString()));
+            throw new HTTPException(apiResponse.extract().statusCode());
+        }
     }
 }
