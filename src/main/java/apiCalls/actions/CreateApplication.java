@@ -12,7 +12,9 @@ import apiCalls.enums.BusinessType;
 import apiCalls.enums.LicenceType;
 import apiCalls.enums.OperatorType;
 import apiCalls.enums.TrafficArea;
+import com.oracle.jrockit.jfr.InvalidValueException;
 import io.restassured.response.ValidatableResponse;
+import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -873,7 +875,7 @@ public class CreateApplication extends BaseAPI {
             return null;
         }
         if (getNoOfVehiclesRequested() > getNoOfOperatingCentreVehicles()) {
-            throw new Exception("Cannot have more vehicles requested than available on operating centre");
+            throw new ValueException("Cannot have more than the specified amount of vehicles on an operating centre.");
         }
         String vehiclesResource = null;
         String vrm;
