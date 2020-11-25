@@ -1097,17 +1097,4 @@ public class CreateApplication extends BaseAPI {
         }
         return apiResponse;
     }
-
-    public void getApplicationLicenceDetails() {
-        String getApplicationResource = URL.build(env, String.format("application/%s", applicationNumber)).toString();
-        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
-        setLicenceId(apiResponse.extract().jsonPath().getString("licence.id"));
-        setLicenceNumber(apiResponse.extract().jsonPath().getString("licence.licNo"));
-        setApplicationStatus(apiResponse.extract().jsonPath().getString("licenceType.status.olbsKey"));
-        if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
-            LOGGER.info("ERROR CODE: ".concat(Integer.toString(apiResponse.extract().statusCode())));
-            LOGGER.info("RESPONSE MESSAGE: ".concat(apiResponse.extract().response().asString()));
-            throw new HTTPException(apiResponse.extract().statusCode());
-        }
-    }
 }
