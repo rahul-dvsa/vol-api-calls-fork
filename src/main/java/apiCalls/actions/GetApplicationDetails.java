@@ -28,10 +28,13 @@ public class GetApplicationDetails {
     private EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
     private static Logger LOGGER = LogManager.getLogger(GetApplicationDetails.class);
 
-    public ValidatableResponse getApplicationLicenceDetails() {
+    public ValidatableResponse getApplicationLicenceDetails(CreateApplication createApplication) {
         String getApplicationResource = URL.build(env, String.format("application/%s", applicationNumber)).toString();
         headers.getHeaders().put("x-pid", headers.getAPI_HEADER());
         apiResponse = RestUtils.get(getApplicationResource, headers.getHeaders());
+        createApplication.setLicenceId(apiResponse.extract().jsonPath().getString("licence.id"));
+        createApplication.setLicenceNumber(apiResponse.extract().jsonPath().getString("licence.licNo"));
+        createApplication.setApplicationStatus(apiResponse.extract().jsonPath().getString("licenceType.status.olbsKey"));
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
             LOGGER.info("ERROR CODE: ".concat(Integer.toString(apiResponse.extract().statusCode())));
             LOGGER.info("RESPONSE MESSAGE: ".concat(apiResponse.extract().response().asString()));
