@@ -8,10 +8,7 @@ import activesupport.http.RestUtils;
 import activesupport.number.Int;
 import activesupport.string.Str;
 import activesupport.system.Properties;
-import apiCalls.enums.BusinessType;
-import apiCalls.enums.LicenceType;
-import apiCalls.enums.OperatorType;
-import apiCalls.enums.TrafficArea;
+import apiCalls.enums.*;
 import io.restassured.response.ValidatableResponse;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 import org.apache.http.HttpStatus;
@@ -34,13 +31,13 @@ public class CreateApplication extends BaseAPI {
     private String familyName;
     private String birthDate;
     private String town;
-    private TrafficArea postCodeByTrafficArea;
+    private String postCodeByTrafficArea;
     private String postcode;
-    private String safetInspectorPostCode;
+    private String safetyInspectorPostCode;
     private String countryCode;
     private String organisationName;
     private String transManEmailAddress;
-    private String applicationNumber;
+    private String applicationId;
     private String userId;
     private String tmUserName;
     private String username;
@@ -158,12 +155,12 @@ public class CreateApplication extends BaseAPI {
         this.organisationId = organisationId;
     }
 
-    public void setApplicationNumber(String applicationNumber) {
-        this.applicationNumber = applicationNumber;
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
     }
 
-    public String getApplicationNumber() {
-        return applicationNumber;
+    public String getApplicationId() {
+        return applicationId;
     }
 
     public String getLicenceNumber() {
@@ -286,6 +283,10 @@ public class CreateApplication extends BaseAPI {
         this.isInterim = isInterim;
     }
 
+    public String getIsOwner() {
+        return isOwner;
+    }
+
     public void setIsOwner(String isOwner) {
         this.isOwner = isOwner;
     }
@@ -334,8 +335,20 @@ public class CreateApplication extends BaseAPI {
         this.userId = userId;
     }
 
+    public String getTransportManagerApplicationId() {
+        return transportManagerApplicationId;
+    }
+
     public void setTransportManagerApplicationId(String transportManagerApplicationId) {
         this.transportManagerApplicationId = transportManagerApplicationId;
+    }
+
+    public String getCompanyNumber() {
+        return companyNumber;
+    }
+
+    public void setCompanyNumber(String companyNumber) {
+        this.companyNumber = companyNumber;
     }
 
     public String getTitle() {
@@ -376,6 +389,10 @@ public class CreateApplication extends BaseAPI {
 
     public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public double getHours() {
+        return hours;
     }
 
     public void setHours(double hours) {
@@ -534,57 +551,82 @@ public class CreateApplication extends BaseAPI {
         this.transportConsultantEmail = transportConsultantEmail;
     }
 
-    public void setSafetInspectorPostCode(String safetInspectorPostCode) {
-        this.safetInspectorPostCode = safetInspectorPostCode;
+    public void setSafetyInspectorPostCode(String safetyInspectorPostCode) {
+        this.safetyInspectorPostCode = safetyInspectorPostCode;
+    }
+
+    public String getSafetyInspectorPostCode() {
+        return safetyInspectorPostCode;
     }
 
     public void setTransportConsultantPostCode(String transportConsultantPostCode) {
         this.transportConsultantPostCode = transportConsultantPostCode;
     }
 
-    public void setPostCodeByTrafficArea(TrafficArea postCodeByTrafficArea) {
+    public String getTransportConsultantPostCode() {
+        return transportConsultantPostCode;
+    }
+
+    public String getPostCodeByTrafficArea() {
+        return postCodeByTrafficArea;
+    }
+
+    public void setPostCodeByTrafficArea(String postCodeByTrafficArea) {
         this.postCodeByTrafficArea = postCodeByTrafficArea;
     }
 
     private Headers apiHeaders = new Headers();
 
     public CreateApplication() {
-        this.businessName = businessName == null ? faker.generateCompanyName() : businessName;
-        this.organisationName = organisationName == null ? faker.generateCompanyName() : organisationName;
-        this.companyNumber = companyNumber == null ? String.valueOf(Int.random(00000000, 99999999)) : companyNumber;
+        setBusinessName( getBusinessName() == null ? faker.generateCompanyName() : getBusinessName() );
+        setOrganisationName( getOrganisationName() == null ? faker.generateCompanyName() : getOrganisationName() );
+        setCompanyNumber( getCompanyNumber() == null ? String.valueOf(Int.random(00000000, 99999999)) : getCompanyNumber() );
 
-        this.phoneNumber = phoneNumber == null ? "0712345678" : phoneNumber;
-        this.businessEmailAddress = businessEmailAddress == null ? String.format("%s.volBusiness@dvsa.com", organisationName.replace(" ", "_").replace(",", "")) : businessEmailAddress;
 
-        this.foreName = foreName == null ? faker.generateFirstName().concat(String.valueOf(Int.random(100, 999))) : foreName;
-        this.familyName = familyName == null ? faker.generateLastName().concat(String.valueOf(Int.random(100, 999))) : familyName;
-        this.birthDate = birthDate == null ? Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28) : birthDate;
+        String generatedBusinessEmail = getOrganisationName().replace(" ", "_").replace(",", "").concat(".volBusiness@dvsa.com");
+        setBusinessEmailAddress( getBusinessEmailAddress() == null ? generatedBusinessEmail : getBusinessEmailAddress() );
+        setPhoneNumber( getPhoneNumber() == null ? "0712345678" : getPhoneNumber());
 
-        this.safetInspectorPostCode = safetInspectorPostCode == null ? faker.getRandomRealUKPostcode() : safetInspectorPostCode;
-        this.transportConsultantPostCode = transportConsultantPostCode == null ? faker.getRandomRealUKPostcode() : transportConsultantPostCode;
+        String generatedFirstName = faker.generateFirstName().concat(String.valueOf(Int.random(100, 999)));
+        String generatedFamilyName = faker.generateLastName().concat(String.valueOf(Int.random(100, 999)));
+        String generatedBirthDate = Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28);
+        setForeName( getForeName() == null ? generatedFirstName : getForeName() );
+        setFamilyName( getFamilyName() == null ? generatedFamilyName : getFamilyName() );
+        setBirthDate( getBirthDate() == null ? generatedBirthDate : getBirthDate() );
 
-        this.hours = hours == 0.0 ? 2.0 : hours;
-        this.restrictedVehicles = restrictedVehicles == null ? "2" : restrictedVehicles;
-        this.operatingCentreVehicleCap = operatingCentreVehicleCap == 0 ? 5 : operatingCentreVehicleCap;
-        this.noOfVehiclesRequested = noOfVehiclesRequested == 0 ? 5 : noOfVehiclesRequested;
-        this.psvVehicleSize = psvVehicleSize == null ? "psvvs_both" : psvVehicleSize;
-        this.psvNoSmallVhlConfirmation = psvNoSmallVhlConfirmation == null ? "Y" : psvNoSmallVhlConfirmation;
-        this.psvOperateSmallVhl = psvOperateSmallVhl == null ? "Y" : psvOperateSmallVhl;
-        this.psvSmallVhlNotes = psvSmallVhlNotes == null ? "submitted through the API" : psvSmallVhlNotes;
-        this.psvLimousines = psvLimousines == null ? "Y" : psvLimousines;
-        this.psvNoLimousineConfirmation = psvNoLimousineConfirmation == null ? "Y" : psvNoLimousineConfirmation;
-        this.psvOnlyLimousinesConfirmation = psvOnlyLimousinesConfirmation == null ? "Y" : psvOnlyLimousinesConfirmation;
-        this.operatorType = operatorType == null ? OperatorType.valueOf("goods".toUpperCase()).asString() : operatorType;
-        this.licenceType = licenceType == null ? LicenceType.valueOf("standard_international".toUpperCase()).asString() : licenceType;
-        this.businessType = businessType == null ? BusinessType.valueOf("limited_company".toUpperCase()).asString() : businessType;
-        this.niFlag = niFlag == null ? "N" : niFlag;
-        this.isInterim = isInterim == null ? "N" : isInterim;
-        this.isOwner = isOwner == null ? "Y" : isOwner;
-        this.countryCode = countryCode == null ? "GB" : countryCode;
+        setHours( getHours() == 0.0 ? 2.0 : getHours() );
+        setSafetyInspectorPostCode( getSafetyInspectorPostCode() == null ? faker.getRandomRealUKPostcode() : getSafetyInspectorPostCode() );
+        setTransportConsultantPostCode( getTransportConsultantPostCode() == null ? faker.getRandomRealUKPostcode() : getTransportConsultantPostCode() );
 
-        this.trafficArea = trafficArea == null ? apiCalls.enums.TrafficArea.NORTH_EAST.asString() : trafficArea;
-        this.enforcementArea = enforcementArea == null ? apiCalls.enums.EnforcementArea.NORTH_EAST.asString() : enforcementArea;
-        this.postCodeByTrafficArea = postCodeByTrafficArea == null ? TrafficArea.valueOf(TrafficArea.NORTH_EAST.name()) : postCodeByTrafficArea;
+        setRestrictedVehicles( getRestrictedVehicles() == null ? "2" : getRestrictedVehicles() );
+        setOperatingCentreVehicleCap( getOperatingCentreVehicleCap() == 0 ? 5 : getOperatingCentreVehicleCap() );
+        setNoOfVehiclesRequested( getNoOfVehiclesRequested() == 0 ? 5 : getNoOfVehiclesRequested() );
+
+        setPsvVehicleSize( getPsvVehicleSize() == null ? "psvvs_both" : getPsvVehicleSize() );
+        setPsvNoSmallVhlConfirmation( getPsvNoSmallVhlConfirmation() == null ? "Y" : getPsvNoSmallVhlConfirmation() );
+        setPsvOperateSmallVhl( getPsvOperateSmallVhl() == null ? "Y" : getPsvOperateSmallVhl() );
+        setPsvSmallVhlNotes( getPsvSmallVhlNotes() == null ? "submitted through the API" : getPsvSmallVhlNotes() );
+        setPsvLimousines( getPsvLimousines() == null ? "Y" : getPsvLimousines() );
+        setPsvNoLimousineConfirmation( getPsvNoLimousineConfirmation() == null ? "Y" : getPsvNoLimousineConfirmation() );
+        setPsvOnlyLimousinesConfirmation( getPsvOnlyLimousinesConfirmation() == null ? "Y" : getPsvOnlyLimousinesConfirmation() );
+
+        String defaultOperatorType = OperatorType.valueOf("goods".toUpperCase()).asString();
+        String defaultLicenceType = LicenceType.valueOf("standard_international".toUpperCase()).asString();
+        String defaultBusinessType = BusinessType.valueOf("limited_company".toUpperCase()).asString();
+        setOperatorType( getOperatorType() == null ? defaultOperatorType : getOperatorType() );
+        setLicenceType( getLicenceType() == null ? defaultLicenceType : getLicenceType() );
+        setBusinessType( getBusinessType() == null ? defaultBusinessType : getBusinessType() );
+        setNiFlag( getNiFlag() == null ? "N" : getNiFlag() );
+        setIsInterim( getIsInterim() == null ? "N" : getIsInterim() );
+        setIsOwner( getIsOwner() == null ? "Y" : getIsOwner() );
+
+        String defaultTrafficArea = TrafficArea.NORTH_EAST.asString();
+        String defaultEnforcementArea = EnforcementArea.NORTH_EAST.asString();
+        String defaultPostCodeByTrafficArea = TrafficArea.getPostCode(TrafficArea.valueOf(TrafficArea.NORTH_EAST.name()));
+        setTrafficArea( getTrafficArea() == null ? defaultTrafficArea : getTrafficArea() );
+        setEnforcementArea( getEnforcementArea() == null ? defaultEnforcementArea : getEnforcementArea() );
+        setPostCodeByTrafficArea( getPostCodeByTrafficArea() == null ? defaultPostCodeByTrafficArea : getPostCodeByTrafficArea() );
+        setCountryCode( getCountryCode() == null ? "GB" : getCountryCode());
 
         this.transportManagerFirstName = transportManagerFirstName == null ? String.format("%s %s", faker.generateFirstName(), faker.generateLastName()) : transportManagerFirstName;
         this.transportManagerLastName = transportManagerLastName == null ? faker.generateFirstName() : transportManagerLastName;
@@ -619,9 +661,8 @@ public class CreateApplication extends BaseAPI {
         ApplicationBuilder applicationBuilder = new ApplicationBuilder().withOperatorType(getOperatorType())
                 .withLicenceType(getLicenceType()).withNiFlag(getNiFlag()).withOrganisation(getOrganisationId());
         apiResponse = RestUtils.post(applicationBuilder, createApplicationResource, apiHeaders.getHeaders());
-        setApplicationNumber(apiResponse.extract().jsonPath().getString("id.application"));
+        setApplicationId(apiResponse.extract().jsonPath().getString("id.application"));
         setLicenceId(apiResponse.extract().jsonPath().getString("id.licence"));
-        setApplicationNumber(applicationNumber);
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {
             LOGGER.info("ERROR CODE: ".concat(Integer.toString(apiResponse.extract().statusCode())));
@@ -632,11 +673,11 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse addBusinessType() {
-        String organisationVersion = fetchApplicationInformation(getApplicationNumber(), "licence.organisation.version", "1");
+        String organisationVersion = fetchApplicationInformation(getApplicationId(), "licence.organisation.version", "1");
         String updateBusinessTypeResource = URL.build(env, String.format("organisation/%s/business-type/", getOrganisationId())).toString();
 
         BusinessTypeBuilder businessTypeBuilder = new BusinessTypeBuilder().withBusinessType(getBusinessType()).withVersion(organisationVersion)
-                .withId(getOrganisationId()).withApplication(getApplicationNumber());
+                .withId(getOrganisationId()).withApplication(getApplicationId());
         apiResponse = RestUtils.put(businessTypeBuilder, updateBusinessTypeResource, apiHeaders.getHeaders());
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
@@ -648,13 +689,13 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse addBusinessDetails() {
-        String organisationVersion = fetchApplicationInformation(getApplicationNumber(), "licence.organisation.version", "1");
+        String organisationVersion = fetchApplicationInformation(getApplicationId(), "licence.organisation.version", "1");
         String natureOfBusiness = faker.generateNatureOfBusiness();
-        String updateBusinessDetailsResource = URL.build(env, String.format("organisation/business-details/application/%s", getApplicationNumber())).toString();
+        String updateBusinessDetailsResource = URL.build(env, String.format("organisation/business-details/application/%s", getApplicationId())).toString();
 
-        AddressBuilder address = new AddressBuilder().withAddressLine1(getBusinessAddressLine1()).withTown(getBusinessTown()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea));
+        AddressBuilder address = new AddressBuilder().withAddressLine1(getBusinessAddressLine1()).withTown(getBusinessTown()).withPostcode(postCodeByTrafficArea);
         UpdateBusinessDetailsBuilder businessDetails = new UpdateBusinessDetailsBuilder()
-                .withId(getApplicationNumber()).withCompanyNumber(companyNumber).withNatureOfBusiness(natureOfBusiness).withLicence(getLicenceId())
+                .withId(getApplicationId()).withCompanyNumber(companyNumber).withNatureOfBusiness(natureOfBusiness).withLicence(getLicenceId())
                 .withVersion(organisationVersion).withName(getBusinessName()).withAddress(address);
 
         apiResponse = RestUtils.put(businessDetails, updateBusinessDetailsResource, apiHeaders.getHeaders());
@@ -668,13 +709,13 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse addAddressDetails() {
-        String applicationAddressResource = URL.build(env, String.format("application/%s/addresses/", getApplicationNumber())).toString();
+        String applicationAddressResource = URL.build(env, String.format("application/%s/addresses/", getApplicationId())).toString();
 
         AddressBuilder establishmentAddress = new AddressBuilder().withAddressLine1(getEstablishmentAddressLine1()
-        ).withTown(getEstablishmentTown()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(getCountryCode());
+        ).withTown(getEstablishmentTown()).withPostcode(postCodeByTrafficArea).withCountryCode(getCountryCode());
 
         AddressBuilder correspondenceAddress = new AddressBuilder().withAddressLine1(getBusinessAddressLine1()).withAddressLine2(getBusinessAddressLine2()
-        ).withTown(getBusinessTown()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(getCountryCode());
+        ).withTown(getBusinessTown()).withPostcode(postCodeByTrafficArea).withCountryCode(getCountryCode());
 
         AddressBuilder transportConsultantAddress = new AddressBuilder().withAddressLine1(transportConsultantAddressLine1).withTown(transportConsultantTown).withPostcode(transportConsultantPostCode).withCountryCode(countryCode);
 
@@ -685,7 +726,7 @@ public class CreateApplication extends BaseAPI {
 
         ContactDetailsBuilder contactDetailsBuilder = new ContactDetailsBuilder().withPhoneNumber(getPhoneNumber()).withEmailAddress(getBusinessEmailAddress());
 
-        ApplicationAddressBuilder addressBuilder = new ApplicationAddressBuilder().withId(applicationNumber).withConsultant(transportConsultant).withContact(contactDetailsBuilder)
+        ApplicationAddressBuilder addressBuilder = new ApplicationAddressBuilder().withId(applicationId).withConsultant(transportConsultant).withContact(contactDetailsBuilder)
                 .withCorrespondenceAddress(correspondenceAddress).withEstablishmentAddress(establishmentAddress);
 
         apiResponse = RestUtils.put(addressBuilder, applicationAddressResource, apiHeaders.getHeaders());
@@ -699,8 +740,8 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse addPartners() {
-        String addPersonResource = URL.build(env, String.format("application/%s/people/", getApplicationNumber())).toString();
-        PersonBuilder addPerson = new PersonBuilder().withId(getApplicationNumber()).withTitle(getTitle()).withForename(getForeName()).withFamilyName(getFamilyName()).withBirthDate(getBirthDate());
+        String addPersonResource = URL.build(env, String.format("application/%s/people/", getApplicationId())).toString();
+        PersonBuilder addPerson = new PersonBuilder().withId(getApplicationId()).withTitle(getTitle()).withForename(getForeName()).withFamilyName(getFamilyName()).withBirthDate(getBirthDate());
         apiResponse = RestUtils.post(addPerson, addPersonResource, apiHeaders.getHeaders());
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {
@@ -712,25 +753,25 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse addOperatingCentre() {
-        String operatingCentreResource = URL.build(env, String.format("application/%s/operating-centre/", getApplicationNumber())).toString();
+        String operatingCentreResource = URL.build(env, String.format("application/%s/operating-centre/", getApplicationId())).toString();
         String permissionOption = "Y";
 
         OperatingCentreBuilder operatingCentreBuilder = new OperatingCentreBuilder();
 
         if (operatorType.equals(OperatorType.GOODS.asString())) {
             AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getOperatingCentreTown()
-            ).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(getCountryCode());
-            operatingCentreBuilder.withApplication(getApplicationNumber()).withNoOfVehiclesRequired(String.valueOf(getOperatingCentreVehicleCap()))
+            ).withPostcode(postCodeByTrafficArea).withCountryCode(getCountryCode());
+            operatingCentreBuilder.withApplication(getApplicationId()).withNoOfVehiclesRequired(String.valueOf(getOperatingCentreVehicleCap()))
                     .withNoOfTrailersRequired(String.valueOf(getOperatingCentreVehicleCap())).withPermission(permissionOption).withAddress(address);
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
-            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getOperatingCentreTown()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(getCountryCode());
-            operatingCentreBuilder.withApplication(getApplicationNumber()
+            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getOperatingCentreTown()).withPostcode(postCodeByTrafficArea).withCountryCode(getCountryCode());
+            operatingCentreBuilder.withApplication(getApplicationId()
             ).withNoOfVehiclesRequired(String.valueOf(getOperatingCentreVehicleCap())).withPermission(permissionOption).withAddress(address);
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
-            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getOperatingCentreTown()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(getCountryCode());
-            operatingCentreBuilder.withApplication(getApplicationNumber()).withNoOfVehiclesRequired(String.valueOf(getRestrictedVehicles())).withPermission(permissionOption).withAddress(address);
+            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getOperatingCentreTown()).withPostcode(postCodeByTrafficArea).withCountryCode(getCountryCode());
+            operatingCentreBuilder.withApplication(getApplicationId()).withNoOfVehiclesRequired(String.valueOf(getRestrictedVehicles())).withPermission(permissionOption).withAddress(address);
         }
         if (!licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             apiResponse = RestUtils.post(operatingCentreBuilder, operatingCentreResource, apiHeaders.getHeaders());
@@ -749,22 +790,22 @@ public class CreateApplication extends BaseAPI {
         if (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
         }
-        String updateOperatingCentreResource = URL.build(env, String.format("application/%s/operating-centres", getApplicationNumber())).toString();
+        String updateOperatingCentreResource = URL.build(env, String.format("application/%s/operating-centres", getApplicationId())).toString();
         OperatingCentreUpdater updateOperatingCentre = new OperatingCentreUpdater();
-        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationNumber(), "version", "1"));
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationId(), "version", "1"));
 
         if (operatorType.equals(OperatorType.GOODS.asString())) {
-            updateOperatingCentre.withId(getApplicationNumber()).withTotAuthVehicles(getOperatingCentreVehicleCap())
+            updateOperatingCentre.withId(getApplicationId()).withTotAuthVehicles(getOperatingCentreVehicleCap())
                     .withTrafficArea(getTrafficArea()).withEnforcementArea(getEnforcementArea()).withTotCommunityLicences(1)
                     .withTAuthTrailers(Integer.parseInt(String.valueOf(getOperatingCentreVehicleCap()))).withVersion(applicationVersion);
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.RESTRICTED.asString()))) {
-            updateOperatingCentre.withId(getApplicationNumber()).withTotAuthVehicles(getOperatingCentreVehicleCap())
+            updateOperatingCentre.withId(getApplicationId()).withTotAuthVehicles(getOperatingCentreVehicleCap())
                     .withTrafficArea(getTrafficArea()).withEnforcementArea(getEnforcementArea()).withTotCommunityLicences(1).withVersion(applicationVersion);
         }
 
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
-            updateOperatingCentre.withId(getApplicationNumber()).withTotAuthVehicles(Integer.valueOf(String.valueOf(getRestrictedVehicles())))
+            updateOperatingCentre.withId(getApplicationId()).withTotAuthVehicles(Integer.valueOf(String.valueOf(getRestrictedVehicles())))
                     .withTrafficArea(getTrafficArea()).withEnforcementArea(getEnforcementArea()).withVersion(applicationVersion);
         }
 
@@ -784,10 +825,10 @@ public class CreateApplication extends BaseAPI {
             return null;
         }
 
-        String financialEvidenceResource = URL.build(env, String.format("application/%s/financial-evidence", getApplicationNumber())).toString();
-        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationNumber(), "version", "1"));
+        String financialEvidenceResource = URL.build(env, String.format("application/%s/financial-evidence", getApplicationId())).toString();
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationId(), "version", "1"));
 
-        FinancialEvidenceBuilder financialEvidenceBuilder = new FinancialEvidenceBuilder().withId(getApplicationNumber()).withVersion(applicationVersion).withFinancialEvidenceUploaded(0);
+        FinancialEvidenceBuilder financialEvidenceBuilder = new FinancialEvidenceBuilder().withId(getApplicationId()).withVersion(applicationVersion).withFinancialEvidenceUploaded(0);
         apiResponse = RestUtils.put(financialEvidenceBuilder, financialEvidenceResource, apiHeaders.getHeaders());
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
@@ -807,7 +848,7 @@ public class CreateApplication extends BaseAPI {
         tmUserName = "apiTM".concat(faker.generateFirstName()).concat(String.valueOf(randNumber));
         String hasEmail = "Y";
         String addTransportManager = URL.build(env, "transport-manager/create-new-user/").toString();
-        TransportManagerBuilder transportManagerBuilder = new TransportManagerBuilder().withApplication(getApplicationNumber()).withFirstName(transportManagerFirstName)
+        TransportManagerBuilder transportManagerBuilder = new TransportManagerBuilder().withApplication(getApplicationId()).withFirstName(transportManagerFirstName)
                 .withFamilyName(transportManagerLastName).withHasEmail(hasEmail).withUsername(getTmUserName()).withEmailAddress(getTransManEmailAddress()).withBirthDate(getBirthDate());
         apiResponse = RestUtils.post(transportManagerBuilder, addTransportManager, apiHeaders.getHeaders());
         setTransportManagerApplicationId(apiResponse.extract().jsonPath().getString("id.transportManagerApplicationId"));
@@ -824,7 +865,7 @@ public class CreateApplication extends BaseAPI {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
-        String submitTransportManager = URL.build(env, String.format("transport-manager-application/%s/submit", getApplicationNumber())).toString();
+        String submitTransportManager = URL.build(env, String.format("transport-manager-application/%s/submit", getApplicationId())).toString();
         GenericBuilder genericBuilder = new GenericBuilder().withId(transportManagerApplicationId).withVersion(1);
         apiResponse = RestUtils.put(genericBuilder, submitTransportManager, apiHeaders.getHeaders());
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
@@ -842,7 +883,7 @@ public class CreateApplication extends BaseAPI {
         String tmApplicationNo = transportManagerApplicationId;
         String addTMresp = URL.build(env, String.format("transport-manager-application/%s/update-details/", tmApplicationNo)).toString();
         int applicationVersion = Integer.parseInt(fetchTMApplicationInformation(tmApplicationNo, "version", "1"));
-        AddressBuilder Address = new AddressBuilder().withAddressLine1(getBusinessAddressLine1()).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withTown(getTown()).withCountryCode(getCountryCode());
+        AddressBuilder Address = new AddressBuilder().withAddressLine1(getBusinessAddressLine1()).withPostcode(postCodeByTrafficArea).withTown(getTown()).withCountryCode(getCountryCode());
         TmRespBuilder tmRespBuilder = new TmRespBuilder().withEmail(getTransManEmailAddress()).withPlaceOfBirth(getTown()).withHomeAddress(Address).withWorkAddress(Address).withTmType(getTmType()).withIsOwner(isOwner)
                 .withHoursMon(hours).withHoursTue(hours).withHoursWed(hours).withHoursThu(hours).withHoursThu(hours).withHoursFri(hours).withHoursSat(hours).withHoursSun(hours).withDob(birthDate)
                 .withId(tmApplicationNo).withVersion(applicationVersion);
@@ -887,16 +928,16 @@ public class CreateApplication extends BaseAPI {
         String vrm;
 
         if (getOperatorType().equals(OperatorType.GOODS.asString())) {
-            vehiclesResource = URL.build(env, String.format("application/%s/goods-vehicles", getApplicationNumber())).toString();
+            vehiclesResource = URL.build(env, String.format("application/%s/goods-vehicles", getApplicationId())).toString();
         }
         if (getOperatorType().equals(OperatorType.PUBLIC.asString())) {
-            vehiclesResource = URL.build(env, String.format("application/%s/psv-vehicles", getApplicationNumber())).toString();
+            vehiclesResource = URL.build(env, String.format("application/%s/psv-vehicles", getApplicationId())).toString();
         }
         do {
             for (int i = 0; i < noOfVehiclesRequested; i++) {
                 vrm = Str.randomWord(2).concat(String.valueOf(Int.random(99, 99)).concat(Str.randomWord(3)))
                         .toLowerCase();
-                VehiclesBuilder vehiclesDetails = new VehiclesBuilder().withId(getApplicationNumber()).withApplication(getApplicationNumber()).withHasEnteredReg("Y").withVrm(vrm)
+                VehiclesBuilder vehiclesDetails = new VehiclesBuilder().withId(getApplicationId()).withApplication(getApplicationId()).withHasEnteredReg("Y").withVrm(vrm)
                         .withPlatedWeight(String.valueOf(Int.random(0, 9999))).withVersion(version);
                 assert vehiclesResource != null;
                 apiResponse = RestUtils.post(vehiclesDetails, vehiclesResource, apiHeaders.getHeaders());
@@ -919,10 +960,10 @@ public class CreateApplication extends BaseAPI {
             return null;
         }
 
-        String vehicleDeclarationResource = URL.build(env, String.format(String.format("application/%s/vehicle-declaration", applicationNumber))).toString();
-        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationNumber(), "version", "1"));
+        String vehicleDeclarationResource = URL.build(env, String.format(String.format("application/%s/vehicle-declaration", applicationId))).toString();
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationId(), "version", "1"));
 
-        VehicleDeclarationBuilder vehicleDeclarationBuilder = new VehicleDeclarationBuilder().withId(getApplicationNumber()
+        VehicleDeclarationBuilder vehicleDeclarationBuilder = new VehicleDeclarationBuilder().withId(getApplicationId()
         ).withPsvVehicleSize(psvVehicleSize)
                 .withPsvLimousines(psvLimousines).withPsvNoSmallVhlConfirmation(psvNoSmallVhlConfirmation).withPsvOperateSmallVhl(psvOperateSmallVhl).withPsvSmallVhlNotes(psvSmallVhlNotes)
                 .withPsvNoLimousineConfirmation(psvNoLimousineConfirmation).withPsvOnlyLimousinesConfirmation(psvOnlyLimousinesConfirmation).withVersion(applicationVersion);
@@ -942,10 +983,10 @@ public class CreateApplication extends BaseAPI {
         }
         String financialHistoryAnswer = "N";
         String insolvencyAnswer = "false";
-        String financialHistoryResource = URL.build(env, String.format("application/%s/financial-history", getApplicationNumber())).toString();
-        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationNumber(), "version", "1"));
+        String financialHistoryResource = URL.build(env, String.format("application/%s/financial-history", getApplicationId())).toString();
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationId(), "version", "1"));
 
-        FinancialHistoryBuilder financialHistoryBuilder = new FinancialHistoryBuilder().withId(getApplicationNumber()).withVersion(String.valueOf(applicationVersion)).withBankrupt(financialHistoryAnswer)
+        FinancialHistoryBuilder financialHistoryBuilder = new FinancialHistoryBuilder().withId(getApplicationId()).withVersion(String.valueOf(applicationVersion)).withBankrupt(financialHistoryAnswer)
                 .withLiquidation(financialHistoryAnswer).withReceivership(financialHistoryAnswer).withAdministration(financialHistoryAnswer).withAdministration(financialHistoryAnswer)
                 .withDisqualified(financialHistoryAnswer).withInsolvencyDetails(insolvencyAnswer).withInsolvencyConfirmation(insolvencyAnswer);
         apiResponse = RestUtils.put(financialHistoryBuilder, financialHistoryResource, apiHeaders.getHeaders());
@@ -965,12 +1006,12 @@ public class CreateApplication extends BaseAPI {
         String tachographIns = "tach_na";
         String safetyInsVaries = "N";
         String safetyConfirmationOption = "Y";
-        String applicationSafetyResource = URL.build(env, String.format("application/%s/safety", getApplicationNumber())).toString();
-        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationNumber(), "version", "1"));
+        String applicationSafetyResource = URL.build(env, String.format("application/%s/safety", getApplicationId())).toString();
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationId(), "version", "1"));
 
         LicenceBuilder licence = new LicenceBuilder().withId(getLicenceId()).withVersion(version).withSafetyInsVaries(safetyInsVaries).withSafetyInsVehicles(String.valueOf(operatingCentreVehicleCap))
                 .withSafetyInsTrailers(String.valueOf(operatingCentreVehicleCap)).withTachographIns(tachographIns);
-        ApplicationSafetyBuilder applicationSafetyBuilder = new ApplicationSafetyBuilder().withId(getApplicationNumber()).withVersion(applicationVersion)
+        ApplicationSafetyBuilder applicationSafetyBuilder = new ApplicationSafetyBuilder().withId(getApplicationId()).withVersion(applicationVersion)
                 .withSafetyConfirmation(safetyConfirmationOption).withLicence(licence);
         apiResponse = RestUtils.put(applicationSafetyBuilder, applicationSafetyResource, apiHeaders.getHeaders());
 
@@ -986,11 +1027,11 @@ public class CreateApplication extends BaseAPI {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
-        String safetyInspectorResource = URL.build(env, String.format("application/%s/workshop", getApplicationNumber()
+        String safetyInspectorResource = URL.build(env, String.format("application/%s/workshop", getApplicationId()
         )).toString();
-        AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(businessAddressLine1).withTown(town).withPostcode(safetInspectorPostCode).withCountryCode(countryCode);
+        AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(businessAddressLine1).withTown(town).withPostcode(safetyInspectorPostCode).withCountryCode(countryCode);
         ContactDetailsBuilder contactDetailsBuilder = new ContactDetailsBuilder().withFao(foreName).withAddress(addressBuilder);
-        SafetyInspectorBuilder safetyInspectorBuilder = new SafetyInspectorBuilder().withApplication(applicationNumber).withLicence(getLicenceId()).withIsExternal("N")
+        SafetyInspectorBuilder safetyInspectorBuilder = new SafetyInspectorBuilder().withApplication(applicationId).withLicence(getLicenceId()).withIsExternal("N")
                 .withContactDetails(contactDetailsBuilder);
         apiResponse = RestUtils.post(safetyInspectorBuilder, safetyInspectorResource, apiHeaders.getHeaders());
         if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {
@@ -1005,10 +1046,10 @@ public class CreateApplication extends BaseAPI {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
-        String previousConvictionsResource = URL.build(env, String.format("application/%s/previous-convictions", applicationNumber)).toString();
-        int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationNumber, "version", "1"));
+        String previousConvictionsResource = URL.build(env, String.format("application/%s/previous-convictions", applicationId)).toString();
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationId, "version", "1"));
 
-        CaseConvictionsPenaltiesBuilder convictionsPenaltiesBuilder = new CaseConvictionsPenaltiesBuilder().withId(applicationNumber).withConvictionsConfirmation("Y")
+        CaseConvictionsPenaltiesBuilder convictionsPenaltiesBuilder = new CaseConvictionsPenaltiesBuilder().withId(applicationId).withConvictionsConfirmation("Y")
                 .withPrevConviction("N").withVersion(applicationVersion);
         apiResponse = RestUtils.put(convictionsPenaltiesBuilder, previousConvictionsResource, apiHeaders.getHeaders());
 
@@ -1025,10 +1066,10 @@ public class CreateApplication extends BaseAPI {
             return null;
         }
         String optionResponse = "N";
-        String licenceHistoryResource = URL.build(env, String.format("application/%s/licence-history", applicationNumber)).toString();
-        int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationNumber, "version", "1"));
+        String licenceHistoryResource = URL.build(env, String.format("application/%s/licence-history", applicationId)).toString();
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationId, "version", "1"));
 
-        LicenceHistoryBuilder licenceHistoryBuilder = new LicenceHistoryBuilder().withId(applicationNumber).withPrevHadLicence(optionResponse).withPrevHasLicence(optionResponse)
+        LicenceHistoryBuilder licenceHistoryBuilder = new LicenceHistoryBuilder().withId(applicationId).withPrevHadLicence(optionResponse).withPrevHasLicence(optionResponse)
                 .withPrevBeenAtPi(optionResponse).withPrevBeenDisqualifiedTc(optionResponse).withPrevBeenRefused(optionResponse).withPrevBeenRevoked(optionResponse).withPrevPurchasedAssets(optionResponse)
                 .withVersion(applicationVersion);
         apiResponse = RestUtils.put(licenceHistoryBuilder, licenceHistoryResource, apiHeaders.getHeaders());
@@ -1045,9 +1086,9 @@ public class CreateApplication extends BaseAPI {
         String phLicenceNumber = "phv123456";
         String councilName = "Volhampton";
         if (operatorType.equals("public") && (licenceType.equals("special_restricted"))) {
-            String submitResource = URL.build(env, String.format("application/%s/taxi-phv", getApplicationNumber())).toString();
-            AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(businessAddressLine1).withTown(town).withPostcode(TrafficArea.getPostCode(postCodeByTrafficArea)).withCountryCode(countryCode);
-            PhvTaxiBuilder taxiBuilder = new PhvTaxiBuilder().withId(applicationNumber).withPrivateHireLicenceNo(phLicenceNumber).withCouncilName(councilName).withLicence(getLicenceId()).withAddress(addressBuilder);
+            String submitResource = URL.build(env, String.format("application/%s/taxi-phv", getApplicationId())).toString();
+            AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(businessAddressLine1).withTown(town).withPostcode(postCodeByTrafficArea).withCountryCode(countryCode);
+            PhvTaxiBuilder taxiBuilder = new PhvTaxiBuilder().withId(applicationId).withPrivateHireLicenceNo(phLicenceNumber).withCouncilName(councilName).withLicence(getLicenceId()).withAddress(addressBuilder);
             apiResponse = RestUtils.post(taxiBuilder, submitResource, apiHeaders.getHeaders());
             if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {
                 LOGGER.info("ERROR CODE: ".concat(Integer.toString(apiResponse.extract().statusCode())));
@@ -1063,14 +1104,14 @@ public class CreateApplication extends BaseAPI {
         String declarationConfirmation = "Y";
         String signatureRequired = "sig_physical_signature";
         DeclarationsAndUndertakings undertakings = new DeclarationsAndUndertakings();
-        String reviewResource = URL.build(env, String.format("application/%s/declaration/", getApplicationNumber())).toString();
-        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationNumber(), "version", "1"));
+        String reviewResource = URL.build(env, String.format("application/%s/declaration/", getApplicationId())).toString();
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationId(), "version", "1"));
 
         if (operatorType.equals("goods") && (getIsInterim().equals("Y"))) {
-            undertakings.withId(getApplicationNumber()).withVersion(String.valueOf(applicationVersion)).withInterimRequested(getIsInterim())
+            undertakings.withId(getApplicationId()).withVersion(String.valueOf(applicationVersion)).withInterimRequested(getIsInterim())
                     .withInterimReason(interimReason).withSignatureType(signatureRequired).withDeclarationConfirmation(declarationConfirmation);
         } else {
-            undertakings.withId(getApplicationNumber()).withVersion(String.valueOf(applicationVersion))
+            undertakings.withId(getApplicationId()).withVersion(String.valueOf(applicationVersion))
                     .withSignatureType(signatureRequired).withDeclarationConfirmation(declarationConfirmation);
         }
         apiResponse = RestUtils.put(undertakings, reviewResource, apiHeaders.getHeaders());
@@ -1084,10 +1125,10 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse submitApplication() {
-        String submitResource = URL.build(env, String.format("application/%s/submit", applicationNumber)).toString();
-        int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationNumber, "version", "1"));
+        String submitResource = URL.build(env, String.format("application/%s/submit", applicationId)).toString();
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationId, "version", "1"));
 
-        GenericBuilder genericBuilder = new GenericBuilder().withId(applicationNumber).withVersion(applicationVersion);
+        GenericBuilder genericBuilder = new GenericBuilder().withId(applicationId).withVersion(applicationVersion);
         apiResponse = RestUtils.put(genericBuilder, submitResource, apiHeaders.getHeaders());
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
