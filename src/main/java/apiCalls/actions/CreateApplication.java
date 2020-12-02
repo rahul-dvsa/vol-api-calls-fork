@@ -36,7 +36,7 @@ public class CreateApplication extends BaseAPI {
     private String safetyInspectorPostCode;
     private String countryCode;
     private String organisationName;
-    private String transManEmailAddress;
+    private String transportManagerEmailAddress;
     private String applicationId;
     private String userId;
     private String tmUserName;
@@ -69,26 +69,39 @@ public class CreateApplication extends BaseAPI {
     private String psvLimousines;
     private String psvNoLimousineConfirmation;
     private String psvOnlyLimousinesConfirmation;
-    private String businessAddressLine1;
-    private String businessAddressLine2;
+    private String correspondenceAddressLine1;
+    private String correspondenceAddressLine2;
+    private String correspondenceAddressLine3;
+    private String correspondenceAddressLine4;
+    private String correspondenceTown;
+    private String correspondencePostCode;
     private String businessTown;
     private String businessPostCode;
     private String establishmentAddressLine1;
     private String establishmentAddressLine2;
+    private String establishmentAddressLine3;
+    private String establishmentAddressLine4;
     private String establishmentTown;
     private String establishmentPostCode;
+    private String operatingCentreAddressLine1;
+    private String operatingCentreAddressLine2;
+    private String operatingCentreAddressLine3;
+    private String operatingCentreAddressLine4;
     private String operatingCentreTown;
     private String operatingCentrePostCode;
-    private String operatingCentreAddressLine1;
-    private String transportConsultantAddressLine1;
-    private String transportConsultantTown;
     private String transportConsultantPhone;
     private String transportConsultantName;
-    private String transportConsultantPostCode;
     private String transportConsultantEmail;
+    private String transportConsultantAddressLine1;
+    private String transportConsultantAddressLine2;
+    private String transportConsultantAddressLine3;
+    private String transportConsultantAddressLine4;
+    private String transportConsultantTown;
+    private String transportConsultantPostCode;
     private String transportManagerFirstName;
     private String transportManagerLastName;
     private int operatingCentreVehicleCap;
+    private int operatingCentreTrailerCap;
     private int noOfVehiclesRequested;
     private double hours;
 
@@ -99,6 +112,14 @@ public class CreateApplication extends BaseAPI {
 
     public void setOperatingCentreVehicleCap(int operatingCentreVehicleCap) {
         this.operatingCentreVehicleCap = operatingCentreVehicleCap;
+    }
+
+    public int getOperatingCentreTrailerCap() {
+        return operatingCentreTrailerCap;
+    }
+
+    public void setOperatingCentreTrailerCap(int operatingCentreTrailerCap) {
+        this.operatingCentreTrailerCap = operatingCentreTrailerCap;
     }
 
     public int getNoOfVehiclesRequested() {
@@ -179,14 +200,6 @@ public class CreateApplication extends BaseAPI {
         this.businessType = businessType;
     }
 
-    public String getBusinessAddressLine1() {
-        return businessAddressLine1;
-    }
-
-    public void setBusinessAddressLine1(String businessAddressLine1) {
-        this.businessAddressLine1 = businessAddressLine1;
-    }
-
     public String getTown() {
         return town;
     }
@@ -219,16 +232,16 @@ public class CreateApplication extends BaseAPI {
         this.organisationName = organisationName;
     }
 
-    public String getTransManEmailAddress() {
-        return transManEmailAddress;
+    public String getTransportManagerEmailAddress() {
+        return transportManagerEmailAddress;
     }
 
     public String getRestrictedVehicles() {
         return restrictedVehicles;
     }
 
-    public void setTransManEmailAddress(String transManEmailAddress) {
-        this.transManEmailAddress = transManEmailAddress;
+    public void setTransportManagerEmailAddress(String transportManagerEmailAddress) {
+        this.transportManagerEmailAddress = transportManagerEmailAddress;
     }
 
     public String getTrafficArea() {
@@ -463,6 +476,54 @@ public class CreateApplication extends BaseAPI {
         this.establishmentAddressLine1 = establishmentAddressLine1;
     }
 
+    public String getCorrespondenceAddressLine1() {
+        return correspondenceAddressLine1;
+    }
+
+    public void setCorrespondenceAddressLine1(String correspondenceAddressLine1) {
+        this.correspondenceAddressLine1 = correspondenceAddressLine1;
+    }
+
+    public String getCorrespondenceAddressLine2() {
+        return correspondenceAddressLine2;
+    }
+
+    public void setCorrespondenceAddressLine2(String correspondenceAddressLine2) {
+        this.correspondenceAddressLine2 = correspondenceAddressLine2;
+    }
+
+    public String getCorrespondenceAddressLine3() {
+        return correspondenceAddressLine3;
+    }
+
+    public void setCorrespondenceAddressLine3(String correspondenceAddressLine3) {
+        this.correspondenceAddressLine3 = correspondenceAddressLine3;
+    }
+
+    public String getCorrespondenceAddressLine4() {
+        return correspondenceAddressLine4;
+    }
+
+    public void setCorrespondenceAddressLine4(String correspondenceAddressLine4) {
+        this.correspondenceAddressLine4 = correspondenceAddressLine4;
+    }
+
+    public String getCorrespondenceTown() {
+        return correspondenceTown;
+    }
+
+    public void setCorrespondenceTown(String correspondenceTown) {
+        this.correspondenceTown = correspondenceTown;
+    }
+
+    public String getCorrespondencePostCode() {
+        return correspondencePostCode;
+    }
+
+    public void setCorrespondencePostCode(String correspondencePostCode) {
+        this.correspondencePostCode = correspondencePostCode;
+    }
+
     public String getBusinessTown() {
         return businessTown;
     }
@@ -511,16 +572,36 @@ public class CreateApplication extends BaseAPI {
         this.operatingCentrePostCode = operatingCentrePostCode;
     }
 
+    public String getOperatingCentreAddressLine1() {
+        return operatingCentreAddressLine1;
+    }
+
     public void setOperatingCentreAddressLine1(String operatingCentreAddressLine1) {
         this.operatingCentreAddressLine1 = operatingCentreAddressLine1;
     }
 
-    public String getBusinessAddressLine2() {
-        return businessAddressLine2;
+    public String getOperatingCentreAddressLine2() {
+        return operatingCentreAddressLine2;
     }
 
-    public void setBusinessAddressLine2(String businessAddressLine2) {
-        this.businessAddressLine2 = businessAddressLine2;
+    public void setOperatingCentreAddressLine2(String operatingCentreAddressLine2) {
+        this.operatingCentreAddressLine2 = operatingCentreAddressLine2;
+    }
+
+    public String getOperatingCentreAddressLine3() {
+        return operatingCentreAddressLine3;
+    }
+
+    public void setOperatingCentreAddressLine3(String operatingCentreAddressLine3) {
+        this.operatingCentreAddressLine3 = operatingCentreAddressLine3;
+    }
+
+    public void setOperatingCentreAddressLine4(String operatingCentreAddressLine4) {
+        this.operatingCentreAddressLine4 = operatingCentreAddressLine4;
+    }
+
+    public String getOperatingCentreAddressLine4() {
+        return operatingCentreAddressLine4;
     }
 
     public String getEstablishmentAddressLine2() {
@@ -531,20 +612,96 @@ public class CreateApplication extends BaseAPI {
         this.establishmentAddressLine2 = establishmentAddressLine2;
     }
 
+    public String getEstablishmentAddressLine3() {
+        return establishmentAddressLine3;
+    }
+
+    public void setEstablishmentAddressLine3(String establishmentAddressLine3) {
+        this.establishmentAddressLine3 = establishmentAddressLine3;
+    }
+
+    public String getEstablishmentAddressLine4() {
+        return establishmentAddressLine4;
+    }
+
+    public void setEstablishmentAddressLine4(String establishmentAddressLine4) {
+        this.establishmentAddressLine4 = establishmentAddressLine4;
+    }
+
+    public void setTransportManagerFirstName(String transportManagerFirstName) {
+        this.transportManagerFirstName = transportManagerFirstName;
+    }
+
+    public String getTransportManagerFirstName() {
+        return transportManagerFirstName;
+    }
+
+    public void setTransportManagerLastName(String transportManagerLastName) {
+
+    }
+
+    public String getTransportManagerLastName() {
+        return transportManagerLastName;
+    }
+
+    public String getTransportConsultantAddressLine1() {
+        return transportConsultantAddressLine1;
+    }
+
     public void setTransportConsultantAddressLine1(String transportConsultantAddressLine1) {
         this.transportConsultantAddressLine1 = transportConsultantAddressLine1;
+    }
+
+    public String getTransportConsultantAddressLine2() {
+        return transportConsultantAddressLine2;
+    }
+
+    public void setTransportConsultantAddressLine2(String transportConsultantAddressLine2) {
+        this.transportConsultantAddressLine2 = transportConsultantAddressLine2;
+    }
+
+    public String getTransportConsultantAddressLine3() {
+        return transportConsultantAddressLine3;
+    }
+
+    public void setTransportConsultantAddressLine3(String transportConsultantAddressLine3) {
+        this.transportConsultantAddressLine3 = transportConsultantAddressLine3;
+    }
+
+    public String getTransportConsultantAddressLine4() {
+        return transportConsultantAddressLine4;
+    }
+
+    public void setTransportConsultantAddressLine4(String transportConsultantAddressLine4) {
+        this.transportConsultantAddressLine4 = transportConsultantAddressLine4;
+    }
+
+    public String getTransportConsultantTown() {
+        return transportConsultantTown;
     }
 
     public void setTransportConsultantTown(String transportConsultantTown) {
         this.transportConsultantTown = transportConsultantTown;
     }
 
+    public String getTransportConsultantPhone() {
+        return transportConsultantPhone;
+    }
+
     public void setTransportConsultantPhone(String transportConsultantPhone) {
         this.transportConsultantPhone = transportConsultantPhone;
     }
 
+    public String getTransportConsultantName() {
+        return transportConsultantEmail;
+    }
+
     public void setTransportConsultantName(String transportConsultantName) {
         this.transportConsultantName = transportConsultantName;
+    }
+
+    public String getTransportConsultantEmail() {
+        return transportConsultantEmail;
     }
 
     public void setTransportConsultantEmail(String transportConsultantEmail) {
@@ -582,7 +739,6 @@ public class CreateApplication extends BaseAPI {
         setOrganisationName( getOrganisationName() == null ? faker.generateCompanyName() : getOrganisationName() );
         setCompanyNumber( getCompanyNumber() == null ? String.valueOf(Int.random(00000000, 99999999)) : getCompanyNumber() );
 
-
         String generatedBusinessEmail = getOrganisationName().replace(" ", "_").replace(",", "").concat(".volBusiness@dvsa.com");
         setBusinessEmailAddress( getBusinessEmailAddress() == null ? generatedBusinessEmail : getBusinessEmailAddress() );
         setPhoneNumber( getPhoneNumber() == null ? "0712345678" : getPhoneNumber());
@@ -599,7 +755,6 @@ public class CreateApplication extends BaseAPI {
         setTransportConsultantPostCode( getTransportConsultantPostCode() == null ? faker.getRandomRealUKPostcode() : getTransportConsultantPostCode() );
 
         setRestrictedVehicles( getRestrictedVehicles() == null ? "2" : getRestrictedVehicles() );
-        setOperatingCentreVehicleCap( getOperatingCentreVehicleCap() == 0 ? 5 : getOperatingCentreVehicleCap() );
         setNoOfVehiclesRequested( getNoOfVehiclesRequested() == 0 ? 5 : getNoOfVehiclesRequested() );
 
         setPsvVehicleSize( getPsvVehicleSize() == null ? "psvvs_both" : getPsvVehicleSize() );
@@ -628,30 +783,60 @@ public class CreateApplication extends BaseAPI {
         setPostCodeByTrafficArea( getPostCodeByTrafficArea() == null ? defaultPostCodeByTrafficArea : getPostCodeByTrafficArea() );
         setCountryCode( getCountryCode() == null ? "GB" : getCountryCode());
 
-        this.transportManagerFirstName = transportManagerFirstName == null ? String.format("%s %s", faker.generateFirstName(), faker.generateLastName()) : transportManagerFirstName;
-        this.transportManagerLastName = transportManagerLastName == null ? faker.generateFirstName() : transportManagerLastName;
-        this.transManEmailAddress = transManEmailAddress == null ? String.format("%s.volTransportManager@dvsa.com", transportManagerFirstName.replace(" ", "_").replace(",", "")) : transportConsultantEmail;
+        // Transport Manager details
+        String generatedTransportManagerFirstName = faker.generateFirstName().concat(String.valueOf(Int.random(100, 999)));
+        String generatedTransportManagerLastName = faker.generateLastName().concat(String.valueOf(Int.random(100, 999)));
+        String generatedTransportManagerEmailAddress = String.format("%s %s", generatedTransportManagerFirstName, generatedTransportManagerLastName)
+                .replace(" ", "_").replace(",", "").concat(".volTransportManager@dvsa.com");
+        setTransportManagerFirstName( getTransportManagerFirstName() == null ? generatedTransportManagerFirstName : getTransportManagerFirstName());
+        setTransportManagerLastName( getTransportManagerLastName() == null ? generatedTransportManagerLastName : getTransportManagerLastName());
+        setTransportManagerEmailAddress( getTransportManagerEmailAddress() == null ? generatedTransportManagerEmailAddress : getTransportManagerEmailAddress());
 
-        this.transportConsultantName = transportConsultantName == null ? String.format("%s %s", faker.generateFirstName(), faker.generateLastName()) : transportConsultantName;
-        this.transportConsultantEmail = transportConsultantEmail == null ? String.format("%s.volTConsultant@dvsa.com", transportConsultantName.replace(" ", "_").replace(",", "")) : transportConsultantEmail;
+        // Transport Consultant details
+        String generatedTransportConsultantName = String.format("%s %s", faker.generateFirstName(), faker.generateLastName());
+        String generatedTransportConsultantEmail = generatedTransportConsultantName.replace(" ", "_").replace(",", "")
+                .concat(".volTConsultant@dvsa.com");
+        setTransportConsultantName( getTransportConsultantName() == null ? generatedTransportConsultantName : getTransportConsultantName());
+        setTransportConsultantEmail( getTransportConsultantEmail() == null ?  generatedTransportConsultantEmail : getTransportConsultantEmail());
 
-        LinkedHashMap<String, String> operatingCentreAddress = faker.generateAddress();
-        this.operatingCentreAddressLine1 = operatingCentreAddressLine1 == null ? operatingCentreAddress.get("addressLine1") : operatingCentreAddressLine1;
-        this.operatingCentreTown = operatingCentreTown == null ? operatingCentreAddress.get("town") : operatingCentreTown;
+        // Operating Centre details
+        LinkedHashMap<String, String> generatedOperatingCentreAddress = faker.generateAddress();
+        setOperatingCentreAddressLine1( getOperatingCentreAddressLine1() == null ? generatedOperatingCentreAddress.get("addressLine1") : getOperatingCentreAddressLine1());
+        setOperatingCentreAddressLine2( getOperatingCentreAddressLine2() == null ? generatedOperatingCentreAddress.get("addressLine2") : getOperatingCentreAddressLine2());
+        setOperatingCentreAddressLine3( getOperatingCentreAddressLine3() == null ? generatedOperatingCentreAddress.get("addressLine3") : getOperatingCentreAddressLine3());
+        setOperatingCentreAddressLine4( getOperatingCentreAddressLine4() == null ? generatedOperatingCentreAddress.get("addressLine4") : getOperatingCentreAddressLine4());
+        setOperatingCentreTown( getOperatingCentreTown() == null ? generatedOperatingCentreAddress.get("town") : getOperatingCentreTown() );
+        setOperatingCentrePostCode( getOperatingCentrePostCode() == null ? faker.getRandomRealUKPostcode() : getOperatingCentrePostCode() );
+        setOperatingCentreVehicleCap( getOperatingCentreVehicleCap() == 0 ? 5 : getOperatingCentreVehicleCap() );
+        setOperatingCentreTrailerCap( getOperatingCentreTrailerCap() == 0 ? 5 : getOperatingCentreTrailerCap() );
 
-        LinkedHashMap<String, String> registeredAddress = faker.generateAddress();
-        this.businessAddressLine1 = businessAddressLine1 == null ? registeredAddress.get("addressLine1") : businessAddressLine1;
-        this.businessAddressLine2 = businessAddressLine2 == null ? registeredAddress.get("addressLine2") : businessAddressLine2;
-        this.businessTown = businessTown == null ? faker.generateAddress().get("town") : businessTown;
+        // Business Address details
+        LinkedHashMap<String, String> generatedRegisteredAddress = faker.generateAddress();
+        setCorrespondenceAddressLine1( getCorrespondenceAddressLine1() == null ? generatedRegisteredAddress.get("addressLine1") : getCorrespondenceAddressLine1());
+        setCorrespondenceAddressLine2( getCorrespondenceAddressLine2() == null ? generatedRegisteredAddress.get("addressLine2") : getCorrespondenceAddressLine2());
+        setCorrespondenceAddressLine3( getCorrespondenceAddressLine3() == null ? generatedRegisteredAddress.get("addressLine3") : getCorrespondenceAddressLine3());
+        setCorrespondenceAddressLine4( getCorrespondenceAddressLine4() == null ? generatedRegisteredAddress.get("addressLine4") : getCorrespondenceAddressLine4());
+        setCorrespondenceTown( getCorrespondenceTown() == null ? generatedRegisteredAddress.get("town") : getCorrespondenceTown() );
+        setCorrespondencePostCode( getCorrespondencePostCode() == null ? faker.getRandomRealUKPostcode() : getCorrespondencePostCode() );
+        setBusinessTown( getBusinessTown() == null ? generatedRegisteredAddress.get("town") : getBusinessTown());
 
-        LinkedHashMap<String, String> establishmentAddress = faker.generateAddress();
-        this.establishmentAddressLine1 = establishmentAddressLine1 == null ? establishmentAddress.get("addressLine1") : establishmentAddressLine1;
-        this.establishmentAddressLine2 = establishmentAddressLine2 == null ? establishmentAddress.get("addressLine2") : establishmentAddressLine2;
-        this.establishmentTown = establishmentTown == null ? faker.generateAddress().get("town") : establishmentTown;
+        // Establishment Address details
+        LinkedHashMap<String, String> generatedEstablishmentAddress = faker.generateAddress();
+        setEstablishmentAddressLine1( getEstablishmentAddressLine1() == null ? generatedEstablishmentAddress.get("addressLine1") : getEstablishmentAddressLine1());
+        setEstablishmentAddressLine2( getEstablishmentAddressLine2() == null ? generatedEstablishmentAddress.get("addressLine2") : getEstablishmentAddressLine2());
+        setEstablishmentAddressLine3( getEstablishmentAddressLine3() == null ? generatedEstablishmentAddress.get("addressLine3") : getEstablishmentAddressLine3());
+        setEstablishmentAddressLine4( getEstablishmentAddressLine4() == null ? generatedEstablishmentAddress.get("addressLine4") : getEstablishmentAddressLine4());
+        setEstablishmentTown( getEstablishmentTown() == null ? generatedEstablishmentAddress.get("town") : getEstablishmentTown());
+        setEstablishmentPostCode( getEstablishmentPostCode() == null ? faker.getRandomRealUKPostcode() : getEstablishmentPostCode());
 
+        // Transport Consultant Address details
         LinkedHashMap<String, String> transportConsultantAddress = faker.generateAddress();
-        this.transportConsultantAddressLine1 = transportConsultantAddressLine1 == null ? transportConsultantAddress.get("addressLine1") : transportConsultantAddressLine1;
-        this.transportConsultantTown = transportConsultantTown == null ? faker.generateAddress().get("town") : transportConsultantTown;
+        setTransportConsultantAddressLine1( getTransportConsultantAddressLine1() == null ? transportConsultantAddress.get("addressLine1") : getTransportConsultantAddressLine1());
+        setTransportConsultantAddressLine2( getTransportConsultantAddressLine2() == null ? transportConsultantAddress.get("addressLine2") : getTransportConsultantAddressLine2());
+        setTransportConsultantAddressLine3( getTransportConsultantAddressLine3() == null ? transportConsultantAddress.get("addressLine3") : getTransportConsultantAddressLine3());
+        setTransportConsultantAddressLine4( getTransportConsultantAddressLine4() == null ? transportConsultantAddress.get("addressLine4") : getTransportConsultantAddressLine4());
+        setTransportConsultantTown( getTransportConsultantTown() == null ? faker.generateAddress().get("town") : getTransportConsultantTown());
+        setTransportConsultantPostCode( getTransportConsultantPostCode() == null ? faker.getRandomRealUKPostcode() : getTransportConsultantPostCode());
     }
 
     public ValidatableResponse startApplication() {
@@ -693,7 +878,7 @@ public class CreateApplication extends BaseAPI {
         String natureOfBusiness = faker.generateNatureOfBusiness();
         String updateBusinessDetailsResource = URL.build(env, String.format("organisation/business-details/application/%s", getApplicationId())).toString();
 
-        AddressBuilder address = new AddressBuilder().withAddressLine1(getBusinessAddressLine1()).withTown(getBusinessTown()).withPostcode(postCodeByTrafficArea);
+        AddressBuilder address = new AddressBuilder().withAddressLine1(getCorrespondenceAddressLine1()).withTown(getBusinessTown()).withPostcode(postCodeByTrafficArea);
         UpdateBusinessDetailsBuilder businessDetails = new UpdateBusinessDetailsBuilder()
                 .withId(getApplicationId()).withCompanyNumber(companyNumber).withNatureOfBusiness(natureOfBusiness).withLicence(getLicenceId())
                 .withVersion(organisationVersion).withName(getBusinessName()).withAddress(address);
@@ -711,11 +896,11 @@ public class CreateApplication extends BaseAPI {
     public ValidatableResponse addAddressDetails() {
         String applicationAddressResource = URL.build(env, String.format("application/%s/addresses/", getApplicationId())).toString();
 
-        AddressBuilder establishmentAddress = new AddressBuilder().withAddressLine1(getEstablishmentAddressLine1()
-        ).withTown(getEstablishmentTown()).withPostcode(postCodeByTrafficArea).withCountryCode(getCountryCode());
+        AddressBuilder correspondenceAddress = new AddressBuilder().withAddressLine1(getCorrespondenceAddressLine1()).withAddressLine2(getCorrespondenceAddressLine2()).withAddressLine3(getCorrespondenceAddressLine3())
+                .withAddressLine4(getCorrespondenceAddressLine4()).withTown(getCorrespondenceTown()).withPostcode(postcode).withCountryCode(countryCode);
 
-        AddressBuilder correspondenceAddress = new AddressBuilder().withAddressLine1(getBusinessAddressLine1()).withAddressLine2(getBusinessAddressLine2()
-        ).withTown(getBusinessTown()).withPostcode(postCodeByTrafficArea).withCountryCode(getCountryCode());
+        AddressBuilder establishmentAddress = new AddressBuilder().withAddressLine1(establishmentAddressLine1).withAddressLine2(establishmentAddressLine2).withAddressLine3(establishmentAddressLine3)
+                .withAddressLine4(establishmentAddressLine4).withTown(establishmentTown).withPostcode(postcode).withCountryCode(countryCode);
 
         AddressBuilder transportConsultantAddress = new AddressBuilder().withAddressLine1(transportConsultantAddressLine1).withTown(transportConsultantTown).withPostcode(transportConsultantPostCode).withCountryCode(countryCode);
 
@@ -756,22 +941,20 @@ public class CreateApplication extends BaseAPI {
         String operatingCentreResource = URL.build(env, String.format("application/%s/operating-centre/", getApplicationId())).toString();
         String permissionOption = "Y";
 
-        OperatingCentreBuilder operatingCentreBuilder = new OperatingCentreBuilder();
+        AddressBuilder address = new AddressBuilder().withAddressLine1(getOperatingCentreAddressLine1()).withAddressLine2(getOperatingCentreAddressLine2()).
+                withAddressLine3(getOperatingCentreAddressLine3()).withAddressLine4(getOperatingCentreAddressLine4()).withTown(getOperatingCentreTown())
+                .withPostcode(getOperatingCentrePostCode()).withCountryCode(getCountryCode());
+        OperatingCentreBuilder operatingCentreBuilder = new OperatingCentreBuilder().withApplication(getApplicationId()).withPermission(permissionOption).withAddress(address);
 
-        if (operatorType.equals(OperatorType.GOODS.asString())) {
-            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getOperatingCentreTown()
-            ).withPostcode(postCodeByTrafficArea).withCountryCode(getCountryCode());
-            operatingCentreBuilder.withApplication(getApplicationId()).withNoOfVehiclesRequired(String.valueOf(getOperatingCentreVehicleCap()))
-                    .withNoOfTrailersRequired(String.valueOf(getOperatingCentreVehicleCap())).withPermission(permissionOption).withAddress(address);
+        if (operatorType.equals("goods")) {
+            operatingCentreBuilder.withNoOfVehiclesRequired(String.valueOf(getOperatingCentreVehicleCap()))
+                    .withNoOfTrailersRequired(String.valueOf(getOperatingCentreTrailerCap()));
         }
-        if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
-            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getOperatingCentreTown()).withPostcode(postCodeByTrafficArea).withCountryCode(getCountryCode());
-            operatingCentreBuilder.withApplication(getApplicationId()
-            ).withNoOfVehiclesRequired(String.valueOf(getOperatingCentreVehicleCap())).withPermission(permissionOption).withAddress(address);
+        if (operatorType.equals("public") && (licenceType.contains("standard"))) {
+            operatingCentreBuilder.withNoOfVehiclesRequired(String.valueOf(getOperatingCentreVehicleCap()));
         }
-        if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
-            AddressBuilder address = new AddressBuilder().withAddressLine1(operatingCentreAddressLine1).withTown(getOperatingCentreTown()).withPostcode(postCodeByTrafficArea).withCountryCode(getCountryCode());
-            operatingCentreBuilder.withApplication(getApplicationId()).withNoOfVehiclesRequired(String.valueOf(getRestrictedVehicles())).withPermission(permissionOption).withAddress(address);
+        if (operatorType.equals("public") && (licenceType.equals("restricted"))) {
+            operatingCentreBuilder.withNoOfVehiclesRequired(String.valueOf(getRestrictedVehicles()));
         }
         if (!licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             apiResponse = RestUtils.post(operatingCentreBuilder, operatingCentreResource, apiHeaders.getHeaders());
@@ -849,7 +1032,7 @@ public class CreateApplication extends BaseAPI {
         String hasEmail = "Y";
         String addTransportManager = URL.build(env, "transport-manager/create-new-user/").toString();
         TransportManagerBuilder transportManagerBuilder = new TransportManagerBuilder().withApplication(getApplicationId()).withFirstName(transportManagerFirstName)
-                .withFamilyName(transportManagerLastName).withHasEmail(hasEmail).withUsername(getTmUserName()).withEmailAddress(getTransManEmailAddress()).withBirthDate(getBirthDate());
+                .withFamilyName(transportManagerLastName).withHasEmail(hasEmail).withUsername(getTmUserName()).withEmailAddress(getTransportManagerEmailAddress()).withBirthDate(getBirthDate());
         apiResponse = RestUtils.post(transportManagerBuilder, addTransportManager, apiHeaders.getHeaders());
         setTransportManagerApplicationId(apiResponse.extract().jsonPath().getString("id.transportManagerApplicationId"));
 
@@ -883,8 +1066,8 @@ public class CreateApplication extends BaseAPI {
         String tmApplicationNo = transportManagerApplicationId;
         String addTMresp = URL.build(env, String.format("transport-manager-application/%s/update-details/", tmApplicationNo)).toString();
         int applicationVersion = Integer.parseInt(fetchTMApplicationInformation(tmApplicationNo, "version", "1"));
-        AddressBuilder Address = new AddressBuilder().withAddressLine1(getBusinessAddressLine1()).withPostcode(postCodeByTrafficArea).withTown(getTown()).withCountryCode(getCountryCode());
-        TmRespBuilder tmRespBuilder = new TmRespBuilder().withEmail(getTransManEmailAddress()).withPlaceOfBirth(getTown()).withHomeAddress(Address).withWorkAddress(Address).withTmType(getTmType()).withIsOwner(isOwner)
+        AddressBuilder Address = new AddressBuilder().withAddressLine1(getCorrespondenceAddressLine1()).withPostcode(postCodeByTrafficArea).withTown(getTown()).withCountryCode(getCountryCode());
+        TmRespBuilder tmRespBuilder = new TmRespBuilder().withEmail(getTransportManagerEmailAddress()).withPlaceOfBirth(getTown()).withHomeAddress(Address).withWorkAddress(Address).withTmType(getTmType()).withIsOwner(isOwner)
                 .withHoursMon(hours).withHoursTue(hours).withHoursWed(hours).withHoursThu(hours).withHoursThu(hours).withHoursFri(hours).withHoursSat(hours).withHoursSun(hours).withDob(birthDate)
                 .withId(tmApplicationNo).withVersion(applicationVersion);
 
@@ -1029,7 +1212,7 @@ public class CreateApplication extends BaseAPI {
         }
         String safetyInspectorResource = URL.build(env, String.format("application/%s/workshop", getApplicationId()
         )).toString();
-        AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(businessAddressLine1).withTown(town).withPostcode(safetyInspectorPostCode).withCountryCode(countryCode);
+        AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(correspondenceAddressLine1).withTown(town).withPostcode(safetyInspectorPostCode).withCountryCode(countryCode);
         ContactDetailsBuilder contactDetailsBuilder = new ContactDetailsBuilder().withFao(foreName).withAddress(addressBuilder);
         SafetyInspectorBuilder safetyInspectorBuilder = new SafetyInspectorBuilder().withApplication(applicationId).withLicence(getLicenceId()).withIsExternal("N")
                 .withContactDetails(contactDetailsBuilder);
@@ -1087,7 +1270,7 @@ public class CreateApplication extends BaseAPI {
         String councilName = "Volhampton";
         if (operatorType.equals("public") && (licenceType.equals("special_restricted"))) {
             String submitResource = URL.build(env, String.format("application/%s/taxi-phv", getApplicationId())).toString();
-            AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(businessAddressLine1).withTown(town).withPostcode(postCodeByTrafficArea).withCountryCode(countryCode);
+            AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(correspondenceAddressLine1).withTown(town).withPostcode(postCodeByTrafficArea).withCountryCode(countryCode);
             PhvTaxiBuilder taxiBuilder = new PhvTaxiBuilder().withId(applicationId).withPrivateHireLicenceNo(phLicenceNumber).withCouncilName(councilName).withLicence(getLicenceId()).withAddress(addressBuilder);
             apiResponse = RestUtils.post(taxiBuilder, submitResource, apiHeaders.getHeaders());
             if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {
