@@ -27,15 +27,22 @@ public class CreateApplication extends BaseAPI {
     private static int version = 1;
 
     private String title;
-    private String foreName;
-    private String familyName;
-    private String birthDate;
+    private String partnerForeName;
+    private String partnerFamilyName;
+    private String partnerDOB;
     private String town;
     private String postCodeByTrafficArea;
     private String postcode;
+    private String safetyInspectorForeName;
+    private String safetyInspectorFamilyName;
+    private String safetyInspectorDOB;
+    private String safetyInspectorAddressLine1;
+    private String safetyInspectorAddressLine2;
+    private String safetyInspectorAddressLine3;
+    private String safetyInspectorAddressLine4;
+    private String safetyInspectorTown;
     private String safetyInspectorPostCode;
     private String countryCode;
-    private String organisationName;
     private String transportManagerEmailAddress;
     private String applicationId;
     private String userId;
@@ -44,6 +51,7 @@ public class CreateApplication extends BaseAPI {
     private String loginId;
     private String pid;
     private String organisationId;
+    private String natureOfBusiness;
     private String licenceNumber;
     private String transportManagerApplicationId;
     private String companyNumber;
@@ -69,13 +77,18 @@ public class CreateApplication extends BaseAPI {
     private String psvLimousines;
     private String psvNoLimousineConfirmation;
     private String psvOnlyLimousinesConfirmation;
+    private String registeredAddressLine1;
+    private String registeredAddressLine2;
+    private String registeredAddressLine3;
+    private String registeredAddressLine4;
+    private String registeredTown;
+    private String registeredPostCode;
     private String correspondenceAddressLine1;
     private String correspondenceAddressLine2;
     private String correspondenceAddressLine3;
     private String correspondenceAddressLine4;
     private String correspondenceTown;
     private String correspondencePostCode;
-    private String businessTown;
     private String businessPostCode;
     private String establishmentAddressLine1;
     private String establishmentAddressLine2;
@@ -100,11 +113,20 @@ public class CreateApplication extends BaseAPI {
     private String transportConsultantPostCode;
     private String transportManagerFirstName;
     private String transportManagerLastName;
+    private String transportManagerDOB;
     private int operatingCentreVehicleCap;
     private int operatingCentreTrailerCap;
     private int noOfVehiclesRequested;
     private double hours;
 
+
+    public String getNatureOfBusiness() {
+        return natureOfBusiness;
+    }
+
+    public void setNatureOfBusiness(String natureOfBusiness) {
+        this.natureOfBusiness = natureOfBusiness;
+    }
 
     public int getOperatingCentreVehicleCap() {
         return operatingCentreVehicleCap;
@@ -222,14 +244,6 @@ public class CreateApplication extends BaseAPI {
 
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
-    }
-
-    public String getOrganisationName() {
-        return organisationName;
-    }
-
-    public void setOrganisationName(String organisationName) {
-        this.organisationName = organisationName;
     }
 
     public String getTransportManagerEmailAddress() {
@@ -380,28 +394,28 @@ public class CreateApplication extends BaseAPI {
         this.tmUserName = tmUserName;
     }
 
-    public String getForeName() {
-        return foreName;
+    public String getPartnerForeName() {
+        return partnerForeName;
     }
 
-    public void setForeName(String foreName) {
-        this.foreName = foreName;
+    public void setPartnerForeName(String partnerForeName) {
+        this.partnerForeName = partnerForeName;
     }
 
-    public String getFamilyName() {
-        return familyName;
+    public String getPartnerFamilyName() {
+        return partnerFamilyName;
     }
 
-    public void setFamilyName(String familyName) {
-        this.familyName = familyName;
+    public void setPartnerFamilyName(String partnerFamilyName) {
+        this.partnerFamilyName = partnerFamilyName;
     }
 
-    public String getBirthDate() {
-        return birthDate;
+    public String getPartnerDOB() {
+        return partnerDOB;
     }
 
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+    public void setPartnerDOB(String partnerDOB) {
+        this.partnerDOB = partnerDOB;
     }
 
     public double getHours() {
@@ -468,13 +482,55 @@ public class CreateApplication extends BaseAPI {
         this.psvOnlyLimousinesConfirmation = psvOnlyLimousinesConfirmation;
     }
 
-    public String getEstablishmentAddressLine1() {
-        return establishmentAddressLine1;
+    public String getRegisteredAddressLine1() {
+        return registeredAddressLine1;
     }
 
-    public void setEstablishmentAddressLine1(String establishmentAddressLine1) {
-        this.establishmentAddressLine1 = establishmentAddressLine1;
+    public void setRegisteredAddressLine1(String registeredAddressLine1) {
+        this.registeredAddressLine1 = registeredAddressLine1;
     }
+
+    public String getRegisteredAddressLine2() {
+        return registeredAddressLine2;
+    }
+
+    public void setRegisteredAddressLine2(String registeredAddressLine2) {
+        this.registeredAddressLine2 = registeredAddressLine2;
+    }
+
+    public String getRegisteredAddressLine3() {
+        return registeredAddressLine3;
+    }
+
+    public void setRegisteredAddressLine3(String registeredAddressLine3) {
+        this.registeredAddressLine3 = registeredAddressLine3;
+    }
+
+    public String getRegisteredAddressLine4() {
+        return registeredAddressLine4;
+    }
+
+    public void setRegisteredAddressLine4(String registeredAddressLine4) {
+        this.registeredAddressLine4 = registeredAddressLine4;
+    }
+
+    public String getRegisteredPostCode() {
+        return registeredPostCode;
+    }
+
+    public void setRegisteredPostCode(String registeredPostCode) {
+        this.registeredPostCode = registeredPostCode;
+    }
+
+    public String getRegisteredTown() {
+        return registeredTown;
+    }
+
+    public void setRegisteredTown(String registeredTown) {
+        this.registeredTown = registeredTown;
+    }
+
+
 
     public String getCorrespondenceAddressLine1() {
         return correspondenceAddressLine1;
@@ -524,14 +580,6 @@ public class CreateApplication extends BaseAPI {
         this.correspondencePostCode = correspondencePostCode;
     }
 
-    public String getBusinessTown() {
-        return businessTown;
-    }
-
-    public void setBusinessTown(String businessTown) {
-        this.businessTown = businessTown;
-    }
-
     public String getBusinessPostCode() {
         return businessPostCode;
     }
@@ -554,22 +602,6 @@ public class CreateApplication extends BaseAPI {
 
     public void setEstablishmentPostCode(String establishmentPostCode) {
         this.establishmentPostCode = establishmentPostCode;
-    }
-
-    public String getOperatingCentreTown() {
-        return operatingCentreTown;
-    }
-
-    public void setOperatingCentreTown(String operatingCentreTown) {
-        this.operatingCentreTown = operatingCentreTown;
-    }
-
-    public String getOperatingCentrePostCode() {
-        return operatingCentrePostCode;
-    }
-
-    public void setOperatingCentrePostCode(String operatingCentrePostCode) {
-        this.operatingCentrePostCode = operatingCentrePostCode;
     }
 
     public String getOperatingCentreAddressLine1() {
@@ -602,6 +634,30 @@ public class CreateApplication extends BaseAPI {
 
     public String getOperatingCentreAddressLine4() {
         return operatingCentreAddressLine4;
+    }
+
+    public String getOperatingCentreTown() {
+        return operatingCentreTown;
+    }
+
+    public void setOperatingCentreTown(String operatingCentreTown) {
+        this.operatingCentreTown = operatingCentreTown;
+    }
+
+    public String getOperatingCentrePostCode() {
+        return operatingCentrePostCode;
+    }
+
+    public void setOperatingCentrePostCode(String operatingCentrePostCode) {
+        this.operatingCentrePostCode = operatingCentrePostCode;
+    }
+
+    public String getEstablishmentAddressLine1() {
+        return establishmentAddressLine1;
+    }
+
+    public void setEstablishmentAddressLine1(String establishmentAddressLine1) {
+        this.establishmentAddressLine1 = establishmentAddressLine1;
     }
 
     public String getEstablishmentAddressLine2() {
@@ -637,7 +693,15 @@ public class CreateApplication extends BaseAPI {
     }
 
     public void setTransportManagerLastName(String transportManagerLastName) {
+        this.transportManagerLastName = transportManagerLastName;
+    }
 
+    public String getTransportManagerDOB() {
+        return transportManagerDOB;
+    }
+
+    public void setTransportManagerDOB(String transportManagerDOB) {
+        this.transportManagerDOB = transportManagerDOB;
     }
 
     public String getTransportManagerLastName() {
@@ -708,6 +772,70 @@ public class CreateApplication extends BaseAPI {
         this.transportConsultantEmail = transportConsultantEmail;
     }
 
+    public String getSafetyInspectorForeName() {
+        return safetyInspectorForeName;
+    }
+
+    public void setSafetyInspectorForeName(String safetyInspectorForeName) {
+        this.safetyInspectorForeName = safetyInspectorForeName;
+    }
+
+    public String getSafetyInspectorFamilyName() {
+        return safetyInspectorFamilyName;
+    }
+
+    public void setSafetyInspectorFamilyName(String safetyInspectorFamilyName) {
+        this.safetyInspectorFamilyName = safetyInspectorFamilyName;
+    }
+
+    public String getSafetyInspectorDOB() {
+        return safetyInspectorDOB;
+    }
+
+    public void setSafetyInspectorDOB(String safetyInspectorDOB) {
+        this.safetyInspectorDOB = safetyInspectorDOB;
+    }
+
+    public String getSafetyInspectorAddressLine1() {
+        return safetyInspectorAddressLine1;
+    }
+
+    public void setSafetyInspectorAddressLine1(String safetyInspectorAddressLine1) {
+        this.safetyInspectorAddressLine1 = safetyInspectorAddressLine1;
+    }
+
+    public String getSafetyInspectorAddressLine2() {
+        return safetyInspectorAddressLine2;
+    }
+
+    public void setSafetyInspectorAddressLine2(String safetyInspectorAddressLine2) {
+        this.safetyInspectorAddressLine2 = safetyInspectorAddressLine2;
+    }
+
+    public String getSafetyInspectorAddressLine3() {
+        return safetyInspectorAddressLine3;
+    }
+
+    public void setSafetyInspectorAddressLine3(String safetyInspectorAddressLine3) {
+        this.safetyInspectorAddressLine3 = safetyInspectorAddressLine3;
+    }
+
+    public String getSafetyInspectorAddressLine4() {
+        return safetyInspectorAddressLine4;
+    }
+
+    public void setSafetyInspectorAddressLine4(String safetyInspectorAddressLine4) {
+        this.safetyInspectorAddressLine4 = safetyInspectorAddressLine4;
+    }
+
+    public String getSafetyInspectorTown() {
+        return safetyInspectorTown;
+    }
+
+    public void setSafetyInspectorTown(String safetyInspectorTown) {
+        this.safetyInspectorTown = safetyInspectorTown;
+    }
+
     public void setSafetyInspectorPostCode(String safetyInspectorPostCode) {
         this.safetyInspectorPostCode = safetyInspectorPostCode;
     }
@@ -735,24 +863,9 @@ public class CreateApplication extends BaseAPI {
     private Headers apiHeaders = new Headers();
 
     public CreateApplication() {
-        setBusinessName( getBusinessName() == null ? faker.generateCompanyName() : getBusinessName() );
-        setOrganisationName( getOrganisationName() == null ? faker.generateCompanyName() : getOrganisationName() );
-        setCompanyNumber( getCompanyNumber() == null ? String.valueOf(Int.random(00000000, 99999999)) : getCompanyNumber() );
 
-        String generatedBusinessEmail = getOrganisationName().replace(" ", "_").replace(",", "").concat(".volBusiness@dvsa.com");
-        setBusinessEmailAddress( getBusinessEmailAddress() == null ? generatedBusinessEmail : getBusinessEmailAddress() );
-        setPhoneNumber( getPhoneNumber() == null ? "0712345678" : getPhoneNumber());
 
-        String generatedFirstName = faker.generateFirstName().concat(String.valueOf(Int.random(100, 999)));
-        String generatedFamilyName = faker.generateLastName().concat(String.valueOf(Int.random(100, 999)));
-        String generatedBirthDate = Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28);
-        setForeName( getForeName() == null ? generatedFirstName : getForeName() );
-        setFamilyName( getFamilyName() == null ? generatedFamilyName : getFamilyName() );
-        setBirthDate( getBirthDate() == null ? generatedBirthDate : getBirthDate() );
 
-        setHours( getHours() == 0.0 ? 2.0 : getHours() );
-        setSafetyInspectorPostCode( getSafetyInspectorPostCode() == null ? faker.getRandomRealUKPostcode() : getSafetyInspectorPostCode() );
-        setTransportConsultantPostCode( getTransportConsultantPostCode() == null ? faker.getRandomRealUKPostcode() : getTransportConsultantPostCode() );
 
         setRestrictedVehicles( getRestrictedVehicles() == null ? "2" : getRestrictedVehicles() );
         setNoOfVehiclesRequested( getNoOfVehiclesRequested() == 0 ? 5 : getNoOfVehiclesRequested() );
@@ -765,6 +878,14 @@ public class CreateApplication extends BaseAPI {
         setPsvNoLimousineConfirmation( getPsvNoLimousineConfirmation() == null ? "Y" : getPsvNoLimousineConfirmation() );
         setPsvOnlyLimousinesConfirmation( getPsvOnlyLimousinesConfirmation() == null ? "Y" : getPsvOnlyLimousinesConfirmation() );
 
+
+
+        String defaultPostCodeByTrafficArea = TrafficArea.getPostCode(TrafficArea.valueOf(TrafficArea.NORTH_EAST.name()));
+        setPostCodeByTrafficArea( getPostCodeByTrafficArea() == null ? defaultPostCodeByTrafficArea : getPostCodeByTrafficArea() );
+        setCountryCode( getCountryCode() == null ? "GB" : getCountryCode());
+
+
+        // Application details
         String defaultOperatorType = OperatorType.valueOf("goods".toUpperCase()).asString();
         String defaultLicenceType = LicenceType.valueOf("standard_international".toUpperCase()).asString();
         String defaultBusinessType = BusinessType.valueOf("limited_company".toUpperCase()).asString();
@@ -773,34 +894,69 @@ public class CreateApplication extends BaseAPI {
         setBusinessType( getBusinessType() == null ? defaultBusinessType : getBusinessType() );
         setNiFlag( getNiFlag() == null ? "N" : getNiFlag() );
         setIsInterim( getIsInterim() == null ? "N" : getIsInterim() );
-        setIsOwner( getIsOwner() == null ? "Y" : getIsOwner() );
 
-        String defaultTrafficArea = TrafficArea.NORTH_EAST.asString();
-        String defaultEnforcementArea = EnforcementArea.NORTH_EAST.asString();
-        String defaultPostCodeByTrafficArea = TrafficArea.getPostCode(TrafficArea.valueOf(TrafficArea.NORTH_EAST.name()));
-        setTrafficArea( getTrafficArea() == null ? defaultTrafficArea : getTrafficArea() );
-        setEnforcementArea( getEnforcementArea() == null ? defaultEnforcementArea : getEnforcementArea() );
-        setPostCodeByTrafficArea( getPostCodeByTrafficArea() == null ? defaultPostCodeByTrafficArea : getPostCodeByTrafficArea() );
-        setCountryCode( getCountryCode() == null ? "GB" : getCountryCode());
+        // Partner details
+        String generatedPartnerFirstName = faker.generateFirstName().concat(String.valueOf(Int.random(100, 999)));
+        String generatedPartnerFamilyName = faker.generateLastName().concat(String.valueOf(Int.random(100, 999)));
+        String generatedBirthDate = Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28);
+        setPartnerForeName( getPartnerForeName() == null ? generatedPartnerFirstName : getPartnerForeName() );
+        setPartnerFamilyName( getPartnerFamilyName() == null ? generatedPartnerFamilyName : getPartnerFamilyName() );
+        setPartnerDOB( getPartnerDOB() == null ? generatedBirthDate : getPartnerDOB() );
 
-        // Transport Manager details
-        String generatedTransportManagerFirstName = faker.generateFirstName().concat(String.valueOf(Int.random(100, 999)));
-        String generatedTransportManagerLastName = faker.generateLastName().concat(String.valueOf(Int.random(100, 999)));
-        String generatedTransportManagerEmailAddress = String.format("%s %s", generatedTransportManagerFirstName, generatedTransportManagerLastName)
-                .replace(" ", "_").replace(",", "").concat(".volTransportManager@dvsa.com");
-        setTransportManagerFirstName( getTransportManagerFirstName() == null ? generatedTransportManagerFirstName : getTransportManagerFirstName());
-        setTransportManagerLastName( getTransportManagerLastName() == null ? generatedTransportManagerLastName : getTransportManagerLastName());
-        setTransportManagerEmailAddress( getTransportManagerEmailAddress() == null ? generatedTransportManagerEmailAddress : getTransportManagerEmailAddress());
+        // Safety Inspector Address details
+        String generatedSafetyInspectorForeName = faker.generateFirstName().concat(String.valueOf(Int.random(100, 999)));
+        String generatedSafetyInspectorFamilyName = faker.generateFirstName().concat(String.valueOf(Int.random(100, 999)));
+        LinkedHashMap<String, String> generatedSafetyInspectorAddress = faker.generateAddress();
+        setSafetyInspectorForeName( getSafetyInspectorForeName() == null ? generatedSafetyInspectorForeName : getSafetyInspectorForeName() );
+        setSafetyInspectorFamilyName( getSafetyInspectorFamilyName() == null ? generatedSafetyInspectorFamilyName : getSafetyInspectorFamilyName() );
+        setSafetyInspectorAddressLine1( getSafetyInspectorAddressLine1() == null ? generatedSafetyInspectorAddress.get("addressLine1") : getSafetyInspectorAddressLine1() );
+        setSafetyInspectorAddressLine2( getSafetyInspectorAddressLine2() == null ? generatedSafetyInspectorAddress.get("addressLine2") : getSafetyInspectorAddressLine2() );
+        setSafetyInspectorAddressLine3( getSafetyInspectorAddressLine3() == null ? generatedSafetyInspectorAddress.get("addressLine3") : getSafetyInspectorAddressLine3() );
+        setSafetyInspectorAddressLine4( getSafetyInspectorAddressLine4() == null ? generatedSafetyInspectorAddress.get("addressLine4") : getSafetyInspectorAddressLine4() );
+        setSafetyInspectorTown( getSafetyInspectorTown() == null ? generatedSafetyInspectorAddress.get("addressLine4") : getSafetyInspectorTown() );
+        setSafetyInspectorPostCode( getSafetyInspectorPostCode() == null ? faker.getRandomRealUKPostcode() : getSafetyInspectorPostCode() );
 
-        // Transport Consultant details
-        String generatedTransportConsultantName = String.format("%s %s", faker.generateFirstName(), faker.generateLastName());
-        String generatedTransportConsultantEmail = generatedTransportConsultantName.replace(" ", "_").replace(",", "")
-                .concat(".volTConsultant@dvsa.com");
-        setTransportConsultantName( getTransportConsultantName() == null ? generatedTransportConsultantName : getTransportConsultantName());
-        setTransportConsultantEmail( getTransportConsultantEmail() == null ?  generatedTransportConsultantEmail : getTransportConsultantEmail());
+        // Business details
+
+        // // Business general details
+        setBusinessName( getBusinessName() == null ? faker.generateCompanyName() : getBusinessName() );
+        setCompanyNumber( getCompanyNumber() == null ? String.valueOf(Int.random(00000000, 99999999)) : getCompanyNumber() );
+        setNatureOfBusiness( getNatureOfBusiness() == null ? faker.generateNatureOfBusiness() : getNatureOfBusiness() );
+        String generatedBusinessEmail = getBusinessName().replace(" ", "_").replace(",", "").concat(".volBusiness@dvsa.com");
+        setBusinessEmailAddress( getBusinessEmailAddress() == null ? generatedBusinessEmail : getBusinessEmailAddress() );
+        setPhoneNumber( getPhoneNumber() == null ? "0712345678" : getPhoneNumber());
+
+        // // Registered Business Address details
+        LinkedHashMap<String, String> generatedRegisteredAddress = faker.generateAddress();
+        setRegisteredAddressLine1( getRegisteredAddressLine1() == null ? generatedRegisteredAddress.get("addressLine1") : getRegisteredAddressLine1() );
+        setRegisteredAddressLine2( getRegisteredAddressLine2() == null ? generatedRegisteredAddress.get("addressLine2") : getRegisteredAddressLine2() );
+        setRegisteredAddressLine3( getRegisteredAddressLine3() == null ? generatedRegisteredAddress.get("addressLine3") : getRegisteredAddressLine3() );
+        setRegisteredAddressLine4( getRegisteredAddressLine4() == null ? generatedRegisteredAddress.get("addressLine4") : getRegisteredAddressLine4() );
+        setRegisteredTown( getCorrespondenceTown() == null ? generatedRegisteredAddress.get("town") : getRegisteredTown() );
+        setRegisteredPostCode( getCorrespondencePostCode() == null ? faker.getRandomRealUKPostcode() : getRegisteredPostCode() );
+
+        // // Correspondence Address details
+        LinkedHashMap<String, String> generatedCorrespondenceAddress = faker.generateAddress();
+        setCorrespondenceAddressLine1( getCorrespondenceAddressLine1() == null ? generatedCorrespondenceAddress.get("addressLine1") : getCorrespondenceAddressLine1() );
+        setCorrespondenceAddressLine2( getCorrespondenceAddressLine2() == null ? generatedCorrespondenceAddress.get("addressLine2") : getCorrespondenceAddressLine2() );
+        setCorrespondenceAddressLine3( getCorrespondenceAddressLine3() == null ? generatedCorrespondenceAddress.get("addressLine3") : getCorrespondenceAddressLine3() );
+        setCorrespondenceAddressLine4( getCorrespondenceAddressLine4() == null ? generatedCorrespondenceAddress.get("addressLine4") : getCorrespondenceAddressLine4() );
+        setCorrespondenceTown( getCorrespondenceTown() == null ? generatedCorrespondenceAddress.get("town") : getCorrespondenceTown() );
+        setCorrespondencePostCode( getCorrespondencePostCode() == null ? faker.getRandomRealUKPostcode() : getCorrespondencePostCode() );
+
+        // // Establishment Address details
+        LinkedHashMap<String, String> generatedEstablishmentAddress = faker.generateAddress();
+        setEstablishmentAddressLine1( getEstablishmentAddressLine1() == null ? generatedEstablishmentAddress.get("addressLine1") : getEstablishmentAddressLine1() );
+        setEstablishmentAddressLine2( getEstablishmentAddressLine2() == null ? generatedEstablishmentAddress.get("addressLine2") : getEstablishmentAddressLine2() );
+        setEstablishmentAddressLine3( getEstablishmentAddressLine3() == null ? generatedEstablishmentAddress.get("addressLine3") : getEstablishmentAddressLine3() );
+        setEstablishmentAddressLine4( getEstablishmentAddressLine4() == null ? generatedEstablishmentAddress.get("addressLine4") : getEstablishmentAddressLine4() );
+        setEstablishmentTown( getEstablishmentTown() == null ? generatedEstablishmentAddress.get("town") : getEstablishmentTown());
+        setEstablishmentPostCode( getEstablishmentPostCode() == null ? faker.getRandomRealUKPostcode() : getEstablishmentPostCode());
 
         // Operating Centre details
         LinkedHashMap<String, String> generatedOperatingCentreAddress = faker.generateAddress();
+        String defaultTrafficArea = TrafficArea.NORTH_EAST.asString();
+        String defaultEnforcementArea = EnforcementArea.NORTH_EAST.asString();
         setOperatingCentreAddressLine1( getOperatingCentreAddressLine1() == null ? generatedOperatingCentreAddress.get("addressLine1") : getOperatingCentreAddressLine1());
         setOperatingCentreAddressLine2( getOperatingCentreAddressLine2() == null ? generatedOperatingCentreAddress.get("addressLine2") : getOperatingCentreAddressLine2());
         setOperatingCentreAddressLine3( getOperatingCentreAddressLine3() == null ? generatedOperatingCentreAddress.get("addressLine3") : getOperatingCentreAddressLine3());
@@ -809,25 +965,28 @@ public class CreateApplication extends BaseAPI {
         setOperatingCentrePostCode( getOperatingCentrePostCode() == null ? faker.getRandomRealUKPostcode() : getOperatingCentrePostCode() );
         setOperatingCentreVehicleCap( getOperatingCentreVehicleCap() == 0 ? 5 : getOperatingCentreVehicleCap() );
         setOperatingCentreTrailerCap( getOperatingCentreTrailerCap() == 0 ? 5 : getOperatingCentreTrailerCap() );
+        setTrafficArea( getTrafficArea() == null ? defaultTrafficArea : getTrafficArea() );
+        setEnforcementArea( getEnforcementArea() == null ? defaultEnforcementArea : getEnforcementArea() );
 
-        // Business Address details
-        LinkedHashMap<String, String> generatedRegisteredAddress = faker.generateAddress();
-        setCorrespondenceAddressLine1( getCorrespondenceAddressLine1() == null ? generatedRegisteredAddress.get("addressLine1") : getCorrespondenceAddressLine1());
-        setCorrespondenceAddressLine2( getCorrespondenceAddressLine2() == null ? generatedRegisteredAddress.get("addressLine2") : getCorrespondenceAddressLine2());
-        setCorrespondenceAddressLine3( getCorrespondenceAddressLine3() == null ? generatedRegisteredAddress.get("addressLine3") : getCorrespondenceAddressLine3());
-        setCorrespondenceAddressLine4( getCorrespondenceAddressLine4() == null ? generatedRegisteredAddress.get("addressLine4") : getCorrespondenceAddressLine4());
-        setCorrespondenceTown( getCorrespondenceTown() == null ? generatedRegisteredAddress.get("town") : getCorrespondenceTown() );
-        setCorrespondencePostCode( getCorrespondencePostCode() == null ? faker.getRandomRealUKPostcode() : getCorrespondencePostCode() );
-        setBusinessTown( getBusinessTown() == null ? generatedRegisteredAddress.get("town") : getBusinessTown());
+        // Transport Manager details
+        String generatedTransportManagerFirstName = faker.generateFirstName().concat(String.valueOf(Int.random(100, 999)));
+        String generatedTransportManagerLastName = faker.generateLastName().concat(String.valueOf(Int.random(100, 999)));
+        String generatedTransportManagerDOB = Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28);
+        String generatedTransportManagerEmailAddress = String.format("%s %s", generatedTransportManagerFirstName, generatedTransportManagerLastName)
+                .replace(" ", "_").replace(",", "").concat(".volTransportManager@dvsa.com");
+        setTransportManagerFirstName( getTransportManagerFirstName() == null ? generatedTransportManagerFirstName : getTransportManagerFirstName());
+        setTransportManagerLastName( getTransportManagerLastName() == null ? generatedTransportManagerLastName : getTransportManagerLastName());
+        setTransportManagerEmailAddress( getTransportManagerEmailAddress() == null ? generatedTransportManagerEmailAddress : getTransportManagerEmailAddress());
+        setTransportManagerDOB( getTransportManagerDOB() == null ? generatedTransportManagerDOB : getTransportManagerDOB());
+        setHours( getHours() == 0.0 ? 2.0 : getHours() );
+        setIsOwner( getIsOwner() == null ? "Y" : getIsOwner() );
 
-        // Establishment Address details
-        LinkedHashMap<String, String> generatedEstablishmentAddress = faker.generateAddress();
-        setEstablishmentAddressLine1( getEstablishmentAddressLine1() == null ? generatedEstablishmentAddress.get("addressLine1") : getEstablishmentAddressLine1());
-        setEstablishmentAddressLine2( getEstablishmentAddressLine2() == null ? generatedEstablishmentAddress.get("addressLine2") : getEstablishmentAddressLine2());
-        setEstablishmentAddressLine3( getEstablishmentAddressLine3() == null ? generatedEstablishmentAddress.get("addressLine3") : getEstablishmentAddressLine3());
-        setEstablishmentAddressLine4( getEstablishmentAddressLine4() == null ? generatedEstablishmentAddress.get("addressLine4") : getEstablishmentAddressLine4());
-        setEstablishmentTown( getEstablishmentTown() == null ? generatedEstablishmentAddress.get("town") : getEstablishmentTown());
-        setEstablishmentPostCode( getEstablishmentPostCode() == null ? faker.getRandomRealUKPostcode() : getEstablishmentPostCode());
+        // Transport Consultant details
+        String generatedTransportConsultantName = String.format("%s %s", faker.generateFirstName(), faker.generateLastName());
+        String generatedTransportConsultantEmail = generatedTransportConsultantName.replace(" ", "_").replace(",", "")
+                .concat(".volTransportConsultant@dvsa.com");
+        setTransportConsultantName( getTransportConsultantName() == null ? generatedTransportConsultantName : getTransportConsultantName());
+        setTransportConsultantEmail( getTransportConsultantEmail() == null ?  generatedTransportConsultantEmail : getTransportConsultantEmail());
 
         // Transport Consultant Address details
         LinkedHashMap<String, String> transportConsultantAddress = faker.generateAddress();
@@ -836,7 +995,7 @@ public class CreateApplication extends BaseAPI {
         setTransportConsultantAddressLine3( getTransportConsultantAddressLine3() == null ? transportConsultantAddress.get("addressLine3") : getTransportConsultantAddressLine3());
         setTransportConsultantAddressLine4( getTransportConsultantAddressLine4() == null ? transportConsultantAddress.get("addressLine4") : getTransportConsultantAddressLine4());
         setTransportConsultantTown( getTransportConsultantTown() == null ? faker.generateAddress().get("town") : getTransportConsultantTown());
-        setTransportConsultantPostCode( getTransportConsultantPostCode() == null ? faker.getRandomRealUKPostcode() : getTransportConsultantPostCode());
+        setTransportConsultantPostCode( getTransportConsultantPostCode() == null ? faker.getRandomRealUKPostcode() : getTransportConsultantPostCode() );
     }
 
     public ValidatableResponse startApplication() {
@@ -875,12 +1034,12 @@ public class CreateApplication extends BaseAPI {
 
     public ValidatableResponse addBusinessDetails() {
         String organisationVersion = fetchApplicationInformation(getApplicationId(), "licence.organisation.version", "1");
-        String natureOfBusiness = faker.generateNatureOfBusiness();
         String updateBusinessDetailsResource = URL.build(env, String.format("organisation/business-details/application/%s", getApplicationId())).toString();
 
-        AddressBuilder address = new AddressBuilder().withAddressLine1(getCorrespondenceAddressLine1()).withTown(getBusinessTown()).withPostcode(postCodeByTrafficArea);
+        AddressBuilder address = new AddressBuilder().withAddressLine1(registeredAddressLine1).withAddressLine2(registeredAddressLine2).withAddressLine3(registeredAddressLine3)
+                .withAddressLine4(registeredAddressLine4).withTown(registeredTown).withPostcode(registeredPostCode);
         UpdateBusinessDetailsBuilder businessDetails = new UpdateBusinessDetailsBuilder()
-                .withId(getApplicationId()).withCompanyNumber(companyNumber).withNatureOfBusiness(natureOfBusiness).withLicence(getLicenceId())
+                .withId(getApplicationId()).withCompanyNumber(getCompanyNumber()).withNatureOfBusiness(getNatureOfBusiness()).withLicence(getLicenceId())
                 .withVersion(organisationVersion).withName(getBusinessName()).withAddress(address);
 
         apiResponse = RestUtils.put(businessDetails, updateBusinessDetailsResource, apiHeaders.getHeaders());
@@ -897,10 +1056,10 @@ public class CreateApplication extends BaseAPI {
         String applicationAddressResource = URL.build(env, String.format("application/%s/addresses/", getApplicationId())).toString();
 
         AddressBuilder correspondenceAddress = new AddressBuilder().withAddressLine1(getCorrespondenceAddressLine1()).withAddressLine2(getCorrespondenceAddressLine2()).withAddressLine3(getCorrespondenceAddressLine3())
-                .withAddressLine4(getCorrespondenceAddressLine4()).withTown(getCorrespondenceTown()).withPostcode(postcode).withCountryCode(countryCode);
+                .withAddressLine4(getCorrespondenceAddressLine4()).withTown(getCorrespondenceTown()).withPostcode(correspondencePostCode).withCountryCode(countryCode);
 
         AddressBuilder establishmentAddress = new AddressBuilder().withAddressLine1(establishmentAddressLine1).withAddressLine2(establishmentAddressLine2).withAddressLine3(establishmentAddressLine3)
-                .withAddressLine4(establishmentAddressLine4).withTown(establishmentTown).withPostcode(postcode).withCountryCode(countryCode);
+                .withAddressLine4(establishmentAddressLine4).withTown(establishmentTown).withPostcode(establishmentPostCode).withCountryCode(countryCode);
 
         AddressBuilder transportConsultantAddress = new AddressBuilder().withAddressLine1(transportConsultantAddressLine1).withTown(transportConsultantTown).withPostcode(transportConsultantPostCode).withCountryCode(countryCode);
 
@@ -926,7 +1085,7 @@ public class CreateApplication extends BaseAPI {
 
     public ValidatableResponse addPartners() {
         String addPersonResource = URL.build(env, String.format("application/%s/people/", getApplicationId())).toString();
-        PersonBuilder addPerson = new PersonBuilder().withId(getApplicationId()).withTitle(getTitle()).withForename(getForeName()).withFamilyName(getFamilyName()).withBirthDate(getBirthDate());
+        PersonBuilder addPerson = new PersonBuilder().withId(getApplicationId()).withTitle(getTitle()).withForename(getPartnerForeName()).withFamilyName(getPartnerFamilyName()).withBirthDate(getPartnerDOB());
         apiResponse = RestUtils.post(addPerson, addPersonResource, apiHeaders.getHeaders());
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {
@@ -1032,7 +1191,7 @@ public class CreateApplication extends BaseAPI {
         String hasEmail = "Y";
         String addTransportManager = URL.build(env, "transport-manager/create-new-user/").toString();
         TransportManagerBuilder transportManagerBuilder = new TransportManagerBuilder().withApplication(getApplicationId()).withFirstName(transportManagerFirstName)
-                .withFamilyName(transportManagerLastName).withHasEmail(hasEmail).withUsername(getTmUserName()).withEmailAddress(getTransportManagerEmailAddress()).withBirthDate(getBirthDate());
+                .withFamilyName(transportManagerLastName).withHasEmail(hasEmail).withUsername(getTmUserName()).withEmailAddress(getTransportManagerEmailAddress()).withBirthDate(getTransportManagerBirthDate());
         apiResponse = RestUtils.post(transportManagerBuilder, addTransportManager, apiHeaders.getHeaders());
         setTransportManagerApplicationId(apiResponse.extract().jsonPath().getString("id.transportManagerApplicationId"));
 
@@ -1068,7 +1227,7 @@ public class CreateApplication extends BaseAPI {
         int applicationVersion = Integer.parseInt(fetchTMApplicationInformation(tmApplicationNo, "version", "1"));
         AddressBuilder Address = new AddressBuilder().withAddressLine1(getCorrespondenceAddressLine1()).withPostcode(postCodeByTrafficArea).withTown(getTown()).withCountryCode(getCountryCode());
         TmRespBuilder tmRespBuilder = new TmRespBuilder().withEmail(getTransportManagerEmailAddress()).withPlaceOfBirth(getTown()).withHomeAddress(Address).withWorkAddress(Address).withTmType(getTmType()).withIsOwner(isOwner)
-                .withHoursMon(hours).withHoursTue(hours).withHoursWed(hours).withHoursThu(hours).withHoursThu(hours).withHoursFri(hours).withHoursSat(hours).withHoursSun(hours).withDob(birthDate)
+                .withHoursMon(hours).withHoursTue(hours).withHoursWed(hours).withHoursThu(hours).withHoursThu(hours).withHoursFri(hours).withHoursSat(hours).withHoursSun(hours).withDob(getTransportManagerbirthDate())
                 .withId(tmApplicationNo).withVersion(applicationVersion);
 
         apiResponse = RestUtils.put(tmRespBuilder, addTMresp, apiHeaders.getHeaders());
@@ -1210,10 +1369,10 @@ public class CreateApplication extends BaseAPI {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
-        String safetyInspectorResource = URL.build(env, String.format("application/%s/workshop", getApplicationId()
-        )).toString();
-        AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(correspondenceAddressLine1).withTown(town).withPostcode(safetyInspectorPostCode).withCountryCode(countryCode);
-        ContactDetailsBuilder contactDetailsBuilder = new ContactDetailsBuilder().withFao(foreName).withAddress(addressBuilder);
+        String safetyInspectorResource = URL.build(env, String.format("application/%s/workshop", getApplicationId())).toString();
+        AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(safetyInspectorAddressLine1).withAddressLine2(safetyInspectorAddressLine2).withAddressLine3(safetyInspectorAddressLine3)
+                .withAddressLine4(safetyInspectorAddressLine4).withTown(safetyInspectorTown).withPostcode(safetyInspectorPostCode).withCountryCode(countryCode);
+        ContactDetailsBuilder contactDetailsBuilder = new ContactDetailsBuilder().withFullName(String.format("%s %s", safetyInspectorForeName, safetyInspectorFamilyName)).withAddress(addressBuilder);
         SafetyInspectorBuilder safetyInspectorBuilder = new SafetyInspectorBuilder().withApplication(applicationId).withLicence(getLicenceId()).withIsExternal("N")
                 .withContactDetails(contactDetailsBuilder);
         apiResponse = RestUtils.post(safetyInspectorBuilder, safetyInspectorResource, apiHeaders.getHeaders());
