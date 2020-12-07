@@ -18,8 +18,8 @@
         <owasp-dependency-checker.version>6.0.2</owasp-dependency-checker.version>
         <javax.xml.version>2.3.1</javax.xml.version>
         <apache-commons.version>1.6</apache-commons.version>
-        <nexus.releases>http://nexus.shd.ci.nonprod.dvsa.aws/repository/maven-releases</nexus.releases>
-        <nexus.snapshots>http://nexus.shd.ci.nonprod.dvsa.aws/repository/maven-snapshots</nexus.snapshots>
+        <nexus.releases>https://nexus.olcs.dev-dvsacloud.uk/repository/maven-releases</nexus.releases>
+        <nexus.snapshots>https://nexus.olcs.dev-dvsacloud.uk/repository/maven-snapshots</nexus.snapshots>
     </properties>
 
     <build>
