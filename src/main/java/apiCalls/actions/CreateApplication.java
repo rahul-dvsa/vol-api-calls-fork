@@ -919,137 +919,122 @@ public class CreateApplication extends BaseAPI {
     public CreateApplication() {
 
         // Application details
-        String defaultOperatorType = OperatorType.valueOf("goods".toUpperCase()).asString();
-        String defaultLicenceType = LicenceType.valueOf("standard_international".toUpperCase()).asString();
-        String defaultBusinessType = BusinessType.valueOf("limited_company".toUpperCase()).asString();
-        String defaultPostCodeByTrafficArea = TrafficArea.getPostCode(TrafficArea.valueOf(TrafficArea.NORTH_EAST.name()));
-        setOperatorType( getOperatorType() == null ? defaultOperatorType : getOperatorType() );
-        setLicenceType( getLicenceType() == null ? defaultLicenceType : getLicenceType() );
-        setBusinessType( getBusinessType() == null ? defaultBusinessType : getBusinessType() );
-        setNiFlag( getNiFlag() == null ? "N" : getNiFlag() );
-        setIsInterim( getIsInterim() == null ? "N" : getIsInterim() );
-        setNoOfVehiclesRequested( getNoOfVehiclesRequested() == 0 ? 5 : getNoOfVehiclesRequested() );
-        setPostCodeByTrafficArea( getPostCodeByTrafficArea() == null ? defaultPostCodeByTrafficArea : getPostCodeByTrafficArea() );
-        setCountryCode( getCountryCode() == null ? "GB" : getCountryCode() );
+        setOperatorType( OperatorType.valueOf("goods".toUpperCase()).asString() );
+        setLicenceType( LicenceType.valueOf("standard_international".toUpperCase()).asString() );
+        setBusinessType( BusinessType.valueOf("limited_company".toUpperCase()).asString() );
+        setNiFlag( "N" );
+        setIsInterim( "N" );
+        setNoOfVehiclesRequested( 5 );
+        setPostCodeByTrafficArea( TrafficArea.getPostCode(TrafficArea.valueOf(TrafficArea.NORTH_EAST.name())));
+        setCountryCode( "GB" );
 
         // PSV details
-        setPsvVehicleSize( getPsvVehicleSize() == null ? "psvvs_both" : getPsvVehicleSize() );
-        setPsvNoSmallVhlConfirmation( getPsvNoSmallVhlConfirmation() == null ? "Y" : getPsvNoSmallVhlConfirmation() );
-        setPsvOperateSmallVhl( getPsvOperateSmallVhl() == null ? "Y" : getPsvOperateSmallVhl() );
-        setPsvSmallVhlNotes( getPsvSmallVhlNotes() == null ? "submitted through the API" : getPsvSmallVhlNotes() );
-        setPsvLimousines( getPsvLimousines() == null ? "Y" : getPsvLimousines() );
-        setPsvNoLimousineConfirmation( getPsvNoLimousineConfirmation() == null ? "Y" : getPsvNoLimousineConfirmation() );
-        setPsvOnlyLimousinesConfirmation( getPsvOnlyLimousinesConfirmation() == null ? "Y" : getPsvOnlyLimousinesConfirmation() );
+        setPsvVehicleSize( "psvvs_both" );
+        setPsvNoSmallVhlConfirmation( "Y" );
+        setPsvOperateSmallVhl( "Y" );
+        setPsvSmallVhlNotes( "submitted through the API" );
+        setPsvLimousines( "Y" );
+        setPsvNoLimousineConfirmation( "Y" );
+        setPsvOnlyLimousinesConfirmation( "Y" );
 
         // Business details
 
         // // Business general details
-        String generatedBusinessEmail = getBusinessName().replace(" ", "_").replace(",", "").concat(".volBusiness@dvsa.com");
-        setBusinessName( getBusinessName() == null ? faker.generateCompanyName() : getBusinessName() );
-        setCompanyNumber( getCompanyNumber() == null ? String.valueOf(Int.random(00000000, 99999999)) : getCompanyNumber() );
-        setNatureOfBusiness( getNatureOfBusiness() == null ? faker.generateNatureOfBusiness() : getNatureOfBusiness() );
-        setBusinessEmailAddress( getBusinessEmailAddress() == null ? generatedBusinessEmail : getBusinessEmailAddress() );
-        setPhoneNumber( getPhoneNumber() == null ? "0712345678" : getPhoneNumber());
+        setBusinessName( faker.generateCompanyName() );
+        setCompanyNumber( String.valueOf(Int.random(00000000, 99999999)) );
+        setNatureOfBusiness( faker.generateNatureOfBusiness() );
+        setBusinessEmailAddress( getBusinessName().replace(" ", "_").replace(",", "").concat(".volBusiness@dvsa.com") );
+        setPhoneNumber( "0712345678" );
 
         // // Registered Business Address details
         LinkedHashMap<String, String> generatedRegisteredAddress = faker.generateAddress();
-        setRegisteredAddressLine1( getRegisteredAddressLine1() == null ? generatedRegisteredAddress.get("addressLine1") : getRegisteredAddressLine1() );
-        setRegisteredAddressLine2( getRegisteredAddressLine2() == null ? generatedRegisteredAddress.get("addressLine2") : getRegisteredAddressLine2() );
-        setRegisteredAddressLine3( getRegisteredAddressLine3() == null ? generatedRegisteredAddress.get("addressLine3") : getRegisteredAddressLine3() );
-        setRegisteredAddressLine4( getRegisteredAddressLine4() == null ? generatedRegisteredAddress.get("addressLine4") : getRegisteredAddressLine4() );
-        setRegisteredTown( getCorrespondenceTown() == null ? generatedRegisteredAddress.get("town") : getRegisteredTown() );
-        setRegisteredPostCode( getCorrespondencePostCode() == null ? faker.getRandomRealUKPostcode() : getRegisteredPostCode() );
+        setRegisteredAddressLine1( generatedRegisteredAddress.get("addressLine1") );
+        setRegisteredAddressLine2( generatedRegisteredAddress.get("addressLine2") );
+        setRegisteredAddressLine3( generatedRegisteredAddress.get("addressLine3") );
+        setRegisteredAddressLine4( generatedRegisteredAddress.get("addressLine4") );
+        setRegisteredTown( generatedRegisteredAddress.get("town") );
+        setRegisteredPostCode( faker.getRandomRealUKPostcode() );
 
         // // Correspondence Address details
         LinkedHashMap<String, String> generatedCorrespondenceAddress = faker.generateAddress();
-        setCorrespondenceAddressLine1( getCorrespondenceAddressLine1() == null ? generatedCorrespondenceAddress.get("addressLine1") : getCorrespondenceAddressLine1() );
-        setCorrespondenceAddressLine2( getCorrespondenceAddressLine2() == null ? generatedCorrespondenceAddress.get("addressLine2") : getCorrespondenceAddressLine2() );
-        setCorrespondenceAddressLine3( getCorrespondenceAddressLine3() == null ? generatedCorrespondenceAddress.get("addressLine3") : getCorrespondenceAddressLine3() );
-        setCorrespondenceAddressLine4( getCorrespondenceAddressLine4() == null ? generatedCorrespondenceAddress.get("addressLine4") : getCorrespondenceAddressLine4() );
-        setCorrespondenceTown( getCorrespondenceTown() == null ? generatedCorrespondenceAddress.get("town") : getCorrespondenceTown() );
-        setCorrespondencePostCode( getCorrespondencePostCode() == null ? faker.getRandomRealUKPostcode() : getCorrespondencePostCode() );
+        setCorrespondenceAddressLine1( generatedCorrespondenceAddress.get("addressLine1") );
+        setCorrespondenceAddressLine2( generatedCorrespondenceAddress.get("addressLine2") );
+        setCorrespondenceAddressLine3( generatedCorrespondenceAddress.get("addressLine3") );
+        setCorrespondenceAddressLine4( generatedCorrespondenceAddress.get("addressLine4") );
+        setCorrespondenceTown( generatedCorrespondenceAddress.get("town") );
+        setCorrespondencePostCode( faker.getRandomRealUKPostcode() );
 
         // // Establishment Address details
         LinkedHashMap<String, String> generatedEstablishmentAddress = faker.generateAddress();
-        setEstablishmentAddressLine1( getEstablishmentAddressLine1() == null ? generatedEstablishmentAddress.get("addressLine1") : getEstablishmentAddressLine1() );
-        setEstablishmentAddressLine2( getEstablishmentAddressLine2() == null ? generatedEstablishmentAddress.get("addressLine2") : getEstablishmentAddressLine2() );
-        setEstablishmentAddressLine3( getEstablishmentAddressLine3() == null ? generatedEstablishmentAddress.get("addressLine3") : getEstablishmentAddressLine3() );
-        setEstablishmentAddressLine4( getEstablishmentAddressLine4() == null ? generatedEstablishmentAddress.get("addressLine4") : getEstablishmentAddressLine4() );
-        setEstablishmentTown( getEstablishmentTown() == null ? generatedEstablishmentAddress.get("town") : getEstablishmentTown() );
-        setEstablishmentPostCode( getEstablishmentPostCode() == null ? faker.getRandomRealUKPostcode() : getEstablishmentPostCode() );
+        setEstablishmentAddressLine1( generatedEstablishmentAddress.get("addressLine1") );
+        setEstablishmentAddressLine2( generatedEstablishmentAddress.get("addressLine2") );
+        setEstablishmentAddressLine3( generatedEstablishmentAddress.get("addressLine3") );
+        setEstablishmentAddressLine4( generatedEstablishmentAddress.get("addressLine4") );
+        setEstablishmentTown( generatedEstablishmentAddress.get("town") );
+        setEstablishmentPostCode( faker.getRandomRealUKPostcode() );
 
         // Partner details
-        String generatedPartnerFirstName = faker.generateFirstName().concat(String.valueOf(Int.random(100, 999)) );
-        String generatedPartnerFamilyName = faker.generateLastName().concat(String.valueOf(Int.random(100, 999)) );
-        String generatedBirthDate = Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28);
-        setPartnerForeName( getPartnerForeName() == null ? generatedPartnerFirstName : getPartnerForeName() );
-        setPartnerFamilyName( getPartnerFamilyName() == null ? generatedPartnerFamilyName : getPartnerFamilyName() );
-        setPartnerDOB( getPartnerDOB() == null ? generatedBirthDate : getPartnerDOB() );
+        setPartnerForeName( faker.generateFirstName().concat(String.valueOf(Int.random(100, 999))) );
+        setPartnerFamilyName( faker.generateLastName().concat(String.valueOf(Int.random(100, 999))) );
+        setPartnerDOB( Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28) );
 
         // Operating Centre details
         LinkedHashMap<String, String> generatedOperatingCentreAddress = faker.generateAddress();
-        String defaultTrafficArea = TrafficArea.NORTH_EAST.asString();
-        String defaultEnforcementArea = EnforcementArea.NORTH_EAST.asString();
-        setOperatingCentreAddressLine1( getOperatingCentreAddressLine1() == null ? generatedOperatingCentreAddress.get("addressLine1") : getOperatingCentreAddressLine1() );
-        setOperatingCentreAddressLine2( getOperatingCentreAddressLine2() == null ? generatedOperatingCentreAddress.get("addressLine2") : getOperatingCentreAddressLine2() );
-        setOperatingCentreAddressLine3( getOperatingCentreAddressLine3() == null ? generatedOperatingCentreAddress.get("addressLine3") : getOperatingCentreAddressLine3() );
-        setOperatingCentreAddressLine4( getOperatingCentreAddressLine4() == null ? generatedOperatingCentreAddress.get("addressLine4") : getOperatingCentreAddressLine4() );
-        setOperatingCentreTown( getOperatingCentreTown() == null ? generatedOperatingCentreAddress.get("town") : getOperatingCentreTown() );
-        setOperatingCentrePostCode( getOperatingCentrePostCode() == null ? faker.getRandomRealUKPostcode() : getOperatingCentrePostCode() );
-        setOperatingCentreVehicleCap( getOperatingCentreVehicleCap() == 0 ? 5 : getOperatingCentreVehicleCap() );
-        setOperatingCentreTrailerCap( getOperatingCentreTrailerCap() == 0 ? 5 : getOperatingCentreTrailerCap() );
-        setRestrictedVehicles( getRestrictedVehicles() == null ? 2 : getRestrictedVehicles() );
-        setTrafficArea( getTrafficArea() == null ? defaultTrafficArea : getTrafficArea() );
-        setEnforcementArea( getEnforcementArea() == null ? defaultEnforcementArea : getEnforcementArea() );
+        setOperatingCentreAddressLine1( generatedOperatingCentreAddress.get("addressLine1") );
+        setOperatingCentreAddressLine2( generatedOperatingCentreAddress.get("addressLine2") );
+        setOperatingCentreAddressLine3( generatedOperatingCentreAddress.get("addressLine3") );
+        setOperatingCentreAddressLine4( generatedOperatingCentreAddress.get("addressLine4") );
+        setOperatingCentreTown( generatedOperatingCentreAddress.get("town") );
+        setOperatingCentrePostCode( faker.getRandomRealUKPostcode() );
+        setOperatingCentreVehicleCap( 5 );
+        setOperatingCentreTrailerCap( 5 );
+        setRestrictedVehicles( 2 );
+        setTrafficArea( TrafficArea.NORTH_EAST.asString() );
+        setEnforcementArea( EnforcementArea.NORTH_EAST.asString() );
 
         // Transport Manager details
         String generatedTransportManagerFirstName = faker.generateFirstName().concat(String.valueOf(Int.random(100, 999)));
         String generatedTransportManagerLastName = faker.generateLastName().concat(String.valueOf(Int.random(100, 999)));
-        String generatedTransportManagerDOB = Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28);
-        String generatedTransportManagerEmailAddress = String.format("%s %s", generatedTransportManagerFirstName, generatedTransportManagerLastName)
-                .replace(" ", "_").replace(",", "").concat(".volTransportManager@dvsa.com");
         LinkedHashMap<String, String> generatedTransportManagerAddress = faker.generateAddress();
-        setTransportManagerFirstName( getTransportManagerFirstName() == null ? generatedTransportManagerFirstName : getTransportManagerFirstName() );
-        setTransportManagerLastName( getTransportManagerLastName() == null ? generatedTransportManagerLastName : getTransportManagerLastName() );
-        setTransportManagerEmailAddress( getTransportManagerEmailAddress() == null ? generatedTransportManagerEmailAddress : getTransportManagerEmailAddress() );
-        setTransportManagerDOB( getTransportManagerDOB() == null ? generatedTransportManagerDOB : getTransportManagerDOB() );
-        setHours( getHours() == 0.0 ? 2.0 : getHours() );
+        setTransportManagerFirstName( generatedTransportManagerFirstName );
+        setTransportManagerLastName( generatedTransportManagerLastName );
+        setTransportManagerEmailAddress( String.format("%s %s", generatedTransportManagerFirstName, generatedTransportManagerLastName)
+                .replace(" ", "_").replace(",", "").concat(".volTransportManager@dvsa.com") );
+        setTransportManagerDOB( Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28) );
+        setHours( 2.0 );
         setIsOwner( getIsOwner() == null ? "Y" : getIsOwner() );
-        setTransportManagerAddressLine1( getTransportManagerAddressLine1() == null ? generatedTransportManagerAddress.get("AddressLine1") : getTransportManagerAddressLine1());
-        setTransportManagerAddressLine2( getTransportManagerAddressLine2() == null ? generatedTransportManagerAddress.get("AddressLine2") : getTransportManagerAddressLine2());
-        setTransportManagerAddressLine3( getTransportManagerAddressLine3() == null ? generatedTransportManagerAddress.get("AddressLine3") : getTransportManagerAddressLine3());
-        setTransportManagerAddressLine4( getTransportManagerAddressLine4() == null ? generatedTransportManagerAddress.get("AddressLine4") : getTransportManagerAddressLine4());
-        setTransportManagerTown( getTransportManagerTown() == null ? generatedTransportManagerAddress.get("town") : getTransportManagerTown());
-        setTransportManagerPostCode( getTransportManagerPostCode() == null ? faker.getRandomRealUKPostcode() : getTransportManagerPostCode());
+        setTransportManagerAddressLine1( generatedTransportManagerAddress.get("AddressLine1") );
+        setTransportManagerAddressLine2( generatedTransportManagerAddress.get("AddressLine2") );
+        setTransportManagerAddressLine3( generatedTransportManagerAddress.get("AddressLine3") );
+        setTransportManagerAddressLine4( generatedTransportManagerAddress.get("AddressLine4") );
+        setTransportManagerTown( generatedTransportManagerAddress.get("town") );
+        setTransportManagerPostCode( faker.getRandomRealUKPostcode() );
 
         // Safety Inspector Address details
-        String generatedSafetyInspectorForeName = faker.generateFirstName().concat(String.valueOf(Int.random(100, 999)));
-        String generatedSafetyInspectorFamilyName = faker.generateFirstName().concat(String.valueOf(Int.random(100, 999)));
         LinkedHashMap<String, String> generatedSafetyInspectorAddress = faker.generateAddress();
-        setSafetyInspectorForeName( getSafetyInspectorForeName() == null ? generatedSafetyInspectorForeName : getSafetyInspectorForeName() );
-        setSafetyInspectorFamilyName( getSafetyInspectorFamilyName() == null ? generatedSafetyInspectorFamilyName : getSafetyInspectorFamilyName() );
-        setSafetyInspectorAddressLine1( getSafetyInspectorAddressLine1() == null ? generatedSafetyInspectorAddress.get("addressLine1") : getSafetyInspectorAddressLine1() );
-        setSafetyInspectorAddressLine2( getSafetyInspectorAddressLine2() == null ? generatedSafetyInspectorAddress.get("addressLine2") : getSafetyInspectorAddressLine2() );
-        setSafetyInspectorAddressLine3( getSafetyInspectorAddressLine3() == null ? generatedSafetyInspectorAddress.get("addressLine3") : getSafetyInspectorAddressLine3() );
-        setSafetyInspectorAddressLine4( getSafetyInspectorAddressLine4() == null ? generatedSafetyInspectorAddress.get("addressLine4") : getSafetyInspectorAddressLine4() );
-        setSafetyInspectorTown( getSafetyInspectorTown() == null ? generatedSafetyInspectorAddress.get("addressLine4") : getSafetyInspectorTown() );
-        setSafetyInspectorPostCode( getSafetyInspectorPostCode() == null ? faker.getRandomRealUKPostcode() : getSafetyInspectorPostCode() );
+        setSafetyInspectorForeName( faker.generateFirstName().concat(String.valueOf(Int.random(100, 999))) );
+        setSafetyInspectorFamilyName( faker.generateFirstName().concat(String.valueOf(Int.random(100, 999))) );
+        setSafetyInspectorAddressLine1( generatedSafetyInspectorAddress.get("addressLine1") );
+        setSafetyInspectorAddressLine2( generatedSafetyInspectorAddress.get("addressLine2") );
+        setSafetyInspectorAddressLine3( generatedSafetyInspectorAddress.get("addressLine3") );
+        setSafetyInspectorAddressLine4( generatedSafetyInspectorAddress.get("addressLine4") );
+        setSafetyInspectorTown( generatedSafetyInspectorAddress.get("addressLine4") );
+        setSafetyInspectorPostCode( faker.getRandomRealUKPostcode() );
 
         // Transport Consultant details
         String generatedTransportConsultantName = String.format("%s %s", faker.generateFirstName(), faker.generateLastName());
-        String generatedTransportConsultantEmail = generatedTransportConsultantName.replace(" ", "_").replace(",", "")
-                .concat(".volTransportConsultant@dvsa.com");
         setTransportConsultantName( getTransportConsultantName() == null ? generatedTransportConsultantName : getTransportConsultantName() );
-        setTransportConsultantEmail( getTransportConsultantEmail() == null ?  generatedTransportConsultantEmail : getTransportConsultantEmail() );
+        setTransportConsultantEmail( generatedTransportConsultantName.replace(" ", "_").replace(",", "")
+                .concat(".volTransportConsultant@dvsa.com") );
 
         // Transport Consultant Address details
         LinkedHashMap<String, String> transportConsultantAddress = faker.generateAddress();
-        setTransportConsultantAddressLine1( getTransportConsultantAddressLine1() == null ? transportConsultantAddress.get("addressLine1") : getTransportConsultantAddressLine1() );
-        setTransportConsultantAddressLine2( getTransportConsultantAddressLine2() == null ? transportConsultantAddress.get("addressLine2") : getTransportConsultantAddressLine2() );
-        setTransportConsultantAddressLine3( getTransportConsultantAddressLine3() == null ? transportConsultantAddress.get("addressLine3") : getTransportConsultantAddressLine3() );
-        setTransportConsultantAddressLine4( getTransportConsultantAddressLine4() == null ? transportConsultantAddress.get("addressLine4") : getTransportConsultantAddressLine4() );
-        setTransportConsultantTown( getTransportConsultantTown() == null ? faker.generateAddress().get("town") : getTransportConsultantTown() );
-        setTransportConsultantPostCode( getTransportConsultantPostCode() == null ? faker.getRandomRealUKPostcode() : getTransportConsultantPostCode() );
+        setTransportConsultantAddressLine1( transportConsultantAddress.get("addressLine1") );
+        setTransportConsultantAddressLine2( transportConsultantAddress.get("addressLine2") );
+        setTransportConsultantAddressLine3( transportConsultantAddress.get("addressLine3") );
+        setTransportConsultantAddressLine4( transportConsultantAddress.get("addressLine4") );
+        setTransportConsultantTown( faker.generateAddress().get("town") );
+        setTransportConsultantPostCode( faker.getRandomRealUKPostcode() );
     }
 
     public ValidatableResponse startApplication() {
