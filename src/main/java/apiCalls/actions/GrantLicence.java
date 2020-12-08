@@ -1,6 +1,5 @@
 package apiCalls.actions;
 
-import activesupport.dates.DateState;
 import activesupport.faker.FakerUtils;
 import activesupport.http.RestUtils;
 import activesupport.system.Properties;
@@ -31,7 +30,8 @@ public class GrantLicence extends BaseAPI{
     private Headers apiHeaders = new Headers();
 
     private String organisationId;
-    private String applicationNumber;
+    private String applicationId;
+    private CreateApplication application;
 
 
     private List<Double> feesToPay = new ArrayList<>();
@@ -45,8 +45,8 @@ public class GrantLicence extends BaseAPI{
         this.organisationId = organisationId;
     }
 
-    public void setApplicationNumber(String applicationNumber) {
-        this.applicationNumber = applicationNumber;
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
     }
 
     public String getDateState() {
@@ -57,32 +57,35 @@ public class GrantLicence extends BaseAPI{
         this.dateState = dateState;
     }
 
-    public ValidatableResponse grantLicence() {
-        createOverview(applicationNumber);
-        getOutstandingFees(applicationNumber);
-        payOutstandingFees(organisationId, applicationNumber);
-        grant(applicationNumber);
+    public GrantLicence(CreateApplication application) {
+        this.application = application;
+    }
+
+    public ValidatableResponse grantLicence(String applicationId, String organisationId) {
+        createOverview(applicationId);
+        getOutstandingFees(applicationId);
+        payOutstandingFees(organisationId, applicationId);
+        grant(applicationId);
         return apiResponse;
     }
 
-    public void createOverview(String volApplicationNumber) {
-        this.applicationNumber = applicationNumber == null ? volApplicationNumber : applicationNumber;
+    public void createOverview(String volApplicationId) {
 
-        String overviewResource = URL.build(env, String.format("application/%s/overview/", applicationNumber)).toString();
+        String overviewResource = URL.build(env, String.format("application/%s/overview/", volApplicationId)).toString();
         apiHeaders.headers.put("x-pid", Headers.getAPI_HEADER());
         String status = "1";
         String overrideOption = "Y";
         String transportArea = "D";
-        String trackingId = fetchApplicationInformation(applicationNumber, "applicationTracking.id", null);
-        int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationNumber, "version", "1"));
-        int applicationTrackingVersion = Integer.parseInt(fetchApplicationInformation(applicationNumber, "applicationTracking.version", "1"));
+        String trackingId = fetchApplicationInformation(volApplicationId, "applicationTracking.id", null);
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(volApplicationId, "version", "1"));
+        int applicationTrackingVersion = Integer.parseInt(fetchApplicationInformation(volApplicationId, "applicationTracking.version", "1"));
 
         TrackingBuilder tracking = new TrackingBuilder().withId(trackingId).withVersion(applicationTrackingVersion).withAddressesStatus(status).withBusinessDetailsStatus(status).withBusinessTypeStatus(status)
                 .withCommunityLicencesStatus(status).withConditionsUndertakingsStatus(status).withConvictionsPenaltiesStatus(status).withFinancialEvidenceStatus(status)
                 .withFinancialHistoryStatus(status).withLicenceHistoryStatus(status).withOperatingCentresStatus(status).withPeopleStatus(status).withSafetyStatus(status)
                 .withTransportManagersStatus(status).withTypeOfLicenceStatus(status).withDeclarationsInternalStatus(status).withVehiclesDeclarationsStatus(status).withVehiclesStatus(status).withVehiclesPsvStatus(status)
                 .withTaxiPhvStatus(status);
-        OverviewBuilder overview = new OverviewBuilder().withId(applicationNumber).withVersion(applicationVersion).withLeadTcArea(transportArea).withOverrideOppositionDate(overrideOption)
+        OverviewBuilder overview = new OverviewBuilder().withId(volApplicationId).withVersion(applicationVersion).withLeadTcArea(transportArea).withOverrideOppositionDate(overrideOption)
                 .withTracking(tracking);
         apiResponse = RestUtils.put(overview, overviewResource, apiHeaders.getHeaders());
 
@@ -93,10 +96,9 @@ public class GrantLicence extends BaseAPI{
         }
     }
 
-    public void getOutstandingFees(String volApplicationNumber) {
-        this.applicationNumber = applicationNumber == null ? volApplicationNumber : applicationNumber;
+    public void getOutstandingFees(String volApplicationId) {
 
-        String getOutstandingFeesResource = URL.build(env, String.format("application/%s/outstanding-fees/", applicationNumber)).toString();
+        String getOutstandingFeesResource = URL.build(env, String.format("application/%s/outstanding-fees/", volApplicationId)).toString();
         apiResponse = RestUtils.get(getOutstandingFeesResource, apiHeaders.getHeaders());
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
             LOGGER.info(apiResponse.extract().statusCode());
@@ -115,17 +117,15 @@ public class GrantLicence extends BaseAPI{
         }
     }
 
-    public void payOutstandingFees(String organisationNumber, String volApplicationNumber) {
+    public void payOutstandingFees(String volOrganisationId, String volApplicationId) {
         String payer = faker.generateFirstName() + faker.generateLastName();
         String paymentMethod = "fpm_cash";
         String slipNo = "123456";
 
-        this.organisationId = organisationId == null ? organisationNumber : organisationId;
-        this.applicationNumber = applicationNumber == null ? volApplicationNumber : applicationNumber;
 
         String payOutstandingFeesResource = URL.build(env, "transaction/pay-outstanding-fees/").toString();
-        FeesBuilder feesBuilder = new FeesBuilder().withFeeIds(outstandingFeesIds).withOrganisationId(organisationId).withApplicationId(applicationNumber)
-                .withPaymentMethod(paymentMethod).withReceived(feesToPay.stream().mapToDouble(Double::doubleValue).sum()).withReceiptDate(getDateState().toString()).withPayer(payer).withSlipNo(slipNo);
+        FeesBuilder feesBuilder = new FeesBuilder().withFeeIds(outstandingFeesIds).withOrganisationId(volOrganisationId).withApplicationId(volApplicationId)
+                .withPaymentMethod(paymentMethod).withReceived(feesToPay.stream().mapToDouble(Double::doubleValue).sum()).withReceiptDate(getDateState()).withPayer(payer).withSlipNo(slipNo);
         apiResponse = RestUtils.post(feesBuilder, payOutstandingFeesResource, apiHeaders.getHeaders());
         if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {
             LOGGER.info(apiResponse.extract().statusCode());
@@ -134,11 +134,10 @@ public class GrantLicence extends BaseAPI{
         }
     }
 
-    public void grant(String volApplicationNumber) {
-        this.applicationNumber = applicationNumber == null ? volApplicationNumber : applicationNumber;
+    public void grant(String volApplicationId) {
 
-        String grantApplicationResource = URL.build(env, String.format("application/%s/grant/", applicationNumber)).toString();
-        GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(applicationNumber).withDuePeriod("9")
+        String grantApplicationResource = URL.build(env, String.format("application/%s/grant/", volApplicationId)).toString();
+        GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(volApplicationId).withDuePeriod("9")
                 .withAuthority("grant_authority_dl").withCaseworkerNotes("This notes are from the API");
         apiResponse = RestUtils.put(grantApplication, grantApplicationResource, apiHeaders.getHeaders());
 
@@ -158,7 +157,7 @@ public class GrantLicence extends BaseAPI{
         }
     }
 
-    public ValidatableResponse payGrantFees() {
+    public ValidatableResponse payGrantFees(String volApplicationId) {
         String payer = faker.generateFirstName() + faker.generateLastName();
         Double grantFees = 401.00;
         String paymentMethod = "fpm_cash";
@@ -166,7 +165,7 @@ public class GrantLicence extends BaseAPI{
 
         String payOutstandingFeesResource = URL.build(env, "transaction/pay-outstanding-fees/").toString();
 
-        FeesBuilder feesBuilder = new FeesBuilder().withFeeIds(Collections.singletonList(feeId)).withOrganisationId(organisationId).withApplicationId(applicationNumber)
+        FeesBuilder feesBuilder = new FeesBuilder().withFeeIds(Collections.singletonList(feeId)).withOrganisationId(organisationId).withApplicationId(volApplicationId)
                 .withPaymentMethod(paymentMethod).withReceived(grantFees).withReceiptDate(getDateState().toString()).withPayer(payer).withSlipNo(slipNo);
         apiResponse = RestUtils.post(feesBuilder, payOutstandingFeesResource, apiHeaders.getHeaders());
 
@@ -178,11 +177,10 @@ public class GrantLicence extends BaseAPI{
         return apiResponse;
     }
 
-    private void variationGrant(String volApplicationNumber) {
-        this.applicationNumber = applicationNumber == null ? volApplicationNumber : applicationNumber;
+    private void variationGrant(String volApplicationId) {
 
-        String grantApplicationResource = URL.build(env, String.format("variation/%s/grant/", applicationNumber)).toString();
-        GenericBuilder grantVariationBuilder = new GenericBuilder().withId(applicationNumber);
+        String grantApplicationResource = URL.build(env, String.format("variation/%s/grant/", volApplicationId)).toString();
+        GenericBuilder grantVariationBuilder = new GenericBuilder().withId(volApplicationId);
         apiResponse = RestUtils.put(grantVariationBuilder, grantApplicationResource, apiHeaders.getHeaders());
         apiResponse = RestUtils.put(grantVariationBuilder, grantApplicationResource, apiHeaders.getHeaders());
 
@@ -193,11 +191,10 @@ public class GrantLicence extends BaseAPI{
         }
     }
 
-    public void refuse(String volApplicationNumber) {
-        this.applicationNumber = applicationNumber == null ? volApplicationNumber : applicationNumber;
+    public void refuse(String volApplicationId) {
 
-        String grantApplicationResource = URL.build(env, String.format("application/%s/refuse/", applicationNumber)).toString();
-        GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(applicationNumber).withCaseworkerNotes("This notes are from the API");
+        String grantApplicationResource = URL.build(env, String.format("application/%s/refuse/", volApplicationId)).toString();
+        GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(volApplicationId).withCaseworkerNotes("This notes are from the API");
         apiResponse = RestUtils.put(grantApplication, grantApplicationResource, apiHeaders.getHeaders());
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
@@ -209,11 +206,10 @@ public class GrantLicence extends BaseAPI{
         }
     }
 
-    public void withdraw(String volApplicationNumber) {
-        this.applicationNumber = applicationNumber == null ? volApplicationNumber : applicationNumber;
+    public void withdraw(String volApplicationId) {
 
-        String grantApplicationResource = URL.build(env, String.format("application/%s/withdraw/", applicationNumber)).toString();
-        GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(applicationNumber).withReason("reg_in_error");
+        String grantApplicationResource = URL.build(env, String.format("application/%s/withdraw/", volApplicationId)).toString();
+        GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(volApplicationId).withReason("reg_in_error");
         apiResponse = RestUtils.put(grantApplication, grantApplicationResource, apiHeaders.getHeaders());
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
