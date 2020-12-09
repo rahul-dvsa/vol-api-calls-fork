@@ -29,8 +29,6 @@ public class GrantLicence extends BaseAPI{
     private FakerUtils faker = new FakerUtils();
     private Headers apiHeaders = new Headers();
 
-    private String organisationId;
-    private String applicationId;
 
 
     private List<Double> feesToPay = new ArrayList<>();
@@ -38,14 +36,6 @@ public class GrantLicence extends BaseAPI{
 
     private void setFeeId(int feeId){
         this.feeId = feeId;
-    }
-
-    public void setOrganisationId(String organisationId) {
-        this.organisationId = organisationId;
-    }
-
-    public void setApplicationId(String applicationId) {
-        this.applicationId = applicationId;
     }
 
     public String getDateState() {
@@ -150,7 +140,7 @@ public class GrantLicence extends BaseAPI{
         }
     }
 
-    public ValidatableResponse payGrantFees(String volApplicationId) {
+    public ValidatableResponse payGrantFees(String volApplicationId, String volOrganisationId) {
         String payer = faker.generateFirstName() + faker.generateLastName();
         Double grantFees = 401.00;
         String paymentMethod = "fpm_cash";
@@ -158,7 +148,7 @@ public class GrantLicence extends BaseAPI{
 
         String payOutstandingFeesResource = URL.build(env, "transaction/pay-outstanding-fees/").toString();
 
-        FeesBuilder feesBuilder = new FeesBuilder().withFeeIds(Collections.singletonList(feeId)).withOrganisationId(organisationId).withApplicationId(volApplicationId)
+        FeesBuilder feesBuilder = new FeesBuilder().withFeeIds(Collections.singletonList(feeId)).withOrganisationId(volOrganisationId).withApplicationId(volApplicationId)
                 .withPaymentMethod(paymentMethod).withReceived(grantFees).withReceiptDate(getDateState()).withPayer(payer).withSlipNo(slipNo);
         apiResponse = RestUtils.post(feesBuilder, payOutstandingFeesResource, apiHeaders.getHeaders());
 
