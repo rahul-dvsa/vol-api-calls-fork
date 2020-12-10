@@ -171,4 +171,8 @@ public class RegisterUser {
         }
         return apiResponse;
     }
+
+//   Possibly move getUserDetails to here and then pass the object into CreateApplication.
+//   Need to think of best way to share same variables.
+//   Maybe a general class to store all variables to then pass call from methods?
 }
