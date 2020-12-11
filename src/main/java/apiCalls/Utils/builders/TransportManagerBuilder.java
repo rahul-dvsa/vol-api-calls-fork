@@ -139,7 +139,7 @@ public class TransportManagerBuilder {
     @Override
     public String toString() {
         return "application:" +  getApplication() + ",firstName:" + getFirstName() + ",familyName:" + getFamilyName()
-        + ",hasEmail:" + getEmailAddress() + ",username:" + getUsername() + "emailAddress:" + getEmailAddress()
+        + ",hasEmail:" + getEmailAddress() + ",username:" + getUsername() + ",emailAddress:" + getEmailAddress()
                 + ",birthDate:" + getBirthDate();
     }
 }

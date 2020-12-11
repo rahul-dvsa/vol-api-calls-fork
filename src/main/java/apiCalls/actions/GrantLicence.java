@@ -28,6 +28,7 @@ public class GrantLicence extends BaseAPI{
     private int feeId;
     private FakerUtils faker = new FakerUtils();
     private Headers apiHeaders = new Headers();
+    private CreateApplication application;
 
 
 
@@ -44,6 +45,10 @@ public class GrantLicence extends BaseAPI{
 
     public void setDateState(String dateState) {
         this.dateState = dateState;
+    }
+
+    public GrantLicence (CreateApplication application) {
+        this.application = application;
     }
 
     public ValidatableResponse grantLicence(String applicationId, String organisationId) {
