@@ -879,18 +879,12 @@ public class CreateApplication extends BaseAPI {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
             return null;
         }
-        String generatedTMFirstName = faker.generateFirstName().concat(String.valueOf(Int.random(100, 999)));
-        String generatedTMLastName = faker.generateLastName().concat(String.valueOf(Int.random(100, 999)));
-        String generatedTMDOB = Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28);
-        String generatedTMUserName = String.format("apiTM%s%s%s", generatedTMFirstName, generatedTMLastName, Int.random(0, 2000));
-        String generatedTMEmailAddress = String.format("%s %s", generatedTMFirstName, generatedTMLastName)
-                .replace(" ", "_").replace(",", "").concat(".volTransportManager@dvsa.com");
-
-        setTransportManagerFirstName( getTransportManagerFirstName() == null ? generatedTMFirstName : getTransportManagerFirstName() );
-        setTransportManagerLastName( getTransportManagerLastName() == null ? generatedTMLastName : getTransportManagerLastName() );
-        setTransportManagerDOB( getTransportManagerDOB() == null ? generatedTMDOB : getTransportManagerDOB() );
-        setTransportManagerUserName(getTransportManagerUserName() == null ? generatedTMUserName : getTransportManagerUserName() );
-        setTransportManagerEmailAddress( getTransportManagerEmailAddress() == null ? generatedTMEmailAddress : getTransportManagerEmailAddress() );
+        setTransportManagerFirstName( faker.generateFirstName().concat(String.valueOf(Int.random(100, 999))) );
+        setTransportManagerLastName( faker.generateLastName().concat(String.valueOf(Int.random(100, 999))) );
+        setTransportManagerDOB( Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28) );
+        setTransportManagerUserName(String.format("apiTM%s%s%s", getTransportManagerFirstName(), getTransportManagerLastName(), Int.random(0, 2000)) );
+        setTransportManagerEmailAddress( String.format("%s %s", getTransportManagerFirstName(), getTransportManagerLastName())
+                .replace(" ", "_").replace(",", "").concat(".volTransportManager@dvsa.com") );
         setHours( 2.0 );
         setIsOwner( getIsOwner() == null ? "Y" : getIsOwner() );
         String hasEmail = "Y";
