@@ -27,14 +27,12 @@ public class RegisterUser {
     private String title;
     private String foreName;
     private String familyName;
-    private String loginId;
+    private String userName;
     private String birthDate;
     private String emailAddress;
     private String organisationName;
     private String businessType;
     private String userId;
-    private String pid;
-    private String organisationId;
 
     public void setTitle(String title) {
         this.title = title;
@@ -60,12 +58,12 @@ public class RegisterUser {
         return familyName;
     }
 
-    public void setLoginId(String loginId) {
-        this.loginId = loginId;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getLoginId() {
-        return loginId;
+    public String getUserName() {
+        return userName;
     }
 
     public String getBirthDate() {
@@ -100,28 +98,12 @@ public class RegisterUser {
         this.businessType = businessType;
     }
 
-    public void setPid(String pid) {
-        this.pid = pid;
-    }
-
-    public String getPid() {
-        return pid;
-    }
-
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
     public String getUserId() {
         return userId;
-    }
-
-    public void setOrganisationId(String organisationId) {
-        this.organisationId = organisationId;
-    }
-
-    public String getOrganisationId() {
-        return organisationId;
     }
 
     private static final Logger LOGGER = LogManager.getLogger(RegisterUser.class);
@@ -134,20 +116,14 @@ public class RegisterUser {
 
     public RegisterUser() {
         FakerUtils faker = new FakerUtils();
-        String firstName = faker.generateFirstName().concat(String.valueOf(Int.random(100, 999)));
-        String lastName = faker.generateLastName().concat(String.valueOf(Int.random(100, 999)));
-        String dateOfBirth = Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28);
-        String loginName = String.format("%s.%s%s", firstName, lastName, Int.random(1000,9999));
-        String email = String.format("%s_%s%s.tester@dvsa.com", firstName, lastName, Int.random(10000, 99999));
-
-        this.loginId = loginId == null ? loginName : getLoginId();
-        this.title = title == null ? UserTitle.MR.asString() : getTitle();
-        this.emailAddress = emailAddress == null ? email : getEmailAddress();
-        this.foreName = foreName == null ? firstName : getForeName();
-        this.familyName = familyName == null ? lastName : getFamilyName();
-        this.organisationName = organisationName == null ? faker.generateCompanyName() : getOrganisationName();
-        this.businessType = businessType == null ? BusinessType.LIMITED_COMPANY.asString() : getBusinessType();
-        this.birthDate = birthDate == null ? dateOfBirth : getBirthDate();
+        setForeName( faker.generateFirstName().concat(String.valueOf(Int.random(100, 999))) );
+        setFamilyName( faker.generateLastName().concat(String.valueOf(Int.random(100, 999))) );
+        setBirthDate( Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28) );
+        setUserName( String.format("%s.%s%s", getForeName(), getFamilyName(), Int.random(1000,9999)) );
+        setEmailAddress( String.format("%s_%s%s.tester@dvsa.com", getForeName(), getFamilyName(), Int.random(10000, 99999)) );
+        setTitle( UserTitle.MR.asString() );
+        setOrganisationName( faker.generateCompanyName() );
+        setBusinessType( BusinessType.LIMITED_COMPANY.asString() );
     }
 
     public ValidatableResponse registerUser() {
@@ -157,7 +133,7 @@ public class RegisterUser {
         PersonBuilder personBuilder = new PersonBuilder().withTitle(getTitle()).withForename(getForeName()).withFamilyName(getFamilyName()).withBirthDate(getBirthDate());
         ContactDetailsBuilder contactDetailsBuilder = new ContactDetailsBuilder().withEmailAddress(getEmailAddress()).withPerson(personBuilder);
 
-        SelfServeUserRegistrationDetailsBuilder selfServeUserRegistrationDetailsBuilder = new SelfServeUserRegistrationDetailsBuilder().withLoginId(getLoginId()).withContactDetails(contactDetailsBuilder)
+        SelfServeUserRegistrationDetailsBuilder selfServeUserRegistrationDetailsBuilder = new SelfServeUserRegistrationDetailsBuilder().withLoginId(getUserName()).withContactDetails(contactDetailsBuilder)
                 .withOrganisationName(getOrganisationName()).withBusinessType(getBusinessType());
 
         apiResponse = RestUtils.post(selfServeUserRegistrationDetailsBuilder, registerResource, apiHeaders.getHeaders());
@@ -167,7 +143,7 @@ public class RegisterUser {
             LOGGER.info("RESPONSE MESSAGE: ".concat(apiResponse.extract().response().asString()));
             throw new HTTPException(apiResponse.extract().statusCode());
         } else {
-            userId = apiResponse.extract().jsonPath().getString("id.user");
+            setUserId(apiResponse.extract().jsonPath().getString("id.user"));
         }
         return apiResponse;
     }

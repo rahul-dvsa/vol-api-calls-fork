@@ -18,7 +18,6 @@ import javax.xml.ws.http.HTTPException;
 
 public class GetUserDetails {
 
-    private String userId;
     private String pid;
     private String organisationId;
 
@@ -28,14 +27,6 @@ public class GetUserDetails {
 
     public String getPid() {
         return pid;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUserId() {
-        return userId;
     }
 
     public String getOrganisationId() {

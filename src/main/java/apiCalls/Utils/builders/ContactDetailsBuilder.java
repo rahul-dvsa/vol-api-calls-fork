@@ -14,7 +14,7 @@ public class ContactDetailsBuilder {
     @JsonProperty("person")
     private PersonBuilder personBuilder;
     @JsonProperty("fao")
-    private String fao;
+    private String fullName;
     @JsonProperty("phone_primary")
     private String phoneNumber;
     @JsonProperty("address")
@@ -66,17 +66,17 @@ public class ContactDetailsBuilder {
     }
 
     @JsonProperty("fao")
-    public String getFao() {
-        return fao;
+    public String getFullName() {
+        return fullName;
     }
 
     @JsonProperty("fao")
-    public void setFao(String fao) {
-        this.fao = fao;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public ContactDetailsBuilder withFao(String fao) {
-        this.fao = fao;
+    public ContactDetailsBuilder withFullName(String fullName) {
+        this.fullName = fullName;
         return this;
     }
 
@@ -99,7 +99,7 @@ public class ContactDetailsBuilder {
     public String toString() {
         return new ToStringBuilder(ToStringStyle.JSON_STYLE)
         .append("emailAddress", getEmailAddress())
-                .append("fao", getFao())
+                .append("fao", getFullName())
                 .append("phone_primary", getPhoneNumber())
                 .append("person", getPersonBuilder())
                 .append("address", getAddress()).toString();
