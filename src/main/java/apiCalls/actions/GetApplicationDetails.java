@@ -16,7 +16,7 @@ public class GetApplicationDetails {
 
     private ValidatableResponse apiResponse;
 
-    private String applicationId;
+    private CreateApplication application;
     private String applicationStatus;
     private String licenceId;
     private String licenceNumber;
@@ -26,12 +26,8 @@ public class GetApplicationDetails {
     Headers apiHeaders = new Headers();
 
 
-    public String getApplicationId() {
-        return applicationId;
-    }
-
-    public void setApplicationId(String applicationId) {
-        this.applicationId = applicationId;
+    public GetApplicationDetails(CreateApplication application) {
+        this.application = application;
     }
 
     public String getApplicationStatus() {
@@ -59,7 +55,7 @@ public class GetApplicationDetails {
     }
 
     public ValidatableResponse getApplicationLicenceDetails(CreateApplication createApplication) {
-        String getApplicationResource = URL.build(env, String.format("application/%s", applicationId)).toString();
+        String getApplicationResource = URL.build(env, String.format("application/%s", application.getApplicationId())).toString();
         apiHeaders.getHeaders().put("x-pid", apiHeaders.getAPI_HEADER());
         apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
         setLicenceId(apiResponse.extract().jsonPath().getString("licence.id"));
