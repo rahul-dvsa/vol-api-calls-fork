@@ -1,5 +1,6 @@
 package apiCalls.actions;
 
+import activesupport.dates.Dates;
 import activesupport.faker.FakerUtils;
 import activesupport.http.RestUtils;
 import activesupport.system.Properties;
@@ -12,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
+import org.joda.time.LocalDate;
 import org.junit.Assert;
 
 import javax.xml.ws.http.HTTPException;
@@ -25,6 +27,7 @@ public class GrantLicence extends BaseAPI{
     private EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
     private FakerUtils faker = new FakerUtils();
     private Headers apiHeaders = new Headers();
+    private Dates date = new Dates(LocalDate::new);
     private ValidatableResponse apiResponse;
     private final CreateApplication application;
     private List outstandingFeesIds;
@@ -46,6 +49,7 @@ public class GrantLicence extends BaseAPI{
 
     public GrantLicence (CreateApplication application) {
         this.application = application;
+        setDateState(date.getFormattedDate(0,0,0,"yyyy-MM-dd"));
     }
 
     public ValidatableResponse grantLicence() {

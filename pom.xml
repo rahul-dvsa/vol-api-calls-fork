@@ -6,10 +6,10 @@
 
     <groupId>org.dvsa.testing.framework</groupId>
     <artifactId>vol-api-calls</artifactId>
-    <version>0.3.3</version>
+    <version>0.3.4</version>
 
     <properties>
-        <active-support.version>1.4.4.3</active-support.version>
+        <active-support.version>1.4.4.5</active-support.version>
         <slf4j.version>2.12.1</slf4j.version>
         <slf4j-log4j12.version>2.12.1</slf4j-log4j12.version>
         <commons-lang3.version>3.7</commons-lang3.version>

@@ -10,6 +10,7 @@ import activesupport.http.RestUtils;
 
 import activesupport.system.Properties;
 
+import apiCalls.Utils.generic.Utils;
 import apiCalls.enums.BusinessType;
 import apiCalls.enums.UserTitle;
 import io.restassured.response.ValidatableResponse;
@@ -138,13 +139,8 @@ public class RegisterUser {
 
         apiResponse = RestUtils.post(selfServeUserRegistrationDetailsBuilder, registerResource, apiHeaders.getHeaders());
 
-        if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {
-            LOGGER.info("ERROR CODE: ".concat(Integer.toString(apiResponse.extract().statusCode())));
-            LOGGER.info("RESPONSE MESSAGE: ".concat(apiResponse.extract().response().asString()));
-            throw new HTTPException(apiResponse.extract().statusCode());
-        } else {
-            setUserId(apiResponse.extract().jsonPath().getString("id.user"));
-        }
+        Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
+        setUserId(apiResponse.extract().jsonPath().getString("id.user"));
         return apiResponse;
     }
 }

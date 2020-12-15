@@ -3,6 +3,7 @@ package apiCalls.actions;
 import activesupport.http.RestUtils;
 import activesupport.system.Properties;
 import apiCalls.Utils.generic.Headers;
+import apiCalls.Utils.generic.Utils;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
@@ -24,7 +25,6 @@ public class GetApplicationDetails {
     private EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
     private static Logger LOGGER = LogManager.getLogger(GetApplicationDetails.class);
     Headers apiHeaders = new Headers();
-
 
     public GetApplicationDetails(CreateApplication application) {
         this.application = application;
@@ -61,11 +61,8 @@ public class GetApplicationDetails {
         setLicenceId(apiResponse.extract().jsonPath().getString("licence.id"));
         setLicenceNumber(apiResponse.extract().jsonPath().getString("licence.licNo"));
         setApplicationStatus(apiResponse.extract().jsonPath().getString("licenceType.status.olbsKey"));
-        if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
-            LOGGER.info("ERROR CODE: ".concat(Integer.toString(apiResponse.extract().statusCode())));
-            LOGGER.info("RESPONSE MESSAGE: ".concat(apiResponse.extract().response().asString()));
-            throw new HTTPException(apiResponse.extract().statusCode());
-        }
+        Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
+
         return apiResponse;
     }
 }
