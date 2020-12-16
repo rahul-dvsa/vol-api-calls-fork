@@ -9,7 +9,6 @@ import activesupport.http.RestUtils;
 import activesupport.number.Int;
 import apiCalls.Utils.builders.*;
 import apiCalls.Utils.generic.*;
-import apiCalls.enums.LicenceType;
 import apiCalls.enums.OperatorType;
 import apiCalls.enums.UserRoles;
 import io.restassured.response.ValidatableResponse;
@@ -24,10 +23,7 @@ import org.hamcrest.Matchers;
 
 import static org.junit.Assert.assertThat;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class UpdateLicence extends BaseAPI {
@@ -36,27 +32,18 @@ public class UpdateLicence extends BaseAPI {
     private Dates date = new Dates(new LocalDateCalendar());
     private FakerUtils faker = new FakerUtils();
     private String variationType;
-
-
-
+    private String variationApplicationId;
 
 
     private String goodOrPsv;
     private String trafficAreaName;
-    public String adminUserForeName;
-    public String adminUserFamilyName;
-    public String adminUserEmailAddress;
-    public String adminUserLogin;
-    private String adminUserId;
     private String licenceStatus;
     private String businessType;
     private String licenceType;
-    private String startNumber;
-    private String endNumber;
     private String queueId;
+
     private String caseType;
     private String caseDescription;
-
 
     private String defendantType;
     private String defendantFirstname;
@@ -71,9 +58,55 @@ public class UpdateLicence extends BaseAPI {
     private String costs;
     private String convictionNotes;
 
+    private String complainantForename;
+    private String complainantFamilyName;
+    private String complaintType;
+    private String complainantStatus;
+    private String isCompliance;
+    private String complaintDate;
+    private String infringementDate;
+    private String complainantDescription;
+    private String driverForename;
+    private String driverFamilyName;
 
-    private List<String> caseCategories = new ArrayList<>();;
-    private List<String> caseOutcomes = new ArrayList<>();;
+    private String conditionUndertakingType;
+    private String conditionUndertakingCategory;
+    private String conditionsUndertakingDescription;
+    private String fulfilled;
+    private String attachedTo;
+
+    private String submissionType;
+
+    private String caseNoteComment;
+    private String caseNotePriority;
+
+    private String internalUserId;
+    private String internalUserTeam;
+    private String internalUserForeName;
+    private String internalUserFamilyName;
+    private String internalUserDOB;
+    private String internalUserAddressLine1;
+    private String internalUserAddressLine2;
+    private String internalUserAddressLine3;
+    private String internalUserAddressLine4;
+    private String internalUserTown;
+    private String internalUserPostCode;
+    private String countryCode;
+    private String internalUserLogin;
+    private String internalUserEmailAddress;
+
+    private String discsStolen;
+    private String discSequence;
+    private String startNumber;
+    private String endNumber;
+
+    private String interimReason;
+    private String interimStartDate;
+    private String interimEndDate;
+
+
+    private List<String> caseCategories = new ArrayList<>();
+    private List<String> caseOutcomes = new ArrayList<>();
 
     private int caseNoteId;
     private int complaintId;
@@ -81,15 +114,8 @@ public class UpdateLicence extends BaseAPI {
     private int conditionUndertaking;
     private int submissionsId;
     private int caseId;
+    private int version = 1;
 
-
-
-
-    private String driverForename = faker.generateFirstName();
-    private String driverFamilyName = faker.generateLastName();
-
-    private static String variationApplicationNumber;
-    private static int version = 1;
 
     public String getCaseType() {
         return caseType;
@@ -123,12 +149,12 @@ public class UpdateLicence extends BaseAPI {
         return licenceType;
     }
 
-    public String getVariationApplicationNumber() {
-        return variationApplicationNumber;
+    public String getVariationApplicationId() {
+        return variationApplicationId;
     }
 
-    public void setVariationApplicationNumber(String variationApplicationNumber) {
-        UpdateLicence.variationApplicationNumber = variationApplicationNumber;
+    public void setVariationApplicationId(String variationApplicationId) {
+        this.variationApplicationId = variationApplicationId;
     }
 
     public String getVariationType() {
@@ -137,30 +163,6 @@ public class UpdateLicence extends BaseAPI {
 
     public void setVariationType(String variationType) {
         this.variationType = variationType;
-    }
-
-    private void setAdminUserId(String adminUserId) {
-        this.adminUserId = adminUserId;
-    }
-
-    public String getAdminUserId() {
-        return this.adminUserId;
-    }
-
-    public String getAdminUserForeName() {
-        return adminUserForeName;
-    }
-
-    public void setAdminUserForeName(String adminUserForeName) {
-        this.adminUserForeName = adminUserForeName;
-    }
-
-    public String getAdminUserFamilyName() {
-        return adminUserFamilyName;
-    }
-
-    public void setAdminUserFamilyName(String adminUserFamilyName) {
-        this.adminUserFamilyName = adminUserFamilyName;
     }
 
     public String getTrafficAreaName() {
@@ -225,17 +227,6 @@ public class UpdateLicence extends BaseAPI {
 
     public String getGoodOrPsv() { return goodOrPsv; }
 
-    public String getAdminUserEmailAddress() { return adminUserEmailAddress; }
-
-    public void setAdminUserEmailAddress(String adminUserEmailAddress) { this.adminUserEmailAddress = adminUserEmailAddress; }
-
-    public String getAdminUserLogin() {
-        return adminUserLogin;
-    }
-
-    public void setAdminUserLogin(String adminUserLogin) {
-        this.adminUserLogin = adminUserLogin;
-    }
 
     private void setGoodOrPsv(String goodOrPsv) {
         this.goodOrPsv = goodOrPsv;
@@ -264,14 +255,6 @@ public class UpdateLicence extends BaseAPI {
     public void setQueueId(String queueId) {
         this.queueId = queueId;
     }
-
-    public String getDriverForename() { return driverForename; }
-
-    public void setDriverForename(String driverForename) { this.driverForename = driverForename; }
-
-    public String getDriverFamilyName() { return driverFamilyName; }
-
-    public void setDriverFamilyName(String driverFamilyName) { this.driverFamilyName = driverFamilyName; }
 
     public String getDefendantType() {
         return defendantType;
@@ -334,7 +317,7 @@ public class UpdateLicence extends BaseAPI {
     }
 
     public void setConvictionNotes(String convictionNotes) {
-        convictionNotes = convictionNotes;
+        this.convictionNotes = convictionNotes;
     }
 
     public String getCategoryText() {
@@ -369,6 +352,306 @@ public class UpdateLicence extends BaseAPI {
         this.costs = costs;
     }
 
+
+    public String getComplainantForename() {
+        return complainantForename;
+    }
+
+    public void setComplainantForename(String complainantForename) {
+        this.complainantForename = complainantForename;
+    }
+
+    public String getComplainantFamilyName() {
+        return complainantFamilyName;
+    }
+
+    public void setComplainantFamilyName(String complainantFamilyName) {
+        this.complainantFamilyName = complainantFamilyName;
+    }
+
+    public String getComplaintType() {
+        return complaintType;
+    }
+
+    public void setComplaintType(String complaintType) {
+        this.complaintType = complaintType;
+    }
+
+    public String getComplainantStatus() {
+        return complainantStatus;
+    }
+
+    public void setComplainantStatus(String complainantStatus) {
+        this.complainantStatus = complainantStatus;
+    }
+
+    public String getIsCompliance() {
+        return isCompliance;
+    }
+
+    public void setIsCompliance(String isCompliance) {
+        this.isCompliance = isCompliance;
+    }
+
+    public String getComplaintDate() {
+        return complaintDate;
+    }
+
+    public void setComplaintDate(String complaintDate) {
+        this.complaintDate = complaintDate;
+    }
+
+    public String getInfringementDate() {
+        return infringementDate;
+    }
+
+    public void setInfringementDate(String infringementDate) {
+        this.infringementDate = infringementDate;
+    }
+
+    public String getComplainantDescription() {
+        return complainantDescription;
+    }
+
+    public void setComplainantDescription(String complainantDescription) {
+        this.complainantDescription = complainantDescription;
+    }
+
+    public String getDriverForename() {
+        return driverForename;
+    }
+
+    public void setDriverForename(String driverForename) {
+        this.driverForename = driverForename;
+    }
+
+    public String getDriverFamilyName() {
+        return driverFamilyName;
+    }
+
+    public void setDriverFamilyName(String driverFamilyName) {
+        this.driverFamilyName = driverFamilyName;
+    }
+
+
+    public String getConditionUndertakingType() {
+        return conditionUndertakingType;
+    }
+
+    public void setConditionUndertakingType(String conditionUndertakingType) {
+        this.conditionUndertakingType = conditionUndertakingType;
+    }
+
+    public String getConditionUndertakingCategory() {
+        return conditionUndertakingCategory;
+    }
+
+    public void setConditionUndertakingCategory(String conditionUndertakingCategory) {
+        this.conditionUndertakingCategory = conditionUndertakingCategory;
+    }
+
+    public String getConditionsUndertakingDescription() {
+        return conditionsUndertakingDescription;
+    }
+
+    public void setConditionsUndertakingDescription(String conditionsUndertakingDescription) {
+        this.conditionsUndertakingDescription = conditionsUndertakingDescription;
+    }
+
+    public String getFulfilled() {
+        return fulfilled;
+    }
+
+    public void setFulfilled(String fulfilled) {
+        this.fulfilled = fulfilled;
+    }
+
+    public String getAttachedTo() {
+        return attachedTo;
+    }
+
+    public void setAttachedTo(String attachedTo) {
+        this.attachedTo = attachedTo;
+    }
+
+    public String getSubmissionType() {
+        return submissionType;
+    }
+
+    public void setSubmissionType(String submissionType) {
+        this.submissionType = submissionType;
+    }
+
+    public String getCaseNoteComment() {
+        return caseNoteComment;
+    }
+
+    public void setCaseNoteComment(String caseNoteComment) {
+        this.caseNoteComment = caseNoteComment;
+    }
+
+    public String getCaseNotePriority() {
+        return caseNotePriority;
+    }
+
+    public void setCaseNotePriority(String caseNotePriority) {
+        this.caseNotePriority = caseNotePriority;
+    }
+
+    public String getInternalUserId() {
+        return internalUserId;
+    }
+
+    public void setInternalUserId(String internalUserId) {
+        this.internalUserId = internalUserId;
+    }
+
+    public String getInternalUserTeam() {
+        return internalUserTeam;
+    }
+
+    public void setInternalUserTeam(String internalUserTeam) {
+        this.internalUserTeam = internalUserTeam;
+    }
+
+    public String getInternalUserForeName(){
+        return internalUserForeName;
+    }
+
+    public void setInternalUserForeName(String internalUserForeName){
+        this.internalUserForeName = internalUserForeName;
+    }
+
+    public String getInternalUserFamilyName() {
+        return internalUserFamilyName;
+    }
+
+    public void setInternalUserFamilyName(String internalUserFamilyName) {
+        this.internalUserFamilyName = internalUserFamilyName;
+    }
+
+
+    public String getInternalUserLogin() {
+        return internalUserLogin;
+    }
+
+    public void setInternalUserLogin(String internalUserLogin) {
+        this.internalUserLogin = internalUserLogin;
+    }
+
+    public String getInternalUserEmailAddress() {
+        return internalUserEmailAddress;
+    }
+
+    public void setInternalUserEmailAddress(String internalUserEmailAddress) {
+        this.internalUserEmailAddress = internalUserEmailAddress;
+    }
+
+    public String getInternalUserDOB() {
+        return internalUserDOB;
+    }
+
+    public void setInternalUserDOB(String internalUserDOB) {
+        this.internalUserDOB = internalUserDOB;
+    }
+
+    public String getInternalUserAddressLine1() {
+        return internalUserAddressLine1;
+    }
+
+    public void setInternalUserAddressLine1(String internalUserAddressLine1) {
+        this.internalUserAddressLine1 = internalUserAddressLine1;
+    }
+
+    public String getInternalUserAddressLine2() {
+        return internalUserAddressLine2;
+    }
+
+    public void setInternalUserAddressLine2(String internalUserAddressLine2) {
+        this.internalUserAddressLine2 = internalUserAddressLine2;
+    }
+
+    public String getInternalUserAddressLine3() {
+        return internalUserAddressLine3;
+    }
+
+    public void setInternalUserAddressLine3(String internalUserAddressLine3) {
+        this.internalUserAddressLine3 = internalUserAddressLine3;
+    }
+
+    public String getInternalUserAddressLine4() {
+        return internalUserAddressLine4;
+    }
+
+    public void setInternalUserAddressLine4(String internalUserAddressLine4) {
+        this.internalUserAddressLine4 = internalUserAddressLine4;
+    }
+
+    public String getInternalUserTown() {
+        return internalUserTown;
+    }
+
+    public void setInternalUserTown(String internalUserTown) {
+        this.internalUserTown = internalUserTown;
+    }
+
+    public String getInternalUserPostCode() {
+        return internalUserPostCode;
+    }
+
+    public void setInternalUserPostCode(String internalUserPostCode) {
+        this.internalUserPostCode = internalUserPostCode;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    public String getDiscsStolen() {
+        return discsStolen;
+    }
+
+    public void setDiscsStolen(String discsStolen) {
+        this.discsStolen = discsStolen;
+    }
+
+    public String getDiscSequence() {
+        return discSequence;
+    }
+
+    public void setDiscSequence(String discSequence) {
+        this.discSequence = discSequence;
+    }
+
+
+    public String getInterimReason() {
+        return interimReason;
+    }
+
+    public void setInterimReason(String interimReason) {
+        this.interimReason = interimReason;
+    }
+
+    public String getInterimStartDate() {
+        return interimStartDate;
+    }
+
+    public void setInterimStartDate(String interimStartDate) {
+        this.interimStartDate = interimStartDate;
+    }
+
+    public String getInterimEndDate() {
+        return interimEndDate;
+    }
+
+    public void setInterimEndDate(String interimEndDate) {
+        this.interimEndDate = interimEndDate;
+    }
+
     private static EnvironmentType env;
     private static final Logger LOGGER = LogManager.getLogger(UpdateLicence.class);
 
@@ -384,10 +667,6 @@ public class UpdateLicence extends BaseAPI {
 
     public UpdateLicence(CreateApplication application) {
         this.application = application;
-        setAdminUserForeName( faker.generateFirstName() );
-        setAdminUserFamilyName( faker.generateLastName() );
-        setAdminUserLogin( String.format("%s%s%s", getAdminUserForeName(), getAdminUserFamilyName(), Int.random(10000, 99999)) );
-        setAdminUserEmailAddress( getAdminUserLogin().concat("AsTheAdminUser@dvsavol.org") );
         setVariationType(null);
 
         // Case Details
@@ -412,6 +691,55 @@ public class UpdateLicence extends BaseAPI {
         setCosts("1000");
         setConvictionNotes("This has been submitted");
 
+        // Complainant Details
+        setComplainantForename(faker.generateFirstName());
+        setComplainantFamilyName(faker.generateLastName());
+        setComplaintType("ct_cov");
+        setComplainantStatus("cs_yst");
+        setIsCompliance("true");
+        setComplaintDate("18-4-1");
+        setInfringementDate("17-4-1");
+        setComplainantDescription("Driver correcting entry in driver's record book in wrong fashion");
+        setDriverForename(faker.generateFirstName());
+        setDriverFamilyName(faker.generateLastName());
+
+        // Conditions and Undertaking Details
+        setConditionUndertakingType("cdt_con");
+        setConditionUndertakingCategory("cu_cat_fin");
+        setConditionsUndertakingDescription("This undertaken has not been fulfilled");
+        setFulfilled("N");
+        setAttachedTo("cat_lic");
+
+        // Submission Details
+        setSubmissionType("submission_type_o_env");
+
+        // Case Note Details
+        setCaseNoteComment("case note submitted through the API");
+        setCaseNotePriority("Y");
+
+        // Internal User Details
+        setInternalUserTeam("1");
+        setInternalUserForeName(faker.generateFirstName());
+        setInternalUserFamilyName(faker.generateLastName());
+        setInternalUserLogin( String.format("%s%s%s", getInternalUserForeName(), getInternalUserFamilyName(), Int.random(10000, 99999)) );
+        setInternalUserEmailAddress( getInternalUserLogin().concat("AsTheAdminUser@dvsavol.org") );
+        setInternalUserDOB(date.getFormattedDate(0, 0, -30, "yyyy-MM-dd"));
+        LinkedHashMap<String, String> internalUserAddress = faker.generateAddress();
+        setInternalUserAddressLine1(internalUserAddress.get("addressLine1"));
+        setInternalUserAddressLine2(internalUserAddress.get("addressLine2"));
+        setInternalUserAddressLine3(internalUserAddress.get("addressLine3"));
+        setInternalUserAddressLine4(internalUserAddress.get("addressLine4"));
+        setInternalUserTown(internalUserAddress.get("town"));
+        setInternalUserPostCode("LS28 5LY");
+        setCountryCode("GB");
+
+        setDiscsStolen("2");
+
+        setDiscSequence("6");
+
+        setInterimReason("Interim granted through the API");
+        setInterimStartDate(date.getFormattedDate(0, 0, 0, "yyyy-MM-dd"));
+        setInterimEndDate(date.getFormattedDate(0, 5, 0, "yyyy-MM-dd"));
     }
 
     public void createVariation() {
@@ -422,14 +750,14 @@ public class UpdateLicence extends BaseAPI {
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
 
-        setVariationApplicationNumber(String.valueOf(apiResponse.extract().jsonPath().getInt("id.application")));
+        setVariationApplicationId(String.valueOf(apiResponse.extract().jsonPath().getInt("id.application")));
     }
 
     public void updateLicenceType() {
         String typeOfLicenceResource = URL.build(env, String.format("variation/%s/type-of-licence", application.getLicenceId())).toString();
-        Integer variationApplicationVersion = Integer.parseInt(fetchApplicationInformation(variationApplicationNumber, "version", "1"));
+        Integer variationApplicationVersion = Integer.parseInt(fetchApplicationInformation(variationApplicationId, "version", "1"));
 
-        GenericBuilder genericBuilder = new GenericBuilder().withId(variationApplicationNumber).withVersion(variationApplicationVersion).withLicenceType(application.getLicenceType());
+        GenericBuilder genericBuilder = new GenericBuilder().withId(variationApplicationId).withVersion(variationApplicationVersion).withLicenceType(application.getLicenceType());
         apiResponse = RestUtils.put(genericBuilder, typeOfLicenceResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
@@ -438,8 +766,8 @@ public class UpdateLicence extends BaseAPI {
     public void createCase() throws MalformedURLException {
         String caseResource = URL.build(env, "cases").toString();
 
-        CaseBuilder caseBuilder = new CaseBuilder().withId(application.getLicenceId()).withCaseType(caseType).
-                withCategorys(caseCategories).withDescription(getCaseDescription()).withOutcomes(caseOutcomes).withApplication(application.getApplicationId());
+        CaseBuilder caseBuilder = new CaseBuilder().withId(application.getLicenceId()).withCaseType(caseType).withCategorys(caseCategories)
+                .withDescription(getCaseDescription()).withOutcomes(caseOutcomes).withApplication(application.getApplicationId());
         apiResponse = RestUtils.post(caseBuilder, caseResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
@@ -451,9 +779,11 @@ public class UpdateLicence extends BaseAPI {
 
         String convictionResource = URL.build(env, "conviction").toString();
 
-        CaseConvictionBuilder caseConvictionBuilder = new CaseConvictionBuilder().withCase(getCaseId()).withConvictionCategory(getConvictionCategory()).withConvictionDate(getConvictionDate()).withBirthDate(getDefendantBirthDate()).withCategoryText(getCategoryText()).withCosts(getCosts())
-                .withCourt(getCourt()).withMsi("Y").withPenalty(getPenalty()).withNotes(getConvictionNotes()).withTakenIntoConsideration("Y").withIsDeclared("Y").withIsDealtWith("Y").withDefendantType(getDefendantType())
-                .withPersonFirstname(getDefendantFirstname()).withPersonLastname(getDefendantLastname()).withOffenceDate(getOffenceDate());
+        CaseConvictionBuilder caseConvictionBuilder = new CaseConvictionBuilder().withCase(getCaseId()).withConvictionCategory(getConvictionCategory())
+                .withConvictionDate(getConvictionDate()).withBirthDate(getDefendantBirthDate()).withCategoryText(getCategoryText()).withCosts(getCosts())
+                .withCourt(getCourt()).withMsi("Y").withPenalty(getPenalty()).withNotes(getConvictionNotes()).withTakenIntoConsideration("Y")
+                .withIsDeclared("Y").withIsDealtWith("Y").withDefendantType(getDefendantType()).withPersonFirstname(getDefendantFirstname())
+                .withPersonLastname(getDefendantLastname()).withOffenceDate(getOffenceDate());
         apiResponse = RestUtils.post(caseConvictionBuilder, convictionResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
@@ -462,18 +792,12 @@ public class UpdateLicence extends BaseAPI {
     }
 
     public void addComplaint() {
-        String complainantForename = faker.generateFirstName();
-        String complainantFamilyName = faker.generateLastName();
-        String complaintType = "ct_cov";
-        String status = "cs_yst";
-        String isCompliance = "true";
-        String complaintDate = "18-4-1";
-        String infringementDate = "17-4-1";
-        String description = "Driver correcting entry in driver's record book in wrong fashion";
 
         String complaintResource = URL.build(env, "complaint").toString();
-        CaseComplaintBuilder complaintBuilder = new CaseComplaintBuilder().withCase(caseId).withComplainantForename(complainantForename).withComplainantFamilyName(complainantFamilyName).withComplaintType(complaintType).withStatus(status).withIsCompliance(isCompliance)
-                .withComplaintDate(complaintDate).withInfringementDate(infringementDate).withDescription(description).withDriverForename(getDriverForename()).withDriverFamilyName(getDriverFamilyName());
+        CaseComplaintBuilder complaintBuilder = new CaseComplaintBuilder().withCase(getCaseId()).withComplainantForename(getComplainantForename())
+                .withComplainantFamilyName(getComplainantFamilyName()).withComplaintType(getComplaintType()).withStatus(getComplainantStatus())
+                .withIsCompliance(getIsCompliance()).withComplaintDate(getComplaintDate()).withInfringementDate(getInfringementDate())
+                .withDescription(getComplainantDescription()).withDriverForename(getDriverForename()).withDriverFamilyName(getDriverFamilyName());
         apiResponse = RestUtils.post(complaintBuilder, complaintResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
@@ -482,15 +806,13 @@ public class UpdateLicence extends BaseAPI {
     }
 
     public void addConditionsUndertakings() throws MalformedURLException {
-        String type = "cdt_con";
-        String conditionCategory = "cu_cat_fin";
-        String fulfilled = "N";
-        String attachedTo = "cat_lic";
-        String description = "This undertaken has not been fulfilled";
-        String conditionsUndertaking = URL.build(env, "condition-undertaking").toString();
-        CaseConditionsBuilder conditionsBuilder = new CaseConditionsBuilder().withLicence(application.getLicenceId()).withApplication(application.getApplicationId()).withCase(Integer.toString(caseId)).withType(type).withConditionCategory(conditionCategory)
-                .withFulfilled(fulfilled).withAttachedTo(attachedTo).withNotes(description);
-        apiResponse = RestUtils.post(conditionsBuilder, conditionsUndertaking, apiHeaders.getHeaders());
+
+        String conditionsUndertakingResource = URL.build(env, "condition-undertaking").toString();
+        CaseConditionsBuilder conditionsBuilder = new CaseConditionsBuilder().withLicence(application.getLicenceId())
+                .withApplication(application.getApplicationId()).withCase(Integer.toString(getCaseId())).withType(getConditionUndertakingType())
+                .withConditionCategory(getConditionUndertakingCategory()).withFulfilled(getFulfilled()).withAttachedTo(getAttachedTo())
+                .withNotes(getConditionsUndertakingDescription());
+        apiResponse = RestUtils.post(conditionsBuilder, conditionsUndertakingResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
 
@@ -498,9 +820,8 @@ public class UpdateLicence extends BaseAPI {
     }
 
     public void createSubmission() throws MalformedURLException {
-        String submissionType = "submission_type_o_env";
         String submissionResource = URL.build(env, "submission").toString();
-        CaseSubmissionBuilder submissionBuilder = new CaseSubmissionBuilder().withCase(Integer.toString(caseId)).withSubmissionType(submissionType);
+        CaseSubmissionBuilder submissionBuilder = new CaseSubmissionBuilder().withCase(Integer.toString(getCaseId())).withSubmissionType(getSubmissionType());
         apiResponse = RestUtils.post(submissionBuilder, submissionResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
@@ -509,11 +830,10 @@ public class UpdateLicence extends BaseAPI {
     }
 
     public void createCaseNote() throws MalformedURLException {
-        String comment = "case note submitted through the API";
-        String priority = "Y";
+
         String caseNoteResource = URL.build(env, "processing/note").toString();
-        CaseNotesBuilder caseNotesBuilder = new CaseNotesBuilder().withCase(Integer.toString(caseId)).withLicence(application.getLicenceId()).withApplication(application.getApplicationId())
-                .withComment(comment).withPriority(priority);
+        CaseNotesBuilder caseNotesBuilder = new CaseNotesBuilder().withCase(Integer.toString(getCaseId())).withLicence(application.getLicenceId())
+                .withApplication(application.getApplicationId()).withComment(getCaseNoteComment()).withPriority(getCaseNotePriority());
         apiResponse = RestUtils.post(caseNotesBuilder, caseNoteResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
@@ -521,9 +841,9 @@ public class UpdateLicence extends BaseAPI {
         setCaseNoteId(apiResponse.extract().jsonPath().getInt("id.note"));
     }
 
-    public ValidatableResponse getCaseDetails(String resource, int id) {
-        String caseResource = URL.build(env, String.format("%s/%s", resource, id)).toString();
-        apiResponse = RestUtils.get(caseResource, apiHeaders.getHeaders());
+    public ValidatableResponse getCaseDetails(String resource) {
+        String caseDetailsResource = URL.build(env, String.format("%s/%s", resource, getCaseId())).toString();
+        apiResponse = RestUtils.get(caseDetailsResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
 
@@ -534,46 +854,11 @@ public class UpdateLicence extends BaseAPI {
         if (application.getLicenceType().equals("special_restricted")) {
             throw new IllegalArgumentException("Cannot update operating centre for special_restricted licence");
         }
-        String noOfVehiclesRequired = "5";
-        String licenceId = application.getLicenceId();
-        String updateOperatingCentreResource = URL.build(env, String.format("application/%s/variation-operating-centre/%s", licenceId, variationApplicationNumber)).toString();
-        OperatingCentreVariationBuilder updateOperatingCentre = new OperatingCentreVariationBuilder();
-
-        if (application.getOperatorType().equals(OperatorType.GOODS.asString())) {
-            updateOperatingCentre.withId(variationApplicationNumber).withApplication(variationApplicationNumber)
-                    .withNoOfVehiclesRequired(noOfVehiclesRequired).withVersion(version);
-        }
-        if (application.getOperatorType().equals(OperatorType.PUBLIC.asString())) {
-            updateOperatingCentre.withId(variationApplicationNumber).withApplication(variationApplicationNumber)
-                    .withNoOfVehiclesRequired(noOfVehiclesRequired).withVersion(version);
-        }
-        if (application.getOperatorType().equals(OperatorType.PUBLIC.asString()) && (application.getLicenceType().equals(LicenceType.RESTRICTED.asString()))) {
-            updateOperatingCentre.withId(variationApplicationNumber).withApplication(variationApplicationNumber)
-                    .withNoOfVehiclesRequired(noOfVehiclesRequired).withVersion(version);
-        }
+        String updateOperatingCentreResource = URL.build(env, String.format("application/%s/variation-operating-centre/%s", application.getLicenceId(), variationApplicationId)).toString();
+        OperatingCentreVariationBuilder updateOperatingCentre = new OperatingCentreVariationBuilder().withId(getVariationApplicationId())
+                .withApplication(getVariationApplicationId()).withNoOfVehiclesRequired(String.valueOf(application.getNoOfVehiclesRequested()))
+                .withVersion(version);
         apiResponse = RestUtils.put(updateOperatingCentre, updateOperatingCentreResource, apiHeaders.getHeaders());
-
-        Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
-
-        return apiResponse;
-    }
-
-    public ValidatableResponse updateInternalUserODetails(String userId, String osType, String header) {
-        String team = "1";
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
-
-        String version = fetchInternalUserInformation(userId, "version", "1");
-
-        String internalAdminUserResource = URL.build(env, String.format("user/internal/%s", userId)).toString();
-
-        AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1("AXIS Building").withTown("Nottingham").withPostcode("LS28 5LY").withCountryCode("GB");
-        HashMap<String, Integer> internalUserDOB = date.getDateHashMap(0, 0, -30);
-        PersonBuilder personBuilder = new PersonBuilder().withForename("Long").withFamilyName("Ash").withBirthDate(internalUserDOB.get("year") + "-" + internalUserDOB.get("month") + "-" + internalUserDOB.get("day"));
-
-        ContactDetailsBuilder contactDetails = new ContactDetailsBuilder().withEmailAddress(adminUserEmailAddress).withAddress(addressBuilder).withPerson(personBuilder);
-        CreateInternalAdminUser internalAdminUser = new CreateInternalAdminUser().withContactDetails(contactDetails).withLoginId(adminUserLogin).withTeam(team)
-                .withUserType(UserRoles.INTERNAL.asString()).withVersion(version).withOSType(osType).withId(userId);
-        apiResponse = RestUtils.put(internalAdminUser, internalAdminUserResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
 
@@ -583,27 +868,57 @@ public class UpdateLicence extends BaseAPI {
     public String createInternalUser(String userRole, String userType) {
         List<String> roles = new ArrayList<>();
         roles.add(userRole);
-        String team = "1";
         apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
         String internalAdminUserResource = URL.build(env, "user/internal").toString();
 
-        AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1("AXIS Building").withTown("Nottingham").withPostcode("LS28 5LY").withCountryCode("GB");
-        HashMap<String, Integer> internalUserDOB = date.getDateHashMap(0, 0, -30);
-        PersonBuilder personBuilder = new PersonBuilder().withForename(faker.generateFirstName()).withFamilyName(faker.generateLastName()).withBirthDate((internalUserDOB.get("year") + "-" + internalUserDOB.get("month") + "-" + internalUserDOB.get("day")));
+        AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(getInternalUserAddressLine1())
+                .withAddressLine2(getInternalUserAddressLine2()).withAddressLine3(getInternalUserAddressLine3())
+                .withAddressLine4(getInternalUserAddressLine4()).withTown(getInternalUserTown())
+                .withPostcode(getInternalUserPostCode()).withCountryCode(getCountryCode());
+        PersonBuilder personBuilder = new PersonBuilder().withForename(getInternalUserForeName())
+                .withFamilyName(getInternalUserFamilyName()).withBirthDate(getInternalUserDOB());
 
-        ContactDetailsBuilder contactDetails = new ContactDetailsBuilder().withEmailAddress(adminUserEmailAddress).withAddress(addressBuilder).withPerson(personBuilder);
-        CreateInternalAdminUser internalAdminUser = new CreateInternalAdminUser().withContactDetails(contactDetails).withLoginId(adminUserLogin).withRoles(roles).withTeam(team).withUserType(userType);
+        ContactDetailsBuilder contactDetails = new ContactDetailsBuilder().withEmailAddress(getInternalUserEmailAddress()).withAddress(addressBuilder).withPerson(personBuilder);
+        CreateInternalAdminUser internalAdminUser = new CreateInternalAdminUser().withContactDetails(contactDetails)
+                .withLoginId(getInternalUserLogin()).withRoles(roles).withTeam(getInternalUserTeam()).withUserType(userType);
         apiResponse = RestUtils.post(internalAdminUser, internalAdminUserResource, application.apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
-        setAdminUserId(apiResponse.extract().response().jsonPath().getString("id.user"));
-        return getAdminUserId();
+        setInternalUserId(apiResponse.extract().response().jsonPath().getString("id.user"));
+        return getInternalUserId();
+    }
+
+    public ValidatableResponse updateInternalUserDetails(String userId, String osType) {
+
+        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
+
+        String version = fetchInternalUserInformation(userId, "version", "1");
+
+        String internalAdminUserResource = URL.build(env, String.format("user/internal/%s", userId)).toString();
+
+        AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(getInternalUserAddressLine1())
+                .withAddressLine2(getInternalUserAddressLine2()).withAddressLine3(getInternalUserAddressLine3())
+                .withAddressLine4(getInternalUserAddressLine4()).withTown(getInternalUserTown())
+                .withPostcode(getInternalUserPostCode()).withCountryCode(getCountryCode());
+        PersonBuilder personBuilder = new PersonBuilder().withForename(getInternalUserForeName())
+                .withFamilyName(getInternalUserFamilyName()).withBirthDate(getInternalUserDOB());
+
+        ContactDetailsBuilder contactDetails = new ContactDetailsBuilder().withEmailAddress(getInternalUserEmailAddress())
+                .withAddress(addressBuilder).withPerson(personBuilder);
+        CreateInternalAdminUser internalAdminUser = new CreateInternalAdminUser().withContactDetails(contactDetails)
+                .withLoginId(getInternalUserLogin()).withTeam(getInternalUserTeam())
+                .withUserType(UserRoles.INTERNAL.asString()).withVersion(version).withOSType(osType).withId(userId);
+        apiResponse = RestUtils.put(internalAdminUser, internalAdminUserResource, apiHeaders.getHeaders());
+
+        Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
+
+        return apiResponse;
     }
 
     public ValidatableResponse grantVariation(String resource) throws MalformedURLException {
-        String grantVariation = URL.build(env, String.format("variation/%s/%s", variationApplicationNumber, resource)).toString();
+        String grantVariation = URL.build(env, String.format("variation/%s/%s", getVariationApplicationId(), resource)).toString();
 
-        GenericBuilder genericBuilder = new GenericBuilder().withId(variationApplicationNumber);
+        GenericBuilder genericBuilder = new GenericBuilder().withId(getVariationApplicationId());
         apiResponse = RestUtils.put(genericBuilder, grantVariation, application.apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         return apiResponse;
@@ -648,7 +963,6 @@ public class UpdateLicence extends BaseAPI {
         setBusinessType(apiResponse.extract().jsonPath().getString("organisation.type.description"));
 
         return businessType;
-
     }
 
     public String getLicenceTypeDetails() {
@@ -661,67 +975,52 @@ public class UpdateLicence extends BaseAPI {
         return licenceType;
     }
 
-    public void updateLicenceStatus(String licenceId, String status) {
+    public void updateLicenceStatus(String status) {
         apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
-        String typeOfLicenceResource = URL.build(env, String.format("licence/%s/decisions/%s", licenceId, status)).toString();
+        String typeOfLicenceResource = URL.build(env, String.format("licence/%s/decisions/%s", application.getLicenceId(), status)).toString();
 
-        GenericBuilder genericBuilder = new GenericBuilder().withId(licenceId);
+        GenericBuilder genericBuilder = new GenericBuilder().withId(application.getLicenceId());
         apiResponse = RestUtils.post(genericBuilder, typeOfLicenceResource, application.apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
 
     public ValidatableResponse surrenderLicence(String licenceId, String userPid) {
         apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
-        String surrenderLicence = URL.build(env, String.format("licence/%s/surrender", licenceId)).toString();
+        String surrenderLicenceResource = URL.build(env, String.format("licence/%s/surrender", licenceId)).toString();
 
         SurrendersBuilder surrendersBuilder = new SurrendersBuilder().withLicence(licenceId);
-        apiResponse = RestUtils.post(surrendersBuilder, surrenderLicence, application.apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(surrendersBuilder, surrenderLicenceResource, application.apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
         return apiResponse;
     }
 
-    public ValidatableResponse updateSurrender(String licenceId, String userPid, Integer surrenderId) {
+    public ValidatableResponse updateSurrender(Integer surrenderId) {
         apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
-        String updateSurrender = URL.build(env, String.format("licence/%s/surrender", licenceId)).toString();
+        String updateSurrender = URL.build(env, String.format("licence/%s/surrender", application.getLicenceId())).toString();
 
-        SurrendersBuilder surrendersBuilder = new SurrendersBuilder().withLicence(licenceId);
-        surrendersBuilder.setId(surrenderId.toString());
-        surrendersBuilder.setDiscStolen("2");
-        surrendersBuilder.setVersion(1);
+        SurrendersBuilder surrendersBuilder = new SurrendersBuilder().withLicence(application.getLicenceId())
+                .withId(surrenderId.toString()).withDiscsStolen(getDiscsStolen()).withVersion(version);
         apiResponse = RestUtils.put(surrendersBuilder, updateSurrender, application.apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         return apiResponse;
     }
 
-    public ValidatableResponse deleteSurrender(String licenceId, String userPid, Integer surrenderId) {
+    public ValidatableResponse deleteSurrender(Integer surrenderId) {
         apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
-        String deleteSurrender = URL.build(env, String.format("licence/%s/surrender", licenceId)).toString();
+        String deleteSurrender = URL.build(env, String.format("licence/%s/surrender", application.getLicenceId())).toString();
 
-        GenericBuilder genericBuilder = new GenericBuilder().withLicence(licenceId);
-        genericBuilder.setId(surrenderId.toString());
-
+        GenericBuilder genericBuilder = new GenericBuilder().withLicence(application.getLicenceId()).withId(surrenderId.toString());
 
         apiResponse = RestUtils.delete(genericBuilder, deleteSurrender, apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         return apiResponse;
     }
 
-    public void enableDisableVerify(String toggle) {
+    public void updateFeatureToggle(String toggleId, String friendlyName, String configName, String status) {
         apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
-        String enableDisableVerifyResource = URL.build(env, "system-parameter/DISABLE_GDS_VERIFY_SIGNATURES/").toString();
+        String updateFeatureToggleResource = URL.build(env, String.format("feature-toggle/%s/", toggleId)).toString();
 
-        GenericBuilder genericBuilder = new GenericBuilder().withId("DISABLE_GDS_VERIFY_SIGNATURES").withParamValue(toggle).
-                withDescription("Disable GDS verify digital signature functionality");
-
-        apiResponse = RestUtils.put(genericBuilder, enableDisableVerifyResource, application.apiHeaders.getHeaders());
-        Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
-    }
-
-    public void updateFeatureToggle(String id, String friendlyName, String configName, String status) {
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
-        String updateFeatureToggleResource = URL.build(env, String.format("feature-toggle/%s/", id)).toString();
-
-        FeatureToggleBuilder featureToggleBuilder = new FeatureToggleBuilder().withId(id).withFriendlyName(friendlyName).withConfigName(configName)
+        FeatureToggleBuilder featureToggleBuilder = new FeatureToggleBuilder().withId(toggleId).withFriendlyName(friendlyName).withConfigName(configName)
                 .withStatus(status);
 
         apiResponse = RestUtils.put(featureToggleBuilder, updateFeatureToggleResource, application.apiHeaders.getHeaders());
@@ -735,7 +1034,7 @@ public class UpdateLicence extends BaseAPI {
             queryParams.put("niFlag", "N");
             queryParams.put("licenceType", String.valueOf(application.getLicenceType()));
             queryParams.put("operatorType", String.valueOf(application.getOperatorType()));
-            queryParams.put("discSequence", "6");
+            queryParams.put("discSequence", getDiscSequence());
         }
         apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
         String discNumberingResource = URL.build(env, "disc-sequence/discs-numbering").toString();
@@ -756,8 +1055,8 @@ public class UpdateLicence extends BaseAPI {
             operator = "psv";
         }
         String discPrintResource = URL.build(env, String.format("%s-disc/print-discs/", operator)).toString();
-        PrintDiscBuilder printDiscBuilder = new PrintDiscBuilder().withDiscSequence("6").withLicenceType(application.getLicenceType()).withNiFlag(application.getNiFlag())
-                .withStartNumber(String.valueOf(getStartNumber()));
+        PrintDiscBuilder printDiscBuilder = new PrintDiscBuilder().withDiscSequence(getDiscSequence())
+                .withLicenceType(application.getLicenceType()).withNiFlag(application.getNiFlag()).withStartNumber(getStartNumber());
         apiResponse = RestUtils.post(printDiscBuilder, discPrintResource, application.apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
         assertThat(apiResponse.extract().body().jsonPath().get("id.queue"), Matchers.notNullValue());
@@ -767,26 +1066,28 @@ public class UpdateLicence extends BaseAPI {
 
     private void confirmDiscPrint() {
         String operator;
-        if (getOperatorTypeDetails().equals("Goods Vehicle")) {
+        if (application.getOperatorType().equals(OperatorType.GOODS.asString())) {
             operator = "goods";
         } else {
             operator = "psv";
         }
         apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
         String discConfirmResource = URL.build(env, String.format("%s-disc/confirm-printing/", operator)).toString();
-        ConfirmPrintBuilder confirmPrintBuilder = new ConfirmPrintBuilder().withDiscSequence("6").withEndNumber(getEndNumber()).withStartNumber(getStartNumber()).withIsSuccessfull(true)
-                .withLicenceType(String.valueOf(application.getLicenceType())).withNiFlag(application.getNiFlag()).withQueueId(getQueueId());
+        ConfirmPrintBuilder confirmPrintBuilder = new ConfirmPrintBuilder().withDiscSequence(getDiscSequence())
+                .withEndNumber(getEndNumber()).withStartNumber(getStartNumber()).withIsSuccessfull(true)
+                .withLicenceType(application.getLicenceType()).withNiFlag(application.getNiFlag()).withQueueId(getQueueId());
         apiResponse = RestUtils.post(confirmPrintBuilder, discConfirmResource, application.apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
 
     public void submitInterimApplication() {
+
         apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
         String interimApplicationResource = URL.build(env, String.format("application/%s/interim/", application.getApplicationId())).toString();
         int applicationVersion = Integer.parseInt(fetchApplicationInformation(application.getApplicationId(), "version", "1"));
 
         InterimApplicationBuilder interimApplicationBuilder = new InterimApplicationBuilder().withAuthVehicles(String.valueOf(application.getNoOfVehiclesRequested())).withAuthTrailers(String.valueOf(application.getNoOfVehiclesRequested()))
-                .withRequested("Y").withReason("Interim granted through the API").withStartDate(date.getFormattedDate(0, 0, 0, "yyyy-MM-dd")).withEndDate(date.getFormattedDate(0, 5, 0, "yyyy-MM-dd"))
+                .withRequested("Y").withReason(getInterimReason()).withStartDate(getInterimStartDate()).withEndDate(getInterimEndDate())
                 .withAction("grant").withId(application.getApplicationId()).withVersion(applicationVersion);
         apiResponse = RestUtils.put(interimApplicationBuilder, interimApplicationResource, application.apiHeaders.getHeaders());
 
