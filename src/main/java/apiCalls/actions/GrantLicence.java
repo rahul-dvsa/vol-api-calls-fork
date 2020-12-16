@@ -7,6 +7,7 @@ import activesupport.system.Properties;
 import apiCalls.Utils.builders.*;
 import apiCalls.Utils.generic.BaseAPI;
 import apiCalls.Utils.generic.Headers;
+import apiCalls.Utils.generic.Utils;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
@@ -86,11 +87,8 @@ public class GrantLicence extends BaseAPI{
                 .withTracking(tracking);
         apiResponse = RestUtils.put(overview, overviewResource, apiHeaders.getHeaders());
 
-        if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
-            LOGGER.info(apiResponse.extract().statusCode());
-            LOGGER.info(apiResponse.extract().response().asString());
-            throw new HTTPException(apiResponse.extract().statusCode());
-        }
+        Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
+
     }
 
     public void getOutstandingFees() {
@@ -123,11 +121,8 @@ public class GrantLicence extends BaseAPI{
         FeesBuilder feesBuilder = new FeesBuilder().withFeeIds(outstandingFeesIds).withOrganisationId(application.getUserDetails().getOrganisationId()).withApplicationId(application.getApplicationId())
                 .withPaymentMethod(paymentMethod).withReceived(feesToPay.stream().mapToDouble(Double::doubleValue).sum()).withReceiptDate(getDateState()).withPayer(payer).withSlipNo(slipNo);
         apiResponse = RestUtils.post(feesBuilder, payOutstandingFeesResource, apiHeaders.getHeaders());
-        if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {
-            LOGGER.info(apiResponse.extract().statusCode());
-            LOGGER.info(apiResponse.extract().response().asString());
-            throw new HTTPException(apiResponse.extract().statusCode());
-        }
+        Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
+
     }
 
     public void grant() {
@@ -164,11 +159,8 @@ public class GrantLicence extends BaseAPI{
                 .withPaymentMethod(paymentMethod).withReceived(grantFees).withReceiptDate(getDateState()).withPayer(payer).withSlipNo(slipNo);
         apiResponse = RestUtils.post(feesBuilder, payOutstandingFeesResource, apiHeaders.getHeaders());
 
-        if (apiResponse.extract().statusCode() != HttpStatus.SC_CREATED) {
-            LOGGER.info(apiResponse.extract().statusCode());
-            LOGGER.info(apiResponse.extract().response().asString());
-            throw new HTTPException(apiResponse.extract().statusCode());
-        }
+        Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
+
         return apiResponse;
     }
 
@@ -178,11 +170,8 @@ public class GrantLicence extends BaseAPI{
         apiResponse = RestUtils.put(grantVariationBuilder, grantApplicationResource, apiHeaders.getHeaders());
         apiResponse = RestUtils.put(grantVariationBuilder, grantApplicationResource, apiHeaders.getHeaders());
 
-        if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
-            LOGGER.info(apiResponse.extract().statusCode());
-            LOGGER.info(apiResponse.extract().response().asString());
-            throw new HTTPException(apiResponse.extract().statusCode());
-        }
+        Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
+
     }
 
     public void refuse() {

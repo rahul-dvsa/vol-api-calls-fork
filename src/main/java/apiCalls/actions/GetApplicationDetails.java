@@ -9,7 +9,6 @@ import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
-import org.apache.logging.log4j.Logger;
 
 import javax.xml.ws.http.HTTPException;
 
@@ -23,7 +22,6 @@ public class GetApplicationDetails {
     private String licenceNumber;
 
     private EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
-    private static Logger LOGGER = LogManager.getLogger(GetApplicationDetails.class);
     Headers apiHeaders = new Headers();
 
     public GetApplicationDetails(CreateApplication application) {

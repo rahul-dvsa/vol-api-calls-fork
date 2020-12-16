@@ -107,8 +107,6 @@ public class RegisterUser {
         return userId;
     }
 
-    private static final Logger LOGGER = LogManager.getLogger(RegisterUser.class);
-
     private EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
 
     private ValidatableResponse apiResponse;
