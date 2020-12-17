@@ -34,6 +34,9 @@ public class UpdateLicence extends BaseAPI {
 
     private FakerUtils faker = new FakerUtils();
 
+    private Headers apiHeaders = new Headers();
+
+    private String adminAPIHeader;
     private String variationType;
     private String variationApplicationId;
     private String caseType;
@@ -109,7 +112,9 @@ public class UpdateLicence extends BaseAPI {
 
     private static EnvironmentType env;
 
-    private Headers apiHeaders = new Headers();
+    public String getAdminAPIHeader() { return adminAPIHeader; }
+
+    public void setAdminAPIHeader(String adminAPIHeader) { this.adminAPIHeader = adminAPIHeader; }
 
     public String getVariationType() { return variationType; }
 
@@ -434,6 +439,7 @@ public class UpdateLicence extends BaseAPI {
     public UpdateLicence(CreateApplication application) {
         this.application = application;
         setVariationType(null);
+        setAdminAPIHeader(Utils.config.getString("apiHeader"));
 
         // Case Details
         setCaseType("case_t_lic");
@@ -635,7 +641,7 @@ public class UpdateLicence extends BaseAPI {
     public String createInternalUser(String userRole, String userType) {
         List<String> roles = new ArrayList<>();
         roles.add(userRole);
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
+        apiHeaders.headers.put("x-pid", getAdminAPIHeader());
         String internalAdminUserResource = URL.build(env, "user/internal").toString();
 
         AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(getInternalUserAddressLine1())
@@ -648,7 +654,7 @@ public class UpdateLicence extends BaseAPI {
         ContactDetailsBuilder contactDetails = new ContactDetailsBuilder().withEmailAddress(getInternalUserEmailAddress()).withAddress(addressBuilder).withPerson(personBuilder);
         CreateInternalAdminUser internalAdminUser = new CreateInternalAdminUser().withContactDetails(contactDetails)
                 .withLoginId(getInternalUserLogin()).withRoles(roles).withTeam(getInternalUserTeam()).withUserType(userType);
-        apiResponse = RestUtils.post(internalAdminUser, internalAdminUserResource, application.apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(internalAdminUser, internalAdminUserResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
         setInternalUserId(apiResponse.extract().response().jsonPath().getString("id.user"));
@@ -657,7 +663,7 @@ public class UpdateLicence extends BaseAPI {
 
     public ValidatableResponse updateInternalUserDetails(String userId, String osType) {
 
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
+        apiHeaders.headers.put("x-pid", getAdminAPIHeader());
 
         String version = fetchInternalUserInformation(userId, "version", "1");
 
@@ -686,46 +692,46 @@ public class UpdateLicence extends BaseAPI {
         String grantVariation = URL.build(env, String.format("variation/%s/%s", getVariationApplicationId(), resource)).toString();
 
         GenericBuilder genericBuilder = new GenericBuilder().withId(getVariationApplicationId());
-        apiResponse = RestUtils.put(genericBuilder, grantVariation, application.apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(genericBuilder, grantVariation, apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         return apiResponse;
     }
 
     public String getLicenceTrafficArea() {
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
+        apiHeaders.headers.put("x-pid", getAdminAPIHeader());
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
-        apiResponse = RestUtils.get(getApplicationResource, application.apiHeaders.getHeaders());
+        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setTrafficAreaName(apiResponse.extract().jsonPath().getString("trafficArea.name"));
         return getTrafficAreaName();
     }
 
     public String getLicenceStatusDetails() {
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
+        apiHeaders.headers.put("x-pid", getAdminAPIHeader());
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
-        apiResponse = RestUtils.get(getApplicationResource, application.apiHeaders.getHeaders());
+        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setLicenceStatus(apiResponse.extract().jsonPath().getString("status.description"));
         return getLicenceStatus();
     }
 
     public String getOperatorTypeDetails() {
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
+        apiHeaders.headers.put("x-pid", getAdminAPIHeader());
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
-        apiResponse = RestUtils.get(getApplicationResource, application.apiHeaders.getHeaders());
+        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setGoodOrPsv(apiResponse.extract().jsonPath().getString("goodsOrPsv.description"));
         return getGoodOrPsv();
     }
 
     public String getBusinessTypeDetails() {
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
+        apiHeaders.headers.put("x-pid", getAdminAPIHeader());
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
-        apiResponse = RestUtils.get(getApplicationResource, application.apiHeaders.getHeaders());
+        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setBusinessType(apiResponse.extract().jsonPath().getString("organisation.type.description"));
 
@@ -733,47 +739,47 @@ public class UpdateLicence extends BaseAPI {
     }
 
     public String getLicenceTypeDetails() {
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
+        apiHeaders.headers.put("x-pid", getAdminAPIHeader());
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
-        apiResponse = RestUtils.get(getApplicationResource, application.apiHeaders.getHeaders());
+        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setLicenceType(apiResponse.extract().jsonPath().getString("licenceType.description"));
         return getLicenceType();
     }
 
     public void updateLicenceStatus(String status) {
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
+        apiHeaders.headers.put("x-pid", getAdminAPIHeader());
         String typeOfLicenceResource = URL.build(env, String.format("licence/%s/decisions/%s", application.getLicenceId(), status)).toString();
 
         GenericBuilder genericBuilder = new GenericBuilder().withId(application.getLicenceId());
-        apiResponse = RestUtils.post(genericBuilder, typeOfLicenceResource, application.apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(genericBuilder, typeOfLicenceResource, apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
 
     public ValidatableResponse surrenderLicence(String licenceId, String userPid) {
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
+        apiHeaders.headers.put("x-pid", getAdminAPIHeader());
         String surrenderLicenceResource = URL.build(env, String.format("licence/%s/surrender", licenceId)).toString();
 
         SurrendersBuilder surrendersBuilder = new SurrendersBuilder().withLicence(licenceId);
-        apiResponse = RestUtils.post(surrendersBuilder, surrenderLicenceResource, application.apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(surrendersBuilder, surrenderLicenceResource, apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
         return apiResponse;
     }
 
     public ValidatableResponse updateSurrender(Integer surrenderId) {
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
+        apiHeaders.headers.put("x-pid", getAdminAPIHeader());
         String updateSurrender = URL.build(env, String.format("licence/%s/surrender", application.getLicenceId())).toString();
 
         SurrendersBuilder surrendersBuilder = new SurrendersBuilder().withLicence(application.getLicenceId())
                 .withId(surrenderId.toString()).withDiscsStolen(getDiscsStolen()).withVersion(version);
-        apiResponse = RestUtils.put(surrendersBuilder, updateSurrender, application.apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(surrendersBuilder, updateSurrender, apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         return apiResponse;
     }
 
     public ValidatableResponse deleteSurrender(Integer surrenderId) {
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
+        apiHeaders.headers.put("x-pid", getAdminAPIHeader());
         String deleteSurrender = URL.build(env, String.format("licence/%s/surrender", application.getLicenceId())).toString();
 
         GenericBuilder genericBuilder = new GenericBuilder().withLicence(application.getLicenceId()).withId(surrenderId.toString());
@@ -784,13 +790,13 @@ public class UpdateLicence extends BaseAPI {
     }
 
     public void updateFeatureToggle(String toggleId, String friendlyName, String configName, String status) {
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
+        apiHeaders.headers.put("x-pid", getAdminAPIHeader());
         String updateFeatureToggleResource = URL.build(env, String.format("feature-toggle/%s/", toggleId)).toString();
 
         FeatureToggleBuilder featureToggleBuilder = new FeatureToggleBuilder().withId(toggleId).withFriendlyName(friendlyName).withConfigName(configName)
                 .withStatus(status);
 
-        apiResponse = RestUtils.put(featureToggleBuilder, updateFeatureToggleResource, application.apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(featureToggleBuilder, updateFeatureToggleResource, apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         apiResponse.statusCode(HttpStatus.SC_OK);
     }
@@ -803,9 +809,9 @@ public class UpdateLicence extends BaseAPI {
             queryParams.put("operatorType", String.valueOf(application.getOperatorType()));
             queryParams.put("discSequence", getDiscSequence());
         }
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
+        apiHeaders.headers.put("x-pid", Utils.config.getString("apiHeader"));
         String discNumberingResource = URL.build(env, "disc-sequence/discs-numbering").toString();
-        apiResponse = RestUtils.getWithQueryParams(discNumberingResource, queryParams, application.apiHeaders.getHeaders());
+        apiResponse = RestUtils.getWithQueryParams(discNumberingResource, queryParams, apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setStartNumber(apiResponse.extract().jsonPath().get("results.startNumber").toString());
         setEndNumber(apiResponse.extract().jsonPath().get("results.endNumber").toString());
@@ -815,7 +821,7 @@ public class UpdateLicence extends BaseAPI {
     public void printLicenceDiscs() {
         String operator;
         getDiscInformation();
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
+        apiHeaders.headers.put("x-pid", getAdminAPIHeader());
         if (getOperatorTypeDetails().equals("Goods Vehicle")) {
             operator = "goods";
         } else {
@@ -824,7 +830,7 @@ public class UpdateLicence extends BaseAPI {
         String discPrintResource = URL.build(env, String.format("%s-disc/print-discs/", operator)).toString();
         PrintDiscBuilder printDiscBuilder = new PrintDiscBuilder().withDiscSequence(getDiscSequence())
                 .withLicenceType(application.getLicenceType()).withNiFlag(application.getNiFlag()).withStartNumber(getStartNumber());
-        apiResponse = RestUtils.post(printDiscBuilder, discPrintResource, application.apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(printDiscBuilder, discPrintResource, apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
         assertThat(apiResponse.extract().body().jsonPath().get("id.queue"), Matchers.notNullValue());
         setQueueId(apiResponse.extract().jsonPath().get("id.queue").toString());
@@ -838,36 +844,36 @@ public class UpdateLicence extends BaseAPI {
         } else {
             operator = "psv";
         }
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
+        apiHeaders.headers.put("x-pid", getAdminAPIHeader());
         String discConfirmResource = URL.build(env, String.format("%s-disc/confirm-printing/", operator)).toString();
         ConfirmPrintBuilder confirmPrintBuilder = new ConfirmPrintBuilder().withDiscSequence(getDiscSequence())
                 .withEndNumber(getEndNumber()).withStartNumber(getStartNumber()).withIsSuccessfull(true)
                 .withLicenceType(application.getLicenceType()).withNiFlag(application.getNiFlag()).withQueueId(getQueueId());
-        apiResponse = RestUtils.post(confirmPrintBuilder, discConfirmResource, application.apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(confirmPrintBuilder, discConfirmResource, apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
 
     public void submitInterimApplication() {
 
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
+        apiHeaders.headers.put("x-pid", getAdminAPIHeader());
         String interimApplicationResource = URL.build(env, String.format("application/%s/interim/", application.getApplicationId())).toString();
         int applicationVersion = Integer.parseInt(fetchApplicationInformation(application.getApplicationId(), "version", "1"));
 
         InterimApplicationBuilder interimApplicationBuilder = new InterimApplicationBuilder().withAuthVehicles(String.valueOf(application.getNoOfVehiclesRequested())).withAuthTrailers(String.valueOf(application.getNoOfVehiclesRequested()))
                 .withRequested("Y").withReason(getInterimReason()).withStartDate(getInterimStartDate()).withEndDate(getInterimEndDate())
                 .withAction("grant").withId(application.getApplicationId()).withVersion(applicationVersion);
-        apiResponse = RestUtils.put(interimApplicationBuilder, interimApplicationResource, application.apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(interimApplicationBuilder, interimApplicationResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
     }
 
     public void grantInterimApplication() {
         submitInterimApplication();
-        apiHeaders.headers.put("x-pid", application.getUserDetails().getPid());
+        apiHeaders.headers.put("x-pid", getAdminAPIHeader());
         String interimApplicationResource = URL.build(env, String.format("application/%s/interim/grant/", application.getApplicationId())).toString();
 
         InterimApplicationBuilder interimApplicationBuilder = new InterimApplicationBuilder().withId(application.getApplicationId());
-        apiResponse = RestUtils.post(interimApplicationBuilder, interimApplicationResource, application.apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(interimApplicationBuilder, interimApplicationResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }

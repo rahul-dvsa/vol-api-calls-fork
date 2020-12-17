@@ -822,8 +822,7 @@ public class CreateApplication extends BaseAPI {
 
         apiResponse = RestUtils.put(updateOperatingCentre, updateOperatingCentreResource, apiHeaders.getHeaders());
 
-        Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
-
+        Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
 
         return apiResponse;
     }
@@ -841,7 +840,6 @@ public class CreateApplication extends BaseAPI {
         apiResponse = RestUtils.put(financialEvidenceBuilder, financialEvidenceResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
-
 
         return apiResponse;
     }
