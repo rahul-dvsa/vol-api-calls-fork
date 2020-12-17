@@ -4,12 +4,11 @@ import activesupport.http.RestUtils;
 import activesupport.system.Properties;
 
 import apiCalls.Utils.generic.Headers;
+import apiCalls.Utils.generic.Utils;
 import apiCalls.enums.UserType;
 import io.restassured.response.ValidatableResponse;
 
 import org.apache.http.HttpStatus;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
@@ -37,9 +36,6 @@ public class GetUserDetails {
         this.organisationId = organisationId;
     }
 
-
-    private static final Logger LOGGER = LogManager.getLogger(RegisterUser.class);
-
     private EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
 
     private ValidatableResponse apiResponse;
@@ -59,11 +55,8 @@ public class GetUserDetails {
             apiResponse = RestUtils.get(userDetailsResource, apiHeaders.getHeaders());
         }
 
-        if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
-            LOGGER.info("ERROR CODE: ".concat(Integer.toString(apiResponse.extract().statusCode())));
-            LOGGER.info("RESPONSE MESSAGE: ".concat(apiResponse.extract().response().asString()));
-            throw new HTTPException(apiResponse.extract().statusCode());
-        }
+        Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
+
         return apiResponse;
     }
 }

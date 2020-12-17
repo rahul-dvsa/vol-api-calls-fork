@@ -28,9 +28,6 @@ public class SurrendersBuilder {
     @JsonProperty("version")
     private int version;
 
-    public SurrendersBuilder() {
-
-    }
 
     @JsonProperty("licence")
     public String getLicence() {
@@ -40,6 +37,12 @@ public class SurrendersBuilder {
     @JsonProperty("licence")
     public void setLicence(String licence) {
         this.licence = licence;
+    }
+
+
+    public SurrendersBuilder withLicence(String licence) {
+        this.licence = licence;
+        return this;
     }
 
     @JsonProperty("discStolen")
@@ -52,6 +55,11 @@ public class SurrendersBuilder {
         this.discStolen = discStolen;
     }
 
+    public SurrendersBuilder withDiscsStolen(String discStolen) {
+        this.discStolen = discStolen;
+        return this;
+    }
+
     @JsonProperty("id")
     public String getId() {
         return id;
@@ -62,8 +70,8 @@ public class SurrendersBuilder {
         this.id = id;
     }
 
-    public SurrendersBuilder withLicence(String licence) {
-        this.licence = licence;
+    public SurrendersBuilder withId(String id) {
+        this.id = id;
         return this;
     }
 
@@ -101,10 +109,10 @@ public class SurrendersBuilder {
     public String toString() {
         return new ToStringBuilder(ToStringStyle.JSON_STYLE)
                 .append("id",getId())
-                .append("paramValue",getParamValue())
-                .append("discStolen",getDiscStolen())
-                .append("licence",getLicence())
-                .append("version",getVersion())
+                .append("paramValue", getParamValue())
+                .append("discStolen", getDiscStolen())
+                .append("licence", getLicence())
+                .append("version", getVersion())
                 .toString();
     }
 }
