@@ -41,9 +41,9 @@ public class GetUserDetails {
     private ValidatableResponse apiResponse;
     private Headers apiHeaders = new Headers();
 
-    public ValidatableResponse getUserDetails(String userType, String userId, String header) {
+    public ValidatableResponse getUserDetails(String userType, String userId) {
         String userDetailsResource;
-        apiHeaders.getHeaders().put("x-pid", header);
+        apiHeaders.getHeaders().put("x-pid", Utils.config.getString("apiHeader"));
 
         if (userType.equals(UserType.EXTERNAL.asString())) {
             userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, userId)).toString();
