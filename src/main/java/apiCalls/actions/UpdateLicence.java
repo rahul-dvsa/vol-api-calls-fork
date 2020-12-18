@@ -809,7 +809,7 @@ public class UpdateLicence extends BaseAPI {
             queryParams.put("operatorType", String.valueOf(application.getOperatorType()));
             queryParams.put("discSequence", getDiscSequence());
         }
-        apiHeaders.headers.put("x-pid", Utils.config.getString("apiHeader"));
+        apiHeaders.headers.put("x-pid", getAdminAPIHeader());
         String discNumberingResource = URL.build(env, "disc-sequence/discs-numbering").toString();
         apiResponse = RestUtils.getWithQueryParams(discNumberingResource, queryParams, apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
@@ -822,7 +822,7 @@ public class UpdateLicence extends BaseAPI {
         String operator;
         getDiscInformation();
         apiHeaders.headers.put("x-pid", getAdminAPIHeader());
-        if (getOperatorTypeDetails().equals("Goods Vehicle")) {
+        if (application.getOperatorType().equals(OperatorType.GOODS.asString())) {
             operator = "goods";
         } else {
             operator = "psv";
