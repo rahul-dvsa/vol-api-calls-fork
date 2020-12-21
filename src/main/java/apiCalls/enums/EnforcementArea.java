@@ -30,7 +30,7 @@ public enum EnforcementArea {
         return codes;
     }
 
-    public EnforcementArea getEnforcementArea(String code) {
+    public static EnforcementArea getEnforcementArea(String code) {
         EnforcementArea ea = map.get(code);
         if (ea == null) {
             throw new IllegalArgumentException("Enforcement Area Code Invalid");
