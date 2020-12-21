@@ -6,7 +6,7 @@
 
     <groupId>org.dvsa.testing.framework</groupId>
     <artifactId>vol-api-calls</artifactId>
-    <version>0.3.4</version>
+    <version>0.3.5</version>
 
     <properties>
         <active-support.version>1.4.4.5</active-support.version>
