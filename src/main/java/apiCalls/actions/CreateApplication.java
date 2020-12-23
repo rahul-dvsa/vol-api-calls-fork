@@ -147,14 +147,15 @@ public class CreateApplication extends BaseAPI {
         return operatorType;
     }
 
-    public void setOperatorType(String operatorType) { this.operatorType = operatorType; }
+    public void setOperatorType(String operatorType) {
+        this.operatorType = OperatorType.valueOf(operatorType.toUpperCase()).asString(); }
 
     public String getLicenceType() {
         return licenceType;
     }
 
     public void setLicenceType(String licenceType) {
-        this.licenceType = licenceType;
+        this.licenceType = LicenceType.valueOf(licenceType.toUpperCase()).asString();
     }
 
     public String getNiFlag() {
@@ -562,8 +563,8 @@ public class CreateApplication extends BaseAPI {
         setUserDetails(getUserDetails);
 
         // Application details
-        setOperatorType( OperatorType.valueOf("goods".toUpperCase()).asString() );
-        setLicenceType( LicenceType.valueOf("standard_international".toUpperCase()).asString() );
+        setOperatorType( "goods" );
+        setLicenceType( "standard_national" );
         setNiFlag( "N" );
         setIsInterim( "N" );
         setNoOfVehiclesRequested( 5 );
