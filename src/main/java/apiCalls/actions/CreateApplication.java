@@ -14,7 +14,6 @@ import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
-import javax.xml.ws.http.HTTPException;
 import java.util.LinkedHashMap;
 
 public class CreateApplication extends BaseAPI {
@@ -47,10 +46,10 @@ public class CreateApplication extends BaseAPI {
     private String psvLimousines;
     private String psvNoLimousineConfirmation;
     private String psvOnlyLimousinesConfirmation;
-    private String partnerTitle;
-    private String partnerForeName;
-    private String partnerFamilyName;
-    private String partnerDOB;
+    private String directorTitle;
+    private String directorForeName;
+    private String directorFamilyName;
+    private String directorDOB;
     private String registeredAddressLine1;
     private String registeredAddressLine2;
     private String registeredAddressLine3;
@@ -272,21 +271,21 @@ public class CreateApplication extends BaseAPI {
 
     public void setPsvOnlyLimousinesConfirmation(String psvOnlyLimousinesConfirmation) { this.psvOnlyLimousinesConfirmation = psvOnlyLimousinesConfirmation; }
 
-    public String getPartnerTitle() { return partnerTitle; }
+    public String getDirectorTitle() { return directorTitle; }
 
-    public void setPartnerTitle(String partnerTitle) { this.partnerTitle = partnerTitle; }
+    public void setDirectorTitle(String directorTitle) { this.directorTitle = directorTitle; }
 
-    public String getPartnerForeName() { return partnerForeName; }
+    public String getDirectorForeName() { return directorForeName; }
 
-    public void setPartnerForeName(String partnerForeName) { this.partnerForeName = partnerForeName; }
+    public void setDirectorForeName(String directorForeName) { this.directorForeName = directorForeName; }
 
-    public String getPartnerFamilyName() { return partnerFamilyName; }
+    public String getDirectorFamilyName() { return directorFamilyName; }
 
-    public void setPartnerFamilyName(String partnerFamilyName) { this.partnerFamilyName = partnerFamilyName; }
+    public void setDirectorFamilyName(String directorFamilyName) { this.directorFamilyName = directorFamilyName; }
 
-    public String getPartnerDOB() { return partnerDOB; }
+    public String getDirectorDOB() { return directorDOB; }
 
-    public void setPartnerDOB(String partnerDOB) { this.partnerDOB = partnerDOB; }
+    public void setDirectorDOB(String directorDOB) { this.directorDOB = directorDOB; }
 
     public String getRegisteredAddressLine1() { return registeredAddressLine1; }
 
@@ -626,11 +625,11 @@ public class CreateApplication extends BaseAPI {
         setEstablishmentTown( generatedEstablishmentAddress.get("town") );
         setEstablishmentPostCode( getPostCodeByTrafficArea() );
 
-        // Partner details
-        setPartnerTitle( UserTitle.MR.asString() );
-        setPartnerForeName( faker.generateFirstName().concat(String.valueOf(Int.random(100, 999))) );
-        setPartnerFamilyName( faker.generateLastName().concat(String.valueOf(Int.random(100, 999))) );
-        setPartnerDOB( Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28) );
+        // Director details
+        setDirectorTitle( UserTitle.MR.asString() );
+        setDirectorForeName( faker.generateFirstName().concat(String.valueOf(Int.random(100, 999))) );
+        setDirectorFamilyName( faker.generateLastName().concat(String.valueOf(Int.random(100, 999))) );
+        setDirectorDOB( Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28) );
 
         // Operating Centre details
         LinkedHashMap<String, String> generatedOperatingCentreAddress = faker.generateAddress();
@@ -756,10 +755,10 @@ public class CreateApplication extends BaseAPI {
         return apiResponse;
     }
 
-    public ValidatableResponse addPartners() {
+    public ValidatableResponse addDirectors() {
         String addPersonResource = URL.build(env, String.format("application/%s/people/", getApplicationId())).toString();
-        PersonBuilder addPerson = new PersonBuilder().withId(getApplicationId()).withTitle(getPartnerTitle())
-                .withForename(getPartnerForeName()).withFamilyName(getPartnerFamilyName()).withBirthDate(getPartnerDOB());
+        PersonBuilder addPerson = new PersonBuilder().withId(getApplicationId()).withTitle(getDirectorTitle())
+                .withForename(getDirectorForeName()).withFamilyName(getDirectorFamilyName()).withBirthDate(getDirectorDOB());
         apiResponse = RestUtils.post(addPerson, addPersonResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
