@@ -588,7 +588,7 @@ public class CreateApplication extends BaseAPI {
         setTaxiPhvAddressLine3( generatedTaxiPhvAddress.get("addressLine3") );
         setTaxiPhvAddressLine4( generatedTaxiPhvAddress.get("addressLine4") );
         setTaxiPhvTown( generatedTaxiPhvAddress.get("town") );
-        setTaxiPhvPostCode( faker.getRandomRealNottinghamPostcode() );
+        setTaxiPhvPostCode( getPostCodeByTrafficArea() );
 
         // Business details
 
@@ -606,7 +606,7 @@ public class CreateApplication extends BaseAPI {
         setRegisteredAddressLine3( generatedRegisteredAddress.get("addressLine3") );
         setRegisteredAddressLine4( generatedRegisteredAddress.get("addressLine4") );
         setRegisteredTown( generatedRegisteredAddress.get("town") );
-        setRegisteredPostCode( faker.getRandomRealNottinghamPostcode() );
+        setRegisteredPostCode( getPostCodeByTrafficArea() );
 
         // // Correspondence Address details
         LinkedHashMap<String, String> generatedCorrespondenceAddress = faker.generateAddress();
@@ -615,7 +615,7 @@ public class CreateApplication extends BaseAPI {
         setCorrespondenceAddressLine3( generatedCorrespondenceAddress.get("addressLine3") );
         setCorrespondenceAddressLine4( generatedCorrespondenceAddress.get("addressLine4") );
         setCorrespondenceTown( generatedCorrespondenceAddress.get("town") );
-        setCorrespondencePostCode( faker.getRandomRealNottinghamPostcode() );
+        setCorrespondencePostCode( getPostCodeByTrafficArea() );
 
         // // Establishment Address details
         LinkedHashMap<String, String> generatedEstablishmentAddress = faker.generateAddress();
@@ -624,7 +624,7 @@ public class CreateApplication extends BaseAPI {
         setEstablishmentAddressLine3( generatedEstablishmentAddress.get("addressLine3") );
         setEstablishmentAddressLine4( generatedEstablishmentAddress.get("addressLine4") );
         setEstablishmentTown( generatedEstablishmentAddress.get("town") );
-        setEstablishmentPostCode( faker.getRandomRealNottinghamPostcode() );
+        setEstablishmentPostCode( getPostCodeByTrafficArea() );
 
         // Partner details
         setPartnerTitle( UserTitle.MR.asString() );
@@ -639,7 +639,7 @@ public class CreateApplication extends BaseAPI {
         setOperatingCentreAddressLine3( generatedOperatingCentreAddress.get("addressLine3") );
         setOperatingCentreAddressLine4( generatedOperatingCentreAddress.get("addressLine4") );
         setOperatingCentreTown( generatedOperatingCentreAddress.get("town") );
-        setOperatingCentrePostCode( faker.getRandomRealNottinghamPostcode() );
+        setOperatingCentrePostCode( getPostCodeByTrafficArea() );
         setOperatingCentreVehicleCap( 5 );
         setOperatingCentreTrailerCap( 5 );
         setRestrictedVehicles( 2 );
@@ -652,7 +652,7 @@ public class CreateApplication extends BaseAPI {
         setTransportManagerAddressLine3( generatedTransportManagerAddress.get("AddressLine3") );
         setTransportManagerAddressLine4( generatedTransportManagerAddress.get("AddressLine4") );
         setTransportManagerTown( generatedTransportManagerAddress.get("town") );
-        setTransportManagerPostCode( faker.getRandomRealNottinghamPostcode() );
+        setTransportManagerPostCode( getPostCodeByTrafficArea() );
 
         // Safety Inspector Address details
         LinkedHashMap<String, String> generatedSafetyInspectorAddress = faker.generateAddress();
@@ -663,7 +663,7 @@ public class CreateApplication extends BaseAPI {
         setSafetyInspectorAddressLine3( generatedSafetyInspectorAddress.get("addressLine3") );
         setSafetyInspectorAddressLine4( generatedSafetyInspectorAddress.get("addressLine4") );
         setSafetyInspectorTown( generatedSafetyInspectorAddress.get("addressLine4") );
-        setSafetyInspectorPostCode( faker.getRandomRealNottinghamPostcode() );
+        setSafetyInspectorPostCode( getPostCodeByTrafficArea() );
 
         // Transport Consultant details
         String generatedTransportConsultantName = String.format("%s %s", faker.generateFirstName(), faker.generateLastName());
@@ -678,7 +678,7 @@ public class CreateApplication extends BaseAPI {
         setTransportConsultantAddressLine3( transportConsultantAddress.get("addressLine3") );
         setTransportConsultantAddressLine4( transportConsultantAddress.get("addressLine4") );
         setTransportConsultantTown( faker.generateAddress().get("town") );
-        setTransportConsultantPostCode( faker.getRandomRealNottinghamPostcode() );
+        setTransportConsultantPostCode( getPostCodeByTrafficArea() );
     }
 
 

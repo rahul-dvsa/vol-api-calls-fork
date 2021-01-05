@@ -80,7 +80,7 @@ public enum TrafficArea {
     }
 
     public static String randomString() {
-        return RandomStringUtils.randomAlphabetic(2);
+        return RandomStringUtils.randomAlphabetic(2).toUpperCase();
     }
 
     public static int randomTwoDigitInt() {
