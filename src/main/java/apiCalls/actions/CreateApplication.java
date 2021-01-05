@@ -845,7 +845,7 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse addTransportManager() {
-        if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
+        if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
         setTransportManagerFirstName( faker.generateFirstName().concat(String.valueOf(Int.random(100, 999))) );
