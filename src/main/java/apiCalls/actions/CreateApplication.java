@@ -30,8 +30,8 @@ public class CreateApplication extends BaseAPI {
     private String licenceType;
     private String niFlag = System.getProperty("ni");
     private String isInterim;
-    private String businessName;
-    private String businessEmailAddress;
+    private String organisationName;
+    private String organisationEmailAddress;
     private String phoneNumber;
     private String companyNumber;
     private String natureOfBusiness;
@@ -171,17 +171,13 @@ public class CreateApplication extends BaseAPI {
         this.isInterim = isInterim;
     }
 
-    public String getBusinessName() { return businessName; }
+    public String getOrganisationName() { return user.getOrganisationName(); }
 
-    public void setBusinessName(String businessName) {
-        this.businessName = businessName;
+    public String getOrganisationEmailAddress() {
+        return organisationEmailAddress;
     }
 
-    public String getBusinessEmailAddress() {
-        return businessEmailAddress;
-    }
-
-    public void setBusinessEmailAddress(String businessEmailAddress) { this.businessEmailAddress = businessEmailAddress; }
+    public void setOrganisationEmailAddress(String organisationEmailAddress) { this.organisationEmailAddress = organisationEmailAddress; }
 
     public String getPhoneNumber() { return phoneNumber; }
 
@@ -592,10 +588,9 @@ public class CreateApplication extends BaseAPI {
         // Business details
 
         // // Business general details
-        setBusinessName( faker.generateCompanyName() );
         setCompanyNumber( String.valueOf(Int.random(00000000, 99999999)) );
         setNatureOfBusiness( faker.generateNatureOfBusiness() );
-        setBusinessEmailAddress( getBusinessName().replace(" ", "_").replace(",", "").concat(".volBusiness@dvsa.com") );
+        setOrganisationEmailAddress( getOrganisationName().replace(" ", "_").replace(",", "").concat(".volBusiness@dvsa.com") );
         setPhoneNumber( "0712345678" );
 
         // // Registered Business Address details
@@ -717,7 +712,7 @@ public class CreateApplication extends BaseAPI {
                 .withAddressLine4(registeredAddressLine4).withTown(registeredTown).withPostcode(getPostCodeByTrafficArea());
         UpdateBusinessDetailsBuilder businessDetails = new UpdateBusinessDetailsBuilder()
                 .withId(getApplicationId()).withCompanyNumber(getCompanyNumber()).withNatureOfBusiness(getNatureOfBusiness()).withLicence(getLicenceId())
-                .withVersion(organisationVersion).withName(getBusinessName()).withAddress(address);
+                .withVersion(organisationVersion).withName(getOrganisationName()).withAddress(address);
 
         apiResponse = RestUtils.put(businessDetails, updateBusinessDetailsResource, apiHeaders.getHeaders());
 
@@ -729,7 +724,7 @@ public class CreateApplication extends BaseAPI {
     public ValidatableResponse addAddressDetails() {
         String applicationAddressResource = URL.build(env, String.format("application/%s/addresses/", getApplicationId())).toString();
 
-        ContactDetailsBuilder contactDetailsBuilder = new ContactDetailsBuilder().withPhoneNumber(getPhoneNumber()).withEmailAddress(getBusinessEmailAddress());
+        ContactDetailsBuilder contactDetailsBuilder = new ContactDetailsBuilder().withPhoneNumber(getPhoneNumber()).withEmailAddress(getOrganisationEmailAddress());
 
         AddressBuilder correspondenceAddress = new AddressBuilder().withAddressLine1(getCorrespondenceAddressLine1()).withAddressLine2(getCorrespondenceAddressLine2()).withAddressLine3(getCorrespondenceAddressLine3())
                 .withAddressLine4(getCorrespondenceAddressLine4()).withTown(getCorrespondenceTown()).withPostcode(getPostCodeByTrafficArea()).withCountryCode(getCountryCode());
@@ -883,7 +878,7 @@ public class CreateApplication extends BaseAPI {
     }
 
     public ValidatableResponse addTmResponsibilities() {
-        if (getOperatorType().equals(OperatorType.PUBLIC.asString()) && (getLicenceType().equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
+        if (getOperatorType().equals(OperatorType.GOODS.asString()) && (getLicenceType().equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
         String addTMresp = URL.build(env, String.format("transport-manager-application/%s/update-details/", getTransportManagerApplicationId())).toString();
@@ -1060,7 +1055,7 @@ public class CreateApplication extends BaseAPI {
     public ValidatableResponse submitTaxiPhv() {
         String phLicenceNumber = "phv".concat(String.valueOf(Int.random(100000,999999)));
         String councilName = "Volhampton";
-        if (operatorType.equals("public") && (licenceType.equals("special_restricted"))) {
+        if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             String submitResource = URL.build(env, String.format("application/%s/taxi-phv", getApplicationId())).toString();
             AddressBuilder addressBuilder = new AddressBuilder().withAddressLine1(getTaxiPhvAddressLine1()).withAddressLine2(getTaxiPhvAddressLine2())
                     .withAddressLine3(getTaxiPhvAddressLine3()).withAddressLine4(getTaxiPhvAddressLine4()).withTown(getTaxiPhvTown()).withPostcode(postCodeByTrafficArea).withCountryCode(getCountryCode());
@@ -1079,7 +1074,7 @@ public class CreateApplication extends BaseAPI {
         DeclarationsAndUndertakings undertakings = new DeclarationsAndUndertakings().withId(getApplicationId()).withVersion(String.valueOf(applicationVersion))
                 .withSignatureType("sig_physical_signature").withDeclarationConfirmation("Y");
 
-        if (operatorType.equals("goods") && (getIsInterim().equals("Y"))) {
+        if (getOperatorType().equals(OperatorType.GOODS.asString()) && (getIsInterim().equals("Y"))) {
             undertakings.withInterimRequested("Y").withInterimReason("Testing through the API");
         }
 
