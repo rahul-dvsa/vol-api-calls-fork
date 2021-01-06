@@ -628,7 +628,7 @@ public class UpdateLicence extends BaseAPI {
         if (application.getLicenceType().equals("special_restricted")) {
             throw new IllegalArgumentException("Cannot update operating centre for special_restricted licence");
         }
-        String updateOperatingCentreResource = URL.build(env, String.format("application/%s/variation-operating-centre/%s", application.getLicenceId(), variationApplicationId)).toString();
+        String updateOperatingCentreResource = URL.build(env, String.format("application/%s/variation-operating-centre/%s", application.getLicenceId(), getVariationApplicationId())).toString();
         OperatingCentreVariationBuilder updateOperatingCentre = new OperatingCentreVariationBuilder().withId(getVariationApplicationId())
                 .withApplication(getVariationApplicationId()).withNoOfVehiclesRequired(String.valueOf(application.getNoOfVehiclesRequested()))
                 .withVersion(version);
@@ -839,12 +839,12 @@ public class UpdateLicence extends BaseAPI {
 
     public void submitInterimApplication() {
 
-        String interimApplicationResource = URL.build(env, String.format("application/%s/interim/", application.getApplicationId())).toString();
-        int applicationVersion = Integer.parseInt(fetchApplicationInformation(application.getApplicationId(), "version", "1"));
+        String interimApplicationResource = URL.build(env, String.format("application/%s/interim/", getVariationApplicationId())).toString();
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getVariationApplicationId(), "version", "1"));
 
         InterimApplicationBuilder interimApplicationBuilder = new InterimApplicationBuilder().withAuthVehicles(String.valueOf(application.getNoOfVehiclesRequested())).withAuthTrailers(String.valueOf(application.getNoOfVehiclesRequested()))
                 .withRequested("Y").withReason(getInterimReason()).withStartDate(getInterimStartDate()).withEndDate(getInterimEndDate())
-                .withAction("grant").withId(application.getApplicationId()).withVersion(applicationVersion);
+                .withAction("grant").withId(getVariationApplicationId()).withVersion(applicationVersion);
         apiResponse = RestUtils.put(interimApplicationBuilder, interimApplicationResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
@@ -852,9 +852,9 @@ public class UpdateLicence extends BaseAPI {
 
     public void grantInterimApplication() {
         submitInterimApplication();
-        String interimApplicationResource = URL.build(env, String.format("application/%s/interim/grant/", application.getApplicationId())).toString();
+        String interimApplicationResource = URL.build(env, String.format("application/%s/interim/grant/", getVariationApplicationId())).toString();
 
-        InterimApplicationBuilder interimApplicationBuilder = new InterimApplicationBuilder().withId(application.getApplicationId());
+        InterimApplicationBuilder interimApplicationBuilder = new InterimApplicationBuilder().withId(getVariationApplicationId());
         apiResponse = RestUtils.post(interimApplicationBuilder, interimApplicationResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
