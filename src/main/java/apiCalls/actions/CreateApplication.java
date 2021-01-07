@@ -14,6 +14,7 @@ import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
+import javax.xml.ws.http.HTTPException;
 import java.util.LinkedHashMap;
 
 public class CreateApplication extends BaseAPI {
@@ -1062,7 +1063,9 @@ public class CreateApplication extends BaseAPI {
             PhvTaxiBuilder taxiBuilder = new PhvTaxiBuilder().withId(applicationId).withPrivateHireLicenceNo(phLicenceNumber).withCouncilName(councilName).withLicence(getLicenceId()).withAddress(addressBuilder);
             apiResponse = RestUtils.post(taxiBuilder, submitResource, apiHeaders.getHeaders());
             Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
+            PhvTaxiUpdateBuilder updatePhvTaxiUpdateBuilder = new PhvTaxiUpdateBuilder().withId(applicationId).withTrafficArea(trafficArea.asString());
 
+            apiResponse = RestUtils.put(updatePhvTaxiUpdateBuilder, submitResource, apiHeaders.getHeaders());
         }
         return apiResponse;
     }
