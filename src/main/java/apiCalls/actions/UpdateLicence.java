@@ -615,8 +615,8 @@ public class UpdateLicence extends BaseAPI {
         setCaseNoteId(apiResponse.extract().jsonPath().getInt("id.note"));
     }
 
-    public ValidatableResponse getCaseDetails(String resource) {
-        String caseDetailsResource = URL.build(env, String.format("%s/%s", resource, getCaseId())).toString();
+    public ValidatableResponse getCaseDetails(String resource, int id) {
+        String caseDetailsResource = URL.build(env, String.format("%s/%s", resource, id)).toString();
         apiResponse = RestUtils.get(caseDetailsResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
@@ -837,24 +837,24 @@ public class UpdateLicence extends BaseAPI {
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
 
-    public void submitInterimApplication() {
+    public void submitInterimApplication(String applicationId) {
 
-        String interimApplicationResource = URL.build(env, String.format("application/%s/interim/", getVariationApplicationId())).toString();
-        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getVariationApplicationId(), "version", "1"));
+        String interimApplicationResource = URL.build(env, String.format("application/%s/interim/", applicationId)).toString();
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationId, "version", "1"));
 
         InterimApplicationBuilder interimApplicationBuilder = new InterimApplicationBuilder().withAuthVehicles(String.valueOf(application.getNoOfVehiclesRequested())).withAuthTrailers(String.valueOf(application.getNoOfVehiclesRequested()))
                 .withRequested("Y").withReason(getInterimReason()).withStartDate(getInterimStartDate()).withEndDate(getInterimEndDate())
-                .withAction("grant").withId(getVariationApplicationId()).withVersion(applicationVersion);
+                .withAction("grant").withId(applicationId).withVersion(applicationVersion);
         apiResponse = RestUtils.put(interimApplicationBuilder, interimApplicationResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
     }
 
-    public void grantInterimApplication() {
-        submitInterimApplication();
-        String interimApplicationResource = URL.build(env, String.format("application/%s/interim/grant/", getVariationApplicationId())).toString();
+    public void grantInterimApplication(String applicationId) {
+        submitInterimApplication(applicationId);
+        String interimApplicationResource = URL.build(env, String.format("application/%s/interim/grant/", applicationId)).toString();
 
-        InterimApplicationBuilder interimApplicationBuilder = new InterimApplicationBuilder().withId(getVariationApplicationId());
+        InterimApplicationBuilder interimApplicationBuilder = new InterimApplicationBuilder().withId(applicationId);
         apiResponse = RestUtils.post(interimApplicationBuilder, interimApplicationResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
