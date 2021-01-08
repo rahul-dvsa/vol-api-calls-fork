@@ -14,7 +14,6 @@ import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
-import javax.xml.ws.http.HTTPException;
 import java.util.LinkedHashMap;
 
 public class CreateApplication extends BaseAPI {
@@ -800,7 +799,7 @@ public class CreateApplication extends BaseAPI {
         int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationId(), "version", "1"));
         String updateOperatingCentreResource = URL.build(env, String.format("application/%s/operating-centres", getApplicationId())).toString();
         OperatingCentreUpdater updateOperatingCentre = new OperatingCentreUpdater().withId(getApplicationId())
-                .withTrafficArea(getTrafficArea().asString()).withEnforcementArea(getEnforcementArea().asString()).withVersion(applicationVersion);
+                .withTrafficArea(getTrafficArea().value()).withEnforcementArea(getEnforcementArea().value()).withVersion(applicationVersion);
 
         if (operatorType.equals(OperatorType.GOODS.asString())) {
             updateOperatingCentre.withTotAuthVehicles(getOperatingCentreVehicleCap())
@@ -1063,7 +1062,7 @@ public class CreateApplication extends BaseAPI {
             PhvTaxiBuilder taxiBuilder = new PhvTaxiBuilder().withId(applicationId).withPrivateHireLicenceNo(phLicenceNumber).withCouncilName(councilName).withLicence(getLicenceId()).withAddress(addressBuilder);
             apiResponse = RestUtils.post(taxiBuilder, submitResource, apiHeaders.getHeaders());
             Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
-            PhvTaxiUpdateBuilder updatePhvTaxiUpdateBuilder = new PhvTaxiUpdateBuilder().withId(applicationId).withTrafficArea(trafficArea.asString());
+            PhvTaxiUpdateBuilder updatePhvTaxiUpdateBuilder = new PhvTaxiUpdateBuilder().withId(applicationId).withTrafficArea(trafficArea.value());
 
             apiResponse = RestUtils.put(updatePhvTaxiUpdateBuilder, submitResource, apiHeaders.getHeaders());
         }

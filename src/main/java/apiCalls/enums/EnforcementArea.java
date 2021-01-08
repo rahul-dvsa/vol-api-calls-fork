@@ -20,22 +20,13 @@ public enum EnforcementArea {
         this.codes = codes.toUpperCase();
     }
 
-    private static final Map<String, EnforcementArea> map = new HashMap<>(values().length, 1);
-
-    static {
-        for (EnforcementArea ea: values()) map.put(ea.codes, ea);
-    }
-
-    public String asString() {
+    public String value() {
         return codes;
     }
 
-    public static EnforcementArea getEnforcementArea(String code) {
-        EnforcementArea ea = map.get(code);
-        if (ea == null) {
-            throw new IllegalArgumentException("Enforcement Area Code Invalid");
-        }
-        return ea;
+    public static EnforcementArea[] enforcementAreaList() {
+        return new EnforcementArea[]{EnforcementArea.NORTH_EAST, EnforcementArea.NORTH_WEST, EnforcementArea.MIDLANDS,
+                EnforcementArea.EAST, EnforcementArea.WALES, EnforcementArea.WEST, EnforcementArea.LONDON,
+                EnforcementArea.SCOTLAND, EnforcementArea.NORTHERN_IRELAND};
     }
-
 }

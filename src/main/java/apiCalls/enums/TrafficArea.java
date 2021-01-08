@@ -19,28 +19,14 @@ public enum TrafficArea {
     NORTHERN_IRELAND("N");
 
     private final String trafficAreas;
-    private static final Map<String, TrafficArea> map = new HashMap<>(values().length,1 );
     static Random random = new Random();
-
-
-    static {
-        for(TrafficArea ta : values()) map.put(ta.trafficAreas, ta);
-    }
 
     private TrafficArea(String trafficAreas) {
         this.trafficAreas = trafficAreas;
     }
 
-    public String asString() {
+    public String value() {
         return trafficAreas;
-    }
-
-    public static TrafficArea getTrafficAreaOf(String trafficArea) {
-        TrafficArea ta = map.get(trafficArea);
-        if (ta == null){
-            throw new IllegalArgumentException("Traffic area value invalid.");
-        }
-        return ta;
     }
 
     public static String getPostCode(TrafficArea trafficArea) {
@@ -89,5 +75,11 @@ public enum TrafficArea {
 
     public static int randomOneDigitInt() {
         return random.nextInt(9);
+    }
+
+    public static TrafficArea[] trafficAreaList() {
+        return new TrafficArea[]{TrafficArea.NORTH_EAST, TrafficArea.NORTH_WEST, TrafficArea.MIDLANDS,
+                TrafficArea.EAST, TrafficArea.WALES, TrafficArea.WEST, TrafficArea.LONDON,
+                TrafficArea.SCOTLAND, TrafficArea.NORTHERN_IRELAND};
     }
 }
