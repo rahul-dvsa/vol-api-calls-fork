@@ -10,6 +10,7 @@ import org.dvsa.testing.lib.url.utils.EnvironmentType;
 public class BaseAPI {
 
     protected EnvironmentType env;
+    private static String apiHeader = Utils.config.getString("apiHeader");
 
     public BaseAPI() {
         try {
@@ -36,7 +37,7 @@ public class BaseAPI {
 
     public static String retrieveAPIData(String url, String jsonPath, String defaultReturn) {
         Headers headers = new Headers();
-        headers.headers.put("x-pid", Headers.getAPI_HEADER());
+        headers.headers.put("x-pid", apiHeader);
         ValidatableResponse response = RestUtils.get(url, headers.getHeaders());
         try {
             return response.extract().response().jsonPath().getString(jsonPath);

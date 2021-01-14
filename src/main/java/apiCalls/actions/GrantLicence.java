@@ -51,6 +51,7 @@ public class GrantLicence extends BaseAPI{
     public GrantLicence (CreateApplication application) {
         this.application = application;
         setDateState(date.getFormattedDate(0,0,0,"yyyy-MM-dd"));
+        apiHeaders.headers.put("x-pid", Utils.config.getString("apiHeader"));
     }
 
     public ValidatableResponse grantLicence() {
@@ -70,7 +71,6 @@ public class GrantLicence extends BaseAPI{
     public void createOverview() {
 
         String overviewResource = URL.build(env, String.format("application/%s/overview/", application.getApplicationId())).toString();
-        apiHeaders.headers.put("x-pid", Headers.getAPI_HEADER());
         String status = "1";
         String overrideOption = "Y";
         String transportArea = "D";

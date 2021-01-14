@@ -3,6 +3,8 @@ package apiCalls.enums;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public enum TrafficArea {
@@ -17,16 +19,15 @@ public enum TrafficArea {
     NORTHERN_IRELAND("N");
 
     private final String trafficAreas;
+    static Random random = new Random();
 
     private TrafficArea(String trafficAreas) {
         this.trafficAreas = trafficAreas;
     }
 
-    public String asString() {
+    public String value() {
         return trafficAreas;
     }
-
-    static Random random = new Random();
 
     public static String getPostCode(TrafficArea trafficArea) {
         String postCode;
@@ -63,8 +64,9 @@ public enum TrafficArea {
         }
         return postCode;
     }
+
     public static String randomString() {
-        return RandomStringUtils.randomAlphabetic(2);
+        return RandomStringUtils.randomAlphabetic(2).toUpperCase();
     }
 
     public static int randomTwoDigitInt() {
@@ -73,5 +75,11 @@ public enum TrafficArea {
 
     public static int randomOneDigitInt() {
         return random.nextInt(9);
+    }
+
+    public static TrafficArea[] trafficAreaList() {
+        return new TrafficArea[]{TrafficArea.NORTH_EAST, TrafficArea.NORTH_WEST, TrafficArea.MIDLANDS,
+                TrafficArea.EAST, TrafficArea.WALES, TrafficArea.WEST, TrafficArea.LONDON,
+                TrafficArea.SCOTLAND, TrafficArea.NORTHERN_IRELAND};
     }
 }
