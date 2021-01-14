@@ -54,7 +54,7 @@ public class GetApplicationDetails {
 
     public ValidatableResponse getApplicationLicenceDetails(CreateApplication createApplication) {
         String getApplicationResource = URL.build(env, String.format("application/%s", application.getApplicationId())).toString();
-        apiHeaders.getHeaders().put("x-pid", apiHeaders.getAPI_HEADER());
+        apiHeaders.getHeaders().put("x-pid", Utils.config.getString("apiHeader"));
         apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
         setLicenceId(apiResponse.extract().jsonPath().getString("licence.id"));
         setLicenceNumber(apiResponse.extract().jsonPath().getString("licence.licNo"));

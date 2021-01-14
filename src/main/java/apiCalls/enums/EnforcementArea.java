@@ -1,5 +1,8 @@
 package apiCalls.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum EnforcementArea {
     NORTH_EAST("EA-B"),
     NORTH_WEST("EA-C"),
@@ -11,13 +14,19 @@ public enum EnforcementArea {
     SCOTLAND("EA-A"),
     NORTHERN_IRELAND("EA-N");
 
-    private final String trafficAreas;
+    private final String codes;
 
-    private EnforcementArea(String trafficAreas) {
-        this.trafficAreas = trafficAreas.toUpperCase();
+    private EnforcementArea(String codes) {
+        this.codes = codes.toUpperCase();
     }
 
-    public String asString() {
-        return trafficAreas;
+    public String value() {
+        return codes;
+    }
+
+    public static EnforcementArea[] enforcementAreaList() {
+        return new EnforcementArea[]{EnforcementArea.NORTH_EAST, EnforcementArea.NORTH_WEST, EnforcementArea.MIDLANDS,
+                EnforcementArea.EAST, EnforcementArea.WALES, EnforcementArea.WEST, EnforcementArea.LONDON,
+                EnforcementArea.SCOTLAND, EnforcementArea.NORTHERN_IRELAND};
     }
 }
