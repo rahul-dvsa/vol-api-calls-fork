@@ -113,7 +113,10 @@ public class CreateApplication extends BaseAPI {
     private String taxiPhvTown;
     private String taxiPhvPostCode;
 
+    private String[] vehicleVRMs;
+
     private int noOfVehiclesRequested;
+    private int noOfTrailersRequested;
     private int operatingCentreVehicleCap;
     private int operatingCentreTrailerCap;
     private int restrictedVehicles;
@@ -531,9 +534,17 @@ public class CreateApplication extends BaseAPI {
 
     public void setTaxiPhvTown(String taxiPhvTown) { this.taxiPhvTown = taxiPhvTown; }
 
+    public String[] getVehicleVRMs() { return vehicleVRMs; }
+
+    public void setVehicleVRMs(String[] vehicleVRMs) { this.vehicleVRMs = vehicleVRMs; }
+
     public int getNoOfVehiclesRequested() { return noOfVehiclesRequested; }
 
     public void setNoOfVehiclesRequested(int noOfVehiclesRequested) { this.noOfVehiclesRequested = noOfVehiclesRequested; }
+
+    public int getNoOfTrailersRequested() { return noOfTrailersRequested; }
+
+    public void setNoOfTrailersRequested(int noOfTrailersRequested) { this.noOfTrailersRequested = noOfTrailersRequested; }
 
     public int getOperatingCentreVehicleCap() { return operatingCentreVehicleCap; }
 
@@ -563,6 +574,7 @@ public class CreateApplication extends BaseAPI {
         setNiFlag( "N" );
         setIsInterim( "N" );
         setNoOfVehiclesRequested( 5 );
+        setNoOfTrailersRequested( 5 );
         setTrafficArea( TrafficArea.NORTH_EAST );
         setPostCodeByTrafficArea( TrafficArea.getPostCode(getTrafficArea()));
         setCountryCode( "GB" );
@@ -804,7 +816,7 @@ public class CreateApplication extends BaseAPI {
         if (operatorType.equals(OperatorType.GOODS.asString())) {
             updateOperatingCentre.withTotAuthVehicles(getOperatingCentreVehicleCap())
                     .withTotCommunityLicences(1)
-                    .withTAuthTrailers(getOperatingCentreVehicleCap());
+                    .withTAuthTrailers(getOperatingCentreTrailerCap());
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.RESTRICTED.asString()))) {
             updateOperatingCentre.withTotAuthVehicles(getOperatingCentreVehicleCap())
@@ -920,26 +932,24 @@ public class CreateApplication extends BaseAPI {
         }
         String vehiclesResource = null;
         String vrm;
+        String[] VRMs = new String[getNoOfVehiclesRequested()];
 
         String operatorType = getOperatorType().equals(OperatorType.GOODS.asString()) ? "goods" : "psv";
         vehiclesResource = URL.build(env, String.format("application/%s/%s-vehicles", getApplicationId(), operatorType)).toString();
 
         // TODO: Might need to add 'make' to the API builder because DVLA pulls this as well
-        do {
-            for (int i = 0; i < noOfVehiclesRequested; i++) {
-                vrm = Str.randomWord(2).concat(String.valueOf(Int.random(10, 99)).concat(Str.randomWord(3)))
-                        .toLowerCase();
-                VehiclesBuilder vehiclesDetails = new VehiclesBuilder().withId(getApplicationId()).withApplication(getApplicationId()).withHasEnteredReg("Y").withVrm(vrm)
-                        .withPlatedWeight(String.valueOf(Int.random(1, 9999))).withVersion(version);
-                assert vehiclesResource != null;
-                apiResponse = RestUtils.post(vehiclesDetails, vehiclesResource, apiHeaders.getHeaders());
+        for (int i = 0; i < getNoOfVehiclesRequested(); i++) {
+            vrm = Str.randomWord(2).concat(String.valueOf(Int.random(10, 99)).concat(Str.randomWord(3)))
+                    .toLowerCase();
+            VehiclesBuilder vehiclesDetails = new VehiclesBuilder().withId(getApplicationId()).withApplication(getApplicationId()).withHasEnteredReg("Y").withVrm(vrm)
+                    .withPlatedWeight(String.valueOf(Int.random(1, 9999))).withVersion(version);
+            assert vehiclesResource != null;
+            apiResponse = RestUtils.post(vehiclesDetails, vehiclesResource, apiHeaders.getHeaders());
+            VRMs[i] = vrm;
             }
-        }
-        while ((apiResponse.extract().statusCode() == HttpStatus.SC_CONFLICT) || (apiResponse.extract().statusCode() == HttpStatus.SC_BAD_REQUEST)
-                || (apiResponse.extract().statusCode() == HttpStatus.SC_UNPROCESSABLE_ENTITY));
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
-
+        setVehicleVRMs(VRMs);
         return apiResponse;
     }
 
@@ -992,7 +1002,7 @@ public class CreateApplication extends BaseAPI {
         int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationId(), "version", "1"));
 
         LicenceBuilder licence = new LicenceBuilder().withId(getLicenceId()).withVersion(version).withSafetyInsVaries(safetyInsVaries).withSafetyInsVehicles(String.valueOf(operatingCentreVehicleCap))
-                .withSafetyInsTrailers(String.valueOf(operatingCentreVehicleCap)).withTachographIns(tachographIns);
+                .withSafetyInsTrailers(String.valueOf(getOperatingCentreTrailerCap())).withTachographIns(tachographIns);
         ApplicationSafetyBuilder applicationSafetyBuilder = new ApplicationSafetyBuilder().withId(getApplicationId()).withVersion(applicationVersion)
                 .withSafetyConfirmation(safetyConfirmationOption).withLicence(licence);
         apiResponse = RestUtils.put(applicationSafetyBuilder, applicationSafetyResource, apiHeaders.getHeaders());
