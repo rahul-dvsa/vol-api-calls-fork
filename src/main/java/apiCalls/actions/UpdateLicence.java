@@ -788,7 +788,7 @@ public class UpdateLicence extends BaseAPI {
         apiResponse.statusCode(HttpStatus.SC_OK);
     }
 
-    private void getDiscInformation() {
+    public void getDiscInformation() {
         Map<String, String> queryParams = new HashMap<>();
         {
             queryParams.put("niFlag", "N");
