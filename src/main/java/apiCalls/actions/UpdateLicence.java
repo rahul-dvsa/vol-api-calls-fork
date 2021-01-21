@@ -801,7 +801,6 @@ public class UpdateLicence extends BaseAPI {
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setStartNumber(apiResponse.extract().jsonPath().get("results.startNumber").toString());
         setEndNumber(apiResponse.extract().jsonPath().get("results.endNumber").toString());
-        // Seems to print regardless of start and end number. Need to refactor to get specific licence start and end number for psv disc test.
     }
 
     public void printLicenceDiscs() {
