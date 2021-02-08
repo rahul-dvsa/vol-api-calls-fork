@@ -174,9 +174,9 @@ public class GrantLicence extends BaseAPI{
 
     }
 
-    public void refuse() {
-        String grantApplicationResource = URL.build(env, String.format("application/%s/refuse/", application.getApplicationId())).toString();
-        GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(application.getApplicationId()).withCaseworkerNotes("This notes are from the API");
+    public void refuse(String applicationId) {
+        String grantApplicationResource = URL.build(env, String.format("application/%s/refuse/", applicationId)).toString();
+        GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(applicationId).withCaseworkerNotes("This notes are from the API");
         apiResponse = RestUtils.put(grantApplication, grantApplicationResource, apiHeaders.getHeaders());
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
@@ -188,9 +188,9 @@ public class GrantLicence extends BaseAPI{
         }
     }
 
-    public void withdraw() {
-        String grantApplicationResource = URL.build(env, String.format("application/%s/withdraw/", application.getApplicationId())).toString();
-        GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(application.getApplicationId()).withReason("reg_in_error");
+    public void withdraw(String applicationId) {
+        String grantApplicationResource = URL.build(env, String.format("application/%s/withdraw/", applicationId)).toString();
+        GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(applicationId).withReason("reg_in_error");
         apiResponse = RestUtils.put(grantApplication, grantApplicationResource, apiHeaders.getHeaders());
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
