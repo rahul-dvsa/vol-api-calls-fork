@@ -1,5 +1,7 @@
 package apiCalls.Utils.builders;
 
+import activesupport.number.Int;
+import activesupport.string.Str;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -130,5 +132,12 @@ public class VehiclesBuilder {
                 .append("application:", getApplication())
                 .append("id:", getId())
                 .toString();
+    }
+
+    public static String generateRandomVRM() {
+        String areaCode = Str.randomWord(2);
+        String ageIdentifier = String.valueOf(Int.random(10, 99));
+        String randomLetters = Str.randomWord(3);
+        return areaCode.concat(ageIdentifier).concat(randomLetters).toUpperCase();
     }
 }

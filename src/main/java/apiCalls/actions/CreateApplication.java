@@ -5,7 +5,6 @@ import apiCalls.Utils.builders.*;
 import apiCalls.Utils.generic.*;
 import activesupport.http.RestUtils;
 import activesupport.number.Int;
-import activesupport.string.Str;
 import activesupport.system.Properties;
 import apiCalls.enums.*;
 import io.restassured.response.ValidatableResponse;
@@ -939,8 +938,7 @@ public class CreateApplication extends BaseAPI {
 
         // TODO: Might need to add 'make' to the API builder because DVLA pulls this as well
         for (int i = 0; i < getNoOfVehiclesRequested(); i++) {
-            vrm = Str.randomWord(2).concat(String.valueOf(Int.random(10, 99)).concat(Str.randomWord(3)))
-                    .toLowerCase();
+            vrm = VehiclesBuilder.generateRandomVRM();
             VehiclesBuilder vehiclesDetails = new VehiclesBuilder().withId(getApplicationId()).withApplication(getApplicationId()).withHasEnteredReg("Y").withVrm(vrm)
                     .withPlatedWeight(String.valueOf(Int.random(1, 9999))).withVersion(version);
             assert vehiclesResource != null;
