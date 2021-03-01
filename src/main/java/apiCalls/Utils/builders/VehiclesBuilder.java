@@ -138,6 +138,6 @@ public class VehiclesBuilder {
         String areaCode = Str.randomWord(2);
         String ageIdentifier = String.valueOf(Int.random(10, 99));
         String randomLetters = Str.randomWord(3);
-        return areaCode.concat(ageIdentifier).concat(randomLetters);
+        return areaCode.concat(ageIdentifier).concat(randomLetters).toUpperCase();
     }
 }
