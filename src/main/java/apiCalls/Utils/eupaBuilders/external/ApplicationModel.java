@@ -2,6 +2,7 @@ package apiCalls.Utils.eupaBuilders.external;
 
 import apiCalls.Utils.eupaBuilders.external.enums.LicenceType;
 import apiCalls.Utils.eupaBuilders.external.enums.OperatorType;
+import apiCalls.Utils.eupaBuilders.enums.Boolean;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

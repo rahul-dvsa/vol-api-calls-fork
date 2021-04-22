@@ -1,6 +1,7 @@
 package apiCalls.Utils.eupaBuilders.internal;
 
 import apiCalls.enums.TrafficArea;
+import apiCalls.Utils.eupaBuilders.enums.Boolean;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

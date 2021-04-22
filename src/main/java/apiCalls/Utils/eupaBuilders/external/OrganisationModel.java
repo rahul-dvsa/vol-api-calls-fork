@@ -1,12 +1,14 @@
 package apiCalls.Utils.eupaBuilders.external;
 
 import apiCalls.Utils.eupaBuilders.EligibleEcmtLicencesResultModel;
+import apiCalls.Utils.eupaBuilders.enums.Boolean;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +27,7 @@ import java.util.stream.Collectors;
 public class OrganisationModel {
 
     @JsonProperty("hasInforceLicences")
-    private Boolean hasInforceLicences;
+    private java.lang.Boolean hasInforceLicences;
     @JsonProperty("allowEmail")
     private Boolean allowEmail;
     @JsonProperty("companyCertSeen")
@@ -42,16 +44,16 @@ public class OrganisationModel {
     private List<EligibleEcmtLicencesResultModel> eligibleEcmtLicences = null;
 
     @JsonProperty("hasInforceLicences")
-    public Boolean getHasInforceLicences() {
+    public java.lang.Boolean getHasInforceLicences() {
         return hasInforceLicences;
     }
 
     @JsonProperty("hasInforceLicences")
-    public void setHasInforceLicences(Boolean hasInforceLicences) {
+    public void setHasInforceLicences(java.lang.Boolean hasInforceLicences) {
         this.hasInforceLicences = hasInforceLicences;
     }
 
-    public OrganisationModel withHasInforceLicences(Boolean hasInforceLicences) {
+    public OrganisationModel withHasInforceLicences(java.lang.Boolean hasInforceLicences) {
         setHasInforceLicences(hasInforceLicences);
         return this;
     }
