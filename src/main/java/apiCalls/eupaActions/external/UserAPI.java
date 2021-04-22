@@ -19,7 +19,10 @@ public class UserAPI extends BaseAPI {
 
     private static String baseResource = "user/selfserve/";
     private static ValidatableResponse response;
-    private static String apiHeader = Utils.config.getString("apiHeader");
+
+    static {
+        BaseAPI.setHeader("x-pid", Utils.config.getString("apiHeader"));
+    }
 
     /**
      * This method registers a new user using the information specified in the userRegistrationDetailsModel
@@ -67,7 +70,6 @@ public class UserAPI extends BaseAPI {
      * @return the information associated with the person passed in as an argument.
      */
     public static UserModel get(@NotNull PersonModel personModel) {
-        setHeader("x-pid", apiHeader);
         URL.build(EnvironmentType.getEnum(Properties.get("env", true)), baseResource + personModel.getUserId());
 
         response = RestUtils.get(String.valueOf(URL.getURL()), getHeaders());
