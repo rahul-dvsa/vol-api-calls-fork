@@ -20,10 +20,6 @@ public class UserAPI extends BaseAPI {
     private static String baseResource = "user/selfserve/";
     private static ValidatableResponse response;
 
-    static {
-        BaseAPI.setHeader("x-pid", Utils.config.getString("apiHeader"));
-    }
-
     /**
      * This method registers a new user using the information specified in the userRegistrationDetailsModel
      * object that's passed in as an argument
@@ -31,6 +27,7 @@ public class UserAPI extends BaseAPI {
      * @return The user that was registered.
      */
     public static PersonModel register(@NotNull UserRegistrationDetailsModel userRegistrationDetailsModel){
+        BaseAPI.setHeader("x-pid", Utils.config.getString("apiHeader"));
         URL.build(EnvironmentType.getEnum(Properties.get("env", true)), baseResource + "register");
         int maxTries = 5;
 
@@ -70,6 +67,7 @@ public class UserAPI extends BaseAPI {
      * @return the information associated with the person passed in as an argument.
      */
     public static UserModel get(@NotNull PersonModel personModel) {
+        BaseAPI.getHeaders().put("x-pid", Utils.config.getString("apiHeader"));
         URL.build(EnvironmentType.getEnum(Properties.get("env", true)), baseResource + personModel.getUserId());
 
         response = RestUtils.get(String.valueOf(URL.getURL()), getHeaders());
