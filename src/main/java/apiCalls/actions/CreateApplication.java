@@ -945,8 +945,11 @@ public class CreateApplication extends BaseAPI {
             apiResponse = RestUtils.post(vehiclesDetails, vehiclesResource, apiHeaders.getHeaders());
             VRMs[i] = vrm;
             }
-
-        Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
+        if(getNoOfVehiclesRequested() == 0){
+            Utils.checkHTTPStatusCode(apiResponse,HttpStatus.SC_OK);
+        }else {
+            Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
+        }
         setVehicleVRMs(VRMs);
         return apiResponse;
     }
