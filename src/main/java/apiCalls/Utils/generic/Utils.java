@@ -11,7 +11,7 @@ import javax.xml.ws.http.HTTPException;
 
 public class Utils {
     private static final Logger LOGGER = LogManager.getLogger(Utils.class);
-    private static EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
+    private static final EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
     public static Config config = new activesupport.config.Configuration(env.toString()).getConfig();
 
     public static void checkHTTPStatusCode(ValidatableResponse apiResponse, int scCreated) {

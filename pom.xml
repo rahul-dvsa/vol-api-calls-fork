@@ -15,7 +15,6 @@
         <commons-lang3.version>3.7</commons-lang3.version>
         <uri-constructor.version>1.5.2</uri-constructor.version>
         <rest-assured-schema.version>4.3.1</rest-assured-schema.version>
-<!--        <owasp-dependency-checker.version>6.0.2</owasp-dependency-checker.version>-->
         <javax.xml.version>2.3.1</javax.xml.version>
         <apache-commons.version>1.6</apache-commons.version>
         <nexus.releases>https://nexus.olcs.dev-dvsacloud.uk/repository/maven-releases</nexus.releases>
@@ -39,22 +38,6 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.owasp</groupId>-->
-<!--                <artifactId>dependency-check-maven</artifactId>-->
-<!--                <version>${owasp-dependency-checker.version}</version>-->
-<!--                <configuration>-->
-<!--                    <failBuildOnCVSS>12</failBuildOnCVSS>-->
-<!--                    <suppressionFile>../vol-active-support/src/test/resources/false_positives.xml</suppressionFile>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <goals>-->
-<!--                            <goal>check</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
         </plugins>
     </build>
     <dependencies>
@@ -88,12 +71,6 @@
             <groupId>javax.xml.ws</groupId>
             <artifactId>jaxws-api</artifactId>
             <version>${javax.xml.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.zeroturnaround</groupId>
-            <artifactId>zt-zip</artifactId>
-            <version>1.13</version>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
