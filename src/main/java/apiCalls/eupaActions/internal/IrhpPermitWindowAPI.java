@@ -3,39 +3,37 @@ package apiCalls.eupaActions.internal;
 import activesupport.http.RestUtils;
 import activesupport.system.Properties;
 import apiCalls.Utils.eupaBuilders.internal.irhp.permit.stock.OpenByCountryModel;
+import apiCalls.Utils.generic.Headers;
 import apiCalls.Utils.generic.Utils;
-import apiCalls.eupaActions.BaseAPI;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.Map;
 
-public class IrhpPermitWindowAPI extends BaseAPI {
+public class IrhpPermitWindowAPI {
 
-    private static String baseResource = "irhp-permit-window/";
-    private static ValidatableResponse response;
-    private static String apiHeader = Utils.config.getString("apiHeader");
+    private static EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
+    private static ValidatableResponse apiResponse;
+    private static Headers apiHeaders = new Headers();
 
-    public static OpenByCountryModel openByCountry(String... countryIds) {
-        String oldXPID = getHeader("x-pid"); // Needed as other calls might expect an external x-pid
-        updateHeader("x-pid", apiHeader);
-        String path = "open-by-country/?dto=Dvsa%5COlcs%5CTransfer%5CQuery%5CIrhpPermitWindow%5COpenByCountry";
+    public static OpenByCountryModel openByCountry(String[] countryIds) {
+        apiHeaders.headers.put("x-pid", Utils.config.getString("apiHeader"));
+        String openCountries = URL.build(env,"irhp-permit-window/open-by-country").toString();
 
-        String countries = IntStream.range(0, countryIds.length)
-                .mapToObj(String::valueOf)
-                .reduce("", (String accumulator, String idx) -> accumulator.concat("&countries%5B" + idx + "%5D=" + countryIds[Integer.parseInt(idx)]));
+        Map<String, String> map = new HashMap<>();
+        for (int i = 0; i < countryIds.length; i++) {
+            map.put(String.format("countries[%s]", i), String.format("%s", countryIds[i]));
+        }
 
-        URL.build(EnvironmentType.getEnum(Properties.get("env", true)), baseResource + path.concat(countries));
+        apiResponse = RestUtils.getWithQueryParams(openCountries, map, apiHeaders.getHeaders());
 
-        response = RestUtils.get(URL.getURL().toString().substring(0, URL.getURL().toString().length() - 1), getHeaders());
+        Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
 
-        response.statusCode(HttpStatus.SC_OK);
-        updateHeader("x-pid", oldXPID);
-
-        return response.extract().as(OpenByCountryModel.class);
+        return apiResponse.extract().as(OpenByCountryModel.class);
     }
 
     public static OpenByCountryModel openByCountry() {
