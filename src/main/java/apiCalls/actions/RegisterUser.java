@@ -2,9 +2,9 @@ package apiCalls.actions;
 
 import activesupport.faker.FakerUtils;
 import activesupport.number.Int;
-import apiCalls.Utils.builders.ContactDetailsBuilder;
-import apiCalls.Utils.builders.PersonBuilder;
-import apiCalls.Utils.builders.SelfServeUserRegistrationDetailsBuilder;
+import apiCalls.Utils.volBuilders.ContactDetailsBuilder;
+import apiCalls.Utils.volBuilders.PersonBuilder;
+import apiCalls.Utils.volBuilders.SelfServeUserRegistrationDetailsBuilder;
 import apiCalls.Utils.generic.Headers;
 import activesupport.http.RestUtils;
 
@@ -15,12 +15,8 @@ import apiCalls.enums.BusinessType;
 import apiCalls.enums.UserTitle;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
-import org.apache.logging.log4j.*;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
-
-
-import javax.xml.ws.http.HTTPException;
 
 
 public class RegisterUser {

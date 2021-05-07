@@ -1,7 +1,7 @@
 package apiCalls.actions;
 
 import activesupport.faker.FakerUtils;
-import apiCalls.Utils.builders.*;
+import apiCalls.Utils.volBuilders.*;
 import apiCalls.Utils.generic.*;
 import activesupport.http.RestUtils;
 import activesupport.number.Int;
