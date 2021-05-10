@@ -6,7 +6,7 @@
 
     <groupId>org.dvsa.testing.framework</groupId>
     <artifactId>vol-api-calls</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 
     <properties>
         <active-support.version>1.5.0</active-support.version>
@@ -18,7 +18,6 @@
         <javax.xml.version>2.3.1</javax.xml.version>
         <apache-commons.version>1.6</apache-commons.version>
         <nexus.releases>https://nexus.olcs.dev-dvsacloud.uk/repository/maven-releases</nexus.releases>
-        <nexus.snapshots>https://nexus.olcs.dev-dvsacloud.uk/repository/maven-snapshots</nexus.snapshots>
     </properties>
 
     <build>
@@ -81,10 +80,6 @@
 
     <!--  Nexus Configuration  -->
     <distributionManagement>
-        <snapshotRepository>
-            <id>maven-snapshots</id>
-            <url>${nexus.snapshots}</url>
-        </snapshotRepository>
         <repository>
             <id>maven-releases</id>
             <url>${nexus.releases}</url>
