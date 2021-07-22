@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "application",
-        "noOfVehiclesRequired",
+        "noOfHgvVehiclesRequired",
         "noOfTrailersRequired",
         "permission",
         "address"
@@ -18,8 +18,8 @@ public class OperatingCentreBuilder {
 
     @JsonProperty("application")
     private String application;
-    @JsonProperty("noOfVehiclesRequired")
-    private String noOfVehiclesRequired;
+    @JsonProperty("noOfHgvVehiclesRequired")
+    private String noOfHgvVehiclesRequired;
     @JsonProperty("noOfTrailersRequired")
     private String noOfTrailersRequired;
     @JsonProperty("permission")
@@ -42,18 +42,18 @@ public class OperatingCentreBuilder {
         return this;
     }
 
-    @JsonProperty("noOfVehiclesRequired")
-    public String getNoOfVehiclesRequired() {
-        return noOfVehiclesRequired;
+    @JsonProperty("noOfHgvVehiclesRequired")
+    public String getnoOfHgvVehiclesRequired() {
+        return noOfHgvVehiclesRequired;
     }
 
-    @JsonProperty("noOfVehiclesRequired")
-    public void setNoOfVehiclesRequired(String noOfVehiclesRequired) {
-        this.noOfVehiclesRequired = noOfVehiclesRequired;
+    @JsonProperty("noOfHgvVehiclesRequired")
+    public void setnoOfHgvVehiclesRequired(String noOfHgvVehiclesRequired) {
+        this.noOfHgvVehiclesRequired = noOfHgvVehiclesRequired;
     }
 
-    public OperatingCentreBuilder withNoOfVehiclesRequired(String noOfVehiclesRequired) {
-        this.noOfVehiclesRequired = noOfVehiclesRequired;
+    public OperatingCentreBuilder withnoOfHgvVehiclesRequired(String noOfHgvVehiclesRequired) {
+        this.noOfHgvVehiclesRequired = noOfHgvVehiclesRequired;
         return this;
     }
 
@@ -107,7 +107,7 @@ public class OperatingCentreBuilder {
     public String toString() {
         return  new ToStringBuilder(ToStringStyle.JSON_STYLE)
                 .append("application", getApplication())
-                .append("noOfVehiclesRequired", getNoOfVehiclesRequired())
+                .append("noOfHgvVehiclesRequired", getnoOfHgvVehiclesRequired())
                 .append("noOfTrailersRequired", getNoOfTrailersRequired())
                 .append("permission", getPermission())
                 .append("address", getAddress()).toString();
