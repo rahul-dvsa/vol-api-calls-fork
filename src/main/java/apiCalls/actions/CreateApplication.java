@@ -786,14 +786,14 @@ public class CreateApplication extends BaseAPI {
         OperatingCentreBuilder operatingCentreBuilder = new OperatingCentreBuilder().withApplication(getApplicationId()).withPermission(permissionOption).withAddress(address);
 
         if (operatorType.equals(OperatorType.GOODS.asString())) {
-            operatingCentreBuilder.withNoOfVehiclesRequired(String.valueOf(getOperatingCentreVehicleCap()))
+            operatingCentreBuilder.withNoOfHgvVehiclesRequired(String.valueOf(getOperatingCentreVehicleCap()))
                     .withNoOfTrailersRequired(String.valueOf(getOperatingCentreTrailerCap()));
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.RESTRICTED.asString()))) {
-            operatingCentreBuilder.withNoOfVehiclesRequired(String.valueOf(getOperatingCentreVehicleCap()));
+            operatingCentreBuilder.withNoOfHgvVehiclesRequired(String.valueOf(getOperatingCentreVehicleCap()));
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
-            operatingCentreBuilder.withNoOfVehiclesRequired(String.valueOf(getRestrictedVehicles()));
+            operatingCentreBuilder.withNoOfHgvVehiclesRequired(String.valueOf(getRestrictedVehicles()));
         }
         apiResponse = RestUtils.post(operatingCentreBuilder, operatingCentreResource, apiHeaders.getHeaders());
 
