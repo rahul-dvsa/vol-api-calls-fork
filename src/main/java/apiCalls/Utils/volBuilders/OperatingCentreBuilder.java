@@ -43,16 +43,16 @@ public class OperatingCentreBuilder {
     }
 
     @JsonProperty("noOfHgvVehiclesRequired")
-    public String getnoOfHgvVehiclesRequired() {
+    public String getNoOfHgvVehiclesRequired() {
         return noOfHgvVehiclesRequired;
     }
 
     @JsonProperty("noOfHgvVehiclesRequired")
-    public void setnoOfHgvVehiclesRequired(String noOfHgvVehiclesRequired) {
+    public void setNoOfHgvVehiclesRequired(String noOfHgvVehiclesRequired) {
         this.noOfHgvVehiclesRequired = noOfHgvVehiclesRequired;
     }
 
-    public OperatingCentreBuilder withnoOfHgvVehiclesRequired(String noOfHgvVehiclesRequired) {
+    public OperatingCentreBuilder withNoOfHgvVehiclesRequired(String noOfHgvVehiclesRequired) {
         this.noOfHgvVehiclesRequired = noOfHgvVehiclesRequired;
         return this;
     }
