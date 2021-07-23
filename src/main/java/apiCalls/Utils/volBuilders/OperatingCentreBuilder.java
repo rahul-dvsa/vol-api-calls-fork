@@ -10,6 +10,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @JsonPropertyOrder({
         "application",
         "noOfHgvVehiclesRequired",
+        "noOfLgvVehiclesRequired",
         "noOfTrailersRequired",
         "permission",
         "address"
@@ -20,6 +21,8 @@ public class OperatingCentreBuilder {
     private String application;
     @JsonProperty("noOfHgvVehiclesRequired")
     private String noOfHgvVehiclesRequired;
+    @JsonProperty("noOfLgvVehiclesRequired")
+    private String noOfLgvVehiclesRequired;
     @JsonProperty("noOfTrailersRequired")
     private String noOfTrailersRequired;
     @JsonProperty("permission")
@@ -54,6 +57,21 @@ public class OperatingCentreBuilder {
 
     public OperatingCentreBuilder withNoOfHgvVehiclesRequired(String noOfHgvVehiclesRequired) {
         this.noOfHgvVehiclesRequired = noOfHgvVehiclesRequired;
+        return this;
+    }
+
+    @JsonProperty("noOfLgvVehiclesRequired")
+    public String getNoOfLgvVehiclesRequired() {
+        return noOfLgvVehiclesRequired;
+    }
+
+    @JsonProperty("noOfLgvVehiclesRequired")
+    public void setNoOfLgvVehiclesRequired(String noOfLgvVehiclesRequired) {
+        this.noOfLgvVehiclesRequired = noOfLgvVehiclesRequired;
+    }
+
+    public OperatingCentreBuilder withNoOfLgvVehiclesRequired(String noOfLgvVehiclesRequired) {
+        this.noOfLgvVehiclesRequired = noOfLgvVehiclesRequired;
         return this;
     }
 
@@ -108,6 +126,7 @@ public class OperatingCentreBuilder {
         return  new ToStringBuilder(ToStringStyle.JSON_STYLE)
                 .append("application", getApplication())
                 .append("noOfHgvVehiclesRequired", getNoOfHgvVehiclesRequired())
+                .append("noOfLgvVehiclesRequired", getNoOfLgvVehiclesRequired())
                 .append("noOfTrailersRequired", getNoOfTrailersRequired())
                 .append("permission", getPermission())
                 .append("address", getAddress()).toString();

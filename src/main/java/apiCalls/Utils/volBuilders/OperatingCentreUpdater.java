@@ -3,6 +3,8 @@ package apiCalls.Utils.volBuilders;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -137,8 +139,13 @@ public class OperatingCentreUpdater {
 
     @Override
     public String toString() {
-        return "id:" + getId() + ",totAuthVehicles:" + getTotAuthVehicles() + ",totAuthTrailers:" + getTotAuthTrailers() +
-                ",trafficArea:" + getTrafficArea() + ",enforcementArea:" + getEnforcementArea()
-        + ",totCommunityLicences:" +  getTotCommunityLicences() + ",version:" + getVersion();
+        return  new ToStringBuilder(ToStringStyle.JSON_STYLE)
+                .append("id", getId())
+                .append("totAuthVehicles", getTotAuthVehicles())
+                .append("totAuthTrailers", getTotAuthTrailers())
+                .append("trafficArea", getTrafficArea())
+                .append("enforcementArea", getEnforcementArea())
+                .append("totCommunityLicences", getTotCommunityLicences())
+                .append("version", getVersion()).toString();
     }
 }
