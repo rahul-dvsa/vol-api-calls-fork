@@ -1052,9 +1052,10 @@ public class CreateApplication extends BaseAPI {
         String safetyConfirmationOption = "Y";
         String applicationSafetyResource = URL.build(env, String.format("application/%s/safety", getApplicationId())).toString();
         int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationId(), "version", "1"));
+        int numberOfWeeksUntilInspection = Int.random(1, 13);
 
-        LicenceBuilder licence = new LicenceBuilder().withId(getLicenceId()).withVersion(version).withSafetyInsVaries(safetyInsVaries).withSafetyInsVehicles(String.valueOf(getTotalOperatingCentreHgvAuthority()))
-                .withSafetyInsTrailers(String.valueOf(getTotalOperatingCentreTrailerAuthority())).withTachographIns(tachographIns);
+        LicenceBuilder licence = new LicenceBuilder().withId(getLicenceId()).withVersion(version).withSafetyInsVaries(safetyInsVaries).withSafetyInsVehicles(String.valueOf(numberOfWeeksUntilInspection))
+                .withSafetyInsTrailers(String.valueOf(numberOfWeeksUntilInspection)).withTachographIns(tachographIns);
         ApplicationSafetyBuilder applicationSafetyBuilder = new ApplicationSafetyBuilder().withId(getApplicationId()).withVersion(applicationVersion)
                 .withSafetyConfirmation(safetyConfirmationOption).withLicence(licence);
         apiResponse = RestUtils.put(applicationSafetyBuilder, applicationSafetyResource, apiHeaders.getHeaders());
