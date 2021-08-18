@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
-        "totAuthVehicles",
+        "totHgvAuthVehicles",
         "totAuthTrailers",
         "trafficArea",
         "totCommunityLicences",
@@ -20,8 +20,8 @@ public class OperatingCentreUpdater {
 
     @JsonProperty("id")
     private String id;
-    @JsonProperty("totAuthVehicles")
-    private Integer totAuthVehicles;
+    @JsonProperty("totHgvAuthVehicles")
+    private Integer totHgvAuthVehicles;
     @JsonProperty("totAuthTrailers")
     private Integer totAuthTrailers;
     @JsonProperty("trafficArea")
@@ -48,18 +48,18 @@ public class OperatingCentreUpdater {
         return this;
     }
 
-    @JsonProperty("totAuthVehicles")
-    public Integer getTotAuthVehicles() {
-        return totAuthVehicles;
+    @JsonProperty("totHgvAuthVehicles")
+    public Integer getTotHgvAuthVehicles() {
+        return totHgvAuthVehicles;
     }
 
-    @JsonProperty("totAuthVehicles")
-    public void setTotAuthVehicles(Integer totAuthVehicles) {
-        this.totAuthVehicles = totAuthVehicles;
+    @JsonProperty("totHgvAuthVehicles")
+    public void setTotHgvAuthVehicles(Integer totHgvAuthVehicles) {
+        this.totHgvAuthVehicles = totHgvAuthVehicles;
     }
 
-    public OperatingCentreUpdater withTotAuthVehicles(Integer totAuthVehicles) {
-        this.totAuthVehicles = totAuthVehicles;
+    public OperatingCentreUpdater withTotHgvAuthVehicles(Integer totAuthHgvVehicles) {
+        this.totHgvAuthVehicles = totAuthHgvVehicles;
         return this;
     }
 
@@ -141,7 +141,7 @@ public class OperatingCentreUpdater {
     public String toString() {
         return  new ToStringBuilder(ToStringStyle.JSON_STYLE)
                 .append("id", getId())
-                .append("totAuthVehicles", getTotAuthVehicles())
+                .append("totAuthHgvVehicles", getTotHgvAuthVehicles())
                 .append("totAuthTrailers", getTotAuthTrailers())
                 .append("trafficArea", getTrafficArea())
                 .append("enforcementArea", getEnforcementArea())

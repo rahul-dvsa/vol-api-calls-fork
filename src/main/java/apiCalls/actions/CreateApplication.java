@@ -818,9 +818,9 @@ public class CreateApplication extends BaseAPI {
             operatingCentreBuilder.withNoOfHgvVehiclesRequired(String.valueOf(getTotalOperatingCentreHgvAuthority()))
                     .withNoOfTrailersRequired(String.valueOf(getTotalOperatingCentreTrailerAuthority()));
         }
-        if (getNoOfAddedLgvVehicles() != 0) {
-                    operatingCentreBuilder.withNoOfLgvVehiclesRequired(String.valueOf(getTotalOperatingCentreLgvAuthority()));
-        }
+//        if (getNoOfAddedLgvVehicles() != 0) {
+//                    operatingCentreBuilder.withNoOfLgvVehiclesRequired(String.valueOf(getTotalOperatingCentreLgvAuthority()));
+//        }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.RESTRICTED.asString()))) {
             operatingCentreBuilder.withNoOfHgvVehiclesRequired(String.valueOf(getTotalOperatingCentreHgvAuthority()));
             //NOTE: Because of timing constraints, psvs now store their vehicles in the hgv column and are updated via the hgv api call.
@@ -847,18 +847,18 @@ public class CreateApplication extends BaseAPI {
                 .withTrafficArea(getTrafficArea().value()).withEnforcementArea(getEnforcementArea().value()).withVersion(applicationVersion);
 
         if (operatorType.equals(OperatorType.GOODS.asString())) {
-            updateOperatingCentre.withTotAuthVehicles(getTotalOperatingCentreHgvAuthority() + getTotalOperatingCentreLgvAuthority())
+            updateOperatingCentre.withTotHgvAuthVehicles(getTotalOperatingCentreHgvAuthority())
                     .withTotCommunityLicences(1)
                     .withTAuthTrailers(getNoOfOperatingCentreTrailerAuthorised());
             //TODO: Community licences aren't displaying number.
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.RESTRICTED.asString()))) {
-            updateOperatingCentre.withTotAuthVehicles(getTotalOperatingCentreHgvAuthority())
+            updateOperatingCentre.withTotHgvAuthVehicles(getTotalOperatingCentreHgvAuthority())
                     .withTotCommunityLicences(1);
         }
 
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
-            updateOperatingCentre.withTotAuthVehicles(getRestrictedVehicles());
+            updateOperatingCentre.withTotHgvAuthVehicles(getRestrictedVehicles());
         }
 
         apiResponse = RestUtils.put(updateOperatingCentre, updateOperatingCentreResource, apiHeaders.getHeaders());
