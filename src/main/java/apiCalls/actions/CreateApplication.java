@@ -112,12 +112,22 @@ public class CreateApplication extends BaseAPI {
     private String taxiPhvTown;
     private String taxiPhvPostCode;
 
-    private String[] vehicleVRMs;
+    private String[] hgvVRMs;
+    private String[] lgvVRMs;
 
-    private int noOfVehiclesRequested;
-    private int noOfTrailersRequested;
-    private int operatingCentreVehicleCap;
-    private int operatingCentreTrailerCap;
+    // Number of vehicles added to vehicle details
+    private int noOfAddedHgvVehicles;
+    private int noOfAddedLgvVehicles;
+
+    // On add an operating centre page
+    private int totalOperatingCentreHgvAuthority;
+    private int totalOperatingCentreLgvAuthority;
+    private int totalOperatingCentreTrailerAuthority;
+
+    // On Operating Centre and Authorisation Page
+    private int noOfOperatingCentreVehicleAuthorised;
+    private int noOfOperatingCentreTrailerAuthorised;
+
     private int restrictedVehicles;
 
     private double hours;
@@ -533,25 +543,41 @@ public class CreateApplication extends BaseAPI {
 
     public void setTaxiPhvTown(String taxiPhvTown) { this.taxiPhvTown = taxiPhvTown; }
 
-    public String[] getVehicleVRMs() { return vehicleVRMs; }
+    public String[] getHgvVRMs() { return hgvVRMs; }
 
-    public void setVehicleVRMs(String[] vehicleVRMs) { this.vehicleVRMs = vehicleVRMs; }
+    public void setHgvVRMs(String[] hgvVRMs) { this.hgvVRMs = hgvVRMs; }
 
-    public int getNoOfVehiclesRequested() { return noOfVehiclesRequested; }
+    public String[] getLgvVRMs() { return lgvVRMs; }
 
-    public void setNoOfVehiclesRequested(int noOfVehiclesRequested) { this.noOfVehiclesRequested = noOfVehiclesRequested; }
+    public void setLgvVRMs(String[] lgvVRMs) { this.lgvVRMs = lgvVRMs; }
 
-    public int getNoOfTrailersRequested() { return noOfTrailersRequested; }
+    public int getNoOfAddedHgvVehicles() { return noOfAddedHgvVehicles; }
 
-    public void setNoOfTrailersRequested(int noOfTrailersRequested) { this.noOfTrailersRequested = noOfTrailersRequested; }
+    public void setNoOfAddedHgvVehicles(int noOfAddedHgvVehicles) { this.noOfAddedHgvVehicles = noOfAddedHgvVehicles; }
 
-    public int getOperatingCentreVehicleCap() { return operatingCentreVehicleCap; }
+    public int getNoOfAddedLgvVehicles() { return noOfAddedLgvVehicles; }
 
-    public void setOperatingCentreVehicleCap(int operatingCentreVehicleCap) { this.operatingCentreVehicleCap = operatingCentreVehicleCap; }
+    public void setNoOfAddedLgvVehicles(int noOfAddedLgvVehicles) { this.noOfAddedLgvVehicles = noOfAddedLgvVehicles; }
 
-    public int getOperatingCentreTrailerCap() { return operatingCentreTrailerCap; }
+    public int getTotalOperatingCentreTrailerAuthority() { return totalOperatingCentreTrailerAuthority; }
 
-    public void setOperatingCentreTrailerCap(int operatingCentreTrailerCap) { this.operatingCentreTrailerCap = operatingCentreTrailerCap; }
+    public void setTotalOperatingCentreTrailerAuthority(int totalOperatingCentreTrailerAuthority) { this.totalOperatingCentreTrailerAuthority = totalOperatingCentreTrailerAuthority; }
+
+    public int getTotalOperatingCentreHgvAuthority() { return totalOperatingCentreHgvAuthority; }
+
+    public void setTotalOperatingCentreHgvAuthority(int totalOperatingCentreHgvAuthority) { this.totalOperatingCentreHgvAuthority = totalOperatingCentreHgvAuthority; }
+
+    public int getTotalOperatingCentreLgvAuthority() { return totalOperatingCentreLgvAuthority; }
+
+    public void setTotalOperatingCentreLgvAuthority(int totalOperatingCentreLgvAuthority) { this.totalOperatingCentreLgvAuthority = totalOperatingCentreLgvAuthority; }
+
+    public int getNoOfOperatingCentreVehicleAuthorised() { return noOfOperatingCentreVehicleAuthorised; }
+
+    public void setNoOfOperatingCentreVehicleAuthorised(int noOfOperatingCentreVehicleAuthorised) { this.noOfOperatingCentreVehicleAuthorised = noOfOperatingCentreVehicleAuthorised; }
+
+    public int getNoOfOperatingCentreTrailerAuthorised() { return noOfOperatingCentreTrailerAuthorised; }
+
+    public void setNoOfOperatingCentreTrailerAuthorised(int noOfOperatingCentreTrailerAuthorised) { this.noOfOperatingCentreTrailerAuthorised = noOfOperatingCentreTrailerAuthorised; }
 
     public int getRestrictedVehicles() { return restrictedVehicles; }
 
@@ -572,8 +598,11 @@ public class CreateApplication extends BaseAPI {
         setLicenceType( "standard_national" );
         setNiFlag( "N" );
         setIsInterim( "N" );
-        setNoOfVehiclesRequested( 5 );
-        setNoOfTrailersRequested( 5 );
+        setNoOfAddedHgvVehicles( 5 );
+        setNoOfAddedLgvVehicles( 0 );
+        setTotalOperatingCentreHgvAuthority( 5 );
+        setTotalOperatingCentreLgvAuthority( 0 );
+        setTotalOperatingCentreTrailerAuthority( 5 );
         setTrafficArea( TrafficArea.NORTH_EAST );
         setPostCodeByTrafficArea( TrafficArea.getPostCode(getTrafficArea()));
         setCountryCode( "GB" );
@@ -645,8 +674,8 @@ public class CreateApplication extends BaseAPI {
         setOperatingCentreAddressLine4( generatedOperatingCentreAddress.get("addressLine4") );
         setOperatingCentreTown( generatedOperatingCentreAddress.get("town") );
         setOperatingCentrePostCode( getPostCodeByTrafficArea() );
-        setOperatingCentreVehicleCap( 5 );
-        setOperatingCentreTrailerCap( 5 );
+        setNoOfOperatingCentreVehicleAuthorised( getTotalOperatingCentreHgvAuthority() + getTotalOperatingCentreLgvAuthority() );
+        setNoOfOperatingCentreTrailerAuthorised( 5 );
         setRestrictedVehicles( 2 );
         setEnforcementArea( EnforcementArea.NORTH_EAST );
 
@@ -786,14 +815,19 @@ public class CreateApplication extends BaseAPI {
         OperatingCentreBuilder operatingCentreBuilder = new OperatingCentreBuilder().withApplication(getApplicationId()).withPermission(permissionOption).withAddress(address);
 
         if (operatorType.equals(OperatorType.GOODS.asString())) {
-            operatingCentreBuilder.withNoOfVehiclesRequired(String.valueOf(getOperatingCentreVehicleCap()))
-                    .withNoOfTrailersRequired(String.valueOf(getOperatingCentreTrailerCap()));
+            operatingCentreBuilder.withNoOfHgvVehiclesRequired(String.valueOf(getTotalOperatingCentreHgvAuthority()))
+                    .withNoOfTrailersRequired(String.valueOf(getTotalOperatingCentreTrailerAuthority()));
+        }
+        if (getNoOfAddedLgvVehicles() != 0) {
+                    operatingCentreBuilder.withNoOfLgvVehiclesRequired(String.valueOf(getTotalOperatingCentreLgvAuthority()));
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.RESTRICTED.asString()))) {
-            operatingCentreBuilder.withNoOfVehiclesRequired(String.valueOf(getOperatingCentreVehicleCap()));
+            operatingCentreBuilder.withNoOfHgvVehiclesRequired(String.valueOf(getTotalOperatingCentreHgvAuthority()));
+            //NOTE: Because of timing constraints, psvs now store their vehicles in the hgv column and are updated via the hgv api call.
+            // This is even though the vehicles aren't hgvs. It may be fixed later but at the moment this is the new norm.
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
-            operatingCentreBuilder.withNoOfVehiclesRequired(String.valueOf(getRestrictedVehicles()));
+            operatingCentreBuilder.withNoOfHgvVehiclesRequired(String.valueOf(getRestrictedVehicles()));
         }
         apiResponse = RestUtils.post(operatingCentreBuilder, operatingCentreResource, apiHeaders.getHeaders());
 
@@ -813,12 +847,13 @@ public class CreateApplication extends BaseAPI {
                 .withTrafficArea(getTrafficArea().value()).withEnforcementArea(getEnforcementArea().value()).withVersion(applicationVersion);
 
         if (operatorType.equals(OperatorType.GOODS.asString())) {
-            updateOperatingCentre.withTotAuthVehicles(getOperatingCentreVehicleCap())
+            updateOperatingCentre.withTotAuthVehicles(getTotalOperatingCentreHgvAuthority() + getTotalOperatingCentreLgvAuthority())
                     .withTotCommunityLicences(1)
-                    .withTAuthTrailers(getOperatingCentreTrailerCap());
+                    .withTAuthTrailers(getNoOfOperatingCentreTrailerAuthorised());
+            //TODO: Community licences aren't displaying number.
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.RESTRICTED.asString()))) {
-            updateOperatingCentre.withTotAuthVehicles(getOperatingCentreVehicleCap())
+            updateOperatingCentre.withTotAuthVehicles(getTotalOperatingCentreHgvAuthority())
                     .withTotCommunityLicences(1);
         }
 
@@ -926,31 +961,47 @@ public class CreateApplication extends BaseAPI {
         if (getOperatorType().equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
         }
-        if (getNoOfVehiclesRequested() > getOperatingCentreVehicleCap()) {
-            throw new ValueException("Cannot have more than the specified amount of vehicles on an operating centre.");
+        if (getNoOfAddedHgvVehicles() > getTotalOperatingCentreHgvAuthority()) {
+            throw new ValueException("Cannot have more than the specified amount of HGVs on an operating centre.");
+        } else if (getNoOfAddedLgvVehicles() > getTotalOperatingCentreLgvAuthority()) {
+            throw new ValueException("Cannot have more than the specified amount of LGVs on an operating centre.");
         }
-        String vehiclesResource = null;
-        String vrm;
-        String[] VRMs = new String[getNoOfVehiclesRequested()];
+        String[] hgvVRMs = new String[getNoOfAddedHgvVehicles()];
 
         String operatorType = getOperatorType().equals(OperatorType.GOODS.asString()) ? "goods" : "psv";
-        vehiclesResource = URL.build(env, String.format("application/%s/%s-vehicles", getApplicationId(), operatorType)).toString();
+        String vehiclesResource = URL.build(env, String.format("application/%s/%s-vehicles", getApplicationId(), operatorType)).toString();
 
         // TODO: Might need to add 'make' to the API builder because DVLA pulls this as well
-        for (int i = 0; i < getNoOfVehiclesRequested(); i++) {
-            vrm = VehiclesBuilder.generateRandomVRM();
+        for (int i = 0; i < getNoOfAddedHgvVehicles(); i++) {
+            String vrm = VehiclesBuilder.generateRandomVRM();
             VehiclesBuilder vehiclesDetails = new VehiclesBuilder().withId(getApplicationId()).withApplication(getApplicationId()).withHasEnteredReg("Y").withVrm(vrm)
-                    .withPlatedWeight(String.valueOf(Int.random(1, 9999))).withVersion(version);
-            assert vehiclesResource != null;
+                    .withPlatedWeight(String.valueOf(Int.random(3500, 7500))).withVersion(version);
             apiResponse = RestUtils.post(vehiclesDetails, vehiclesResource, apiHeaders.getHeaders());
-            VRMs[i] = vrm;
-            }
-        if(getNoOfVehiclesRequested() == 0){
+            hgvVRMs[i] = vrm;
+        }
+        if (getNoOfAddedHgvVehicles() == 0) {
             Utils.checkHTTPStatusCode(apiResponse,HttpStatus.SC_OK);
-        }else {
+        } else {
             Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
         }
-        setVehicleVRMs(VRMs);
+        setHgvVRMs(hgvVRMs);
+
+        String[] lgvVRMs = new String[getNoOfAddedLgvVehicles()];
+        if (getNoOfAddedLgvVehicles() != 0 && !operatorType.equals(OperatorType.PUBLIC.asString())) {
+            for (int i = 0; i < getNoOfAddedLgvVehicles(); i++) {
+                String vrm = VehiclesBuilder.generateRandomVRM();
+                VehiclesBuilder vehiclesDetails = new VehiclesBuilder().withId(getApplicationId()).withApplication(getApplicationId()).withHasEnteredReg("Y").withVrm(vrm)
+                        .withPlatedWeight(String.valueOf(Int.random(2500, 3000))).withVersion(version);
+                apiResponse = RestUtils.post(vehiclesDetails, vehiclesResource, apiHeaders.getHeaders());
+                lgvVRMs[i] = vrm;
+            }
+            if (getNoOfAddedLgvVehicles() == 0) {
+                Utils.checkHTTPStatusCode(apiResponse,HttpStatus.SC_OK);
+            } else {
+                Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
+            }
+            setLgvVRMs(lgvVRMs);
+        }
         return apiResponse;
     }
 
@@ -1001,9 +1052,10 @@ public class CreateApplication extends BaseAPI {
         String safetyConfirmationOption = "Y";
         String applicationSafetyResource = URL.build(env, String.format("application/%s/safety", getApplicationId())).toString();
         int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationId(), "version", "1"));
+        int numberOfWeeksUntilInspection = Int.random(1, 13);
 
-        LicenceBuilder licence = new LicenceBuilder().withId(getLicenceId()).withVersion(version).withSafetyInsVaries(safetyInsVaries).withSafetyInsVehicles(String.valueOf(operatingCentreVehicleCap))
-                .withSafetyInsTrailers(String.valueOf(getOperatingCentreTrailerCap())).withTachographIns(tachographIns);
+        LicenceBuilder licence = new LicenceBuilder().withId(getLicenceId()).withVersion(version).withSafetyInsVaries(safetyInsVaries).withSafetyInsVehicles(String.valueOf(numberOfWeeksUntilInspection))
+                .withSafetyInsTrailers(String.valueOf(numberOfWeeksUntilInspection)).withTachographIns(tachographIns);
         ApplicationSafetyBuilder applicationSafetyBuilder = new ApplicationSafetyBuilder().withId(getApplicationId()).withVersion(applicationVersion)
                 .withSafetyConfirmation(safetyConfirmationOption).withLicence(licence);
         apiResponse = RestUtils.put(applicationSafetyBuilder, applicationSafetyResource, apiHeaders.getHeaders());

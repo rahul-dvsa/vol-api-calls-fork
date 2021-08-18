@@ -9,7 +9,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "application",
-        "noOfVehiclesRequired",
+        "noOfHgvVehiclesRequired",
+        "noOfLgvVehiclesRequired",
         "noOfTrailersRequired",
         "permission",
         "address"
@@ -18,8 +19,10 @@ public class OperatingCentreBuilder {
 
     @JsonProperty("application")
     private String application;
-    @JsonProperty("noOfVehiclesRequired")
-    private String noOfVehiclesRequired;
+    @JsonProperty("noOfHgvVehiclesRequired")
+    private String noOfHgvVehiclesRequired;
+    @JsonProperty("noOfLgvVehiclesRequired")
+    private String noOfLgvVehiclesRequired;
     @JsonProperty("noOfTrailersRequired")
     private String noOfTrailersRequired;
     @JsonProperty("permission")
@@ -42,18 +45,33 @@ public class OperatingCentreBuilder {
         return this;
     }
 
-    @JsonProperty("noOfVehiclesRequired")
-    public String getNoOfVehiclesRequired() {
-        return noOfVehiclesRequired;
+    @JsonProperty("noOfHgvVehiclesRequired")
+    public String getNoOfHgvVehiclesRequired() {
+        return noOfHgvVehiclesRequired;
     }
 
-    @JsonProperty("noOfVehiclesRequired")
-    public void setNoOfVehiclesRequired(String noOfVehiclesRequired) {
-        this.noOfVehiclesRequired = noOfVehiclesRequired;
+    @JsonProperty("noOfHgvVehiclesRequired")
+    public void setNoOfHgvVehiclesRequired(String noOfHgvVehiclesRequired) {
+        this.noOfHgvVehiclesRequired = noOfHgvVehiclesRequired;
     }
 
-    public OperatingCentreBuilder withNoOfVehiclesRequired(String noOfVehiclesRequired) {
-        this.noOfVehiclesRequired = noOfVehiclesRequired;
+    public OperatingCentreBuilder withNoOfHgvVehiclesRequired(String noOfHgvVehiclesRequired) {
+        this.noOfHgvVehiclesRequired = noOfHgvVehiclesRequired;
+        return this;
+    }
+
+    @JsonProperty("noOfLgvVehiclesRequired")
+    public String getNoOfLgvVehiclesRequired() {
+        return noOfLgvVehiclesRequired;
+    }
+
+    @JsonProperty("noOfLgvVehiclesRequired")
+    public void setNoOfLgvVehiclesRequired(String noOfLgvVehiclesRequired) {
+        this.noOfLgvVehiclesRequired = noOfLgvVehiclesRequired;
+    }
+
+    public OperatingCentreBuilder withNoOfLgvVehiclesRequired(String noOfLgvVehiclesRequired) {
+        this.noOfLgvVehiclesRequired = noOfLgvVehiclesRequired;
         return this;
     }
 
@@ -107,7 +125,8 @@ public class OperatingCentreBuilder {
     public String toString() {
         return  new ToStringBuilder(ToStringStyle.JSON_STYLE)
                 .append("application", getApplication())
-                .append("noOfVehiclesRequired", getNoOfVehiclesRequired())
+                .append("noOfHgvVehiclesRequired", getNoOfHgvVehiclesRequired())
+                .append("noOfLgvVehiclesRequired", getNoOfLgvVehiclesRequired())
                 .append("noOfTrailersRequired", getNoOfTrailersRequired())
                 .append("permission", getPermission())
                 .append("address", getAddress()).toString();

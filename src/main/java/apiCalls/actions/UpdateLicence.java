@@ -630,7 +630,7 @@ public class UpdateLicence extends BaseAPI {
         }
         String updateOperatingCentreResource = URL.build(env, String.format("application/%s/variation-operating-centre/%s", application.getLicenceId(), getVariationApplicationId())).toString();
         OperatingCentreVariationBuilder updateOperatingCentre = new OperatingCentreVariationBuilder().withId(getVariationApplicationId())
-                .withApplication(getVariationApplicationId()).withNoOfVehiclesRequired(String.valueOf(application.getNoOfVehiclesRequested()))
+                .withApplication(getVariationApplicationId()).withNoOfVehiclesRequired(String.valueOf(application.getNoOfAddedHgvVehicles()))
                 .withVersion(version);
         apiResponse = RestUtils.put(updateOperatingCentre, updateOperatingCentreResource, apiHeaders.getHeaders());
 
@@ -841,7 +841,7 @@ public class UpdateLicence extends BaseAPI {
         String interimApplicationResource = URL.build(env, String.format("application/%s/interim/", applicationId)).toString();
         int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationId, "version", "1"));
 
-        InterimApplicationBuilder interimApplicationBuilder = new InterimApplicationBuilder().withAuthVehicles(String.valueOf(application.getNoOfVehiclesRequested())).withAuthTrailers(String.valueOf(application.getNoOfVehiclesRequested()))
+        InterimApplicationBuilder interimApplicationBuilder = new InterimApplicationBuilder().withAuthVehicles(String.valueOf(application.getNoOfAddedHgvVehicles())).withAuthTrailers(String.valueOf(application.getNoOfAddedHgvVehicles()))
                 .withRequested("Y").withReason(getInterimReason()).withStartDate(getInterimStartDate()).withEndDate(getInterimEndDate())
                 .withAction("grant").withId(applicationId).withVersion(applicationVersion);
         apiResponse = RestUtils.put(interimApplicationBuilder, interimApplicationResource, apiHeaders.getHeaders());
