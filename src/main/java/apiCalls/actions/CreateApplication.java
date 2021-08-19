@@ -847,18 +847,18 @@ public class CreateApplication extends BaseAPI {
                 .withTrafficArea(getTrafficArea().value()).withEnforcementArea(getEnforcementArea().value()).withVersion(applicationVersion);
 
         if (operatorType.equals(OperatorType.GOODS.asString())) {
-            updateOperatingCentre.withTotHgvAuthVehicles(getTotalOperatingCentreHgvAuthority())
+            updateOperatingCentre.withTotAuthHgvVehicles(getTotalOperatingCentreHgvAuthority())
                     .withTotCommunityLicences(1)
                     .withTAuthTrailers(getNoOfOperatingCentreTrailerAuthorised());
             //TODO: Community licences aren't displaying number.
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.RESTRICTED.asString()))) {
-            updateOperatingCentre.withTotHgvAuthVehicles(getTotalOperatingCentreHgvAuthority())
+            updateOperatingCentre.withTotAuthHgvVehicles(getTotalOperatingCentreHgvAuthority())
                     .withTotCommunityLicences(1);
         }
 
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
-            updateOperatingCentre.withTotHgvAuthVehicles(getRestrictedVehicles());
+            updateOperatingCentre.withTotAuthHgvVehicles(getRestrictedVehicles());
         }
 
         apiResponse = RestUtils.put(updateOperatingCentre, updateOperatingCentreResource, apiHeaders.getHeaders());

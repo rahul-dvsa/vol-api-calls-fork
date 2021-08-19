@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
-        "totHgvAuthVehicles",
+        "totAuthHgvVehicles",
         "totAuthTrailers",
         "trafficArea",
         "totCommunityLicences",
@@ -20,8 +20,8 @@ public class OperatingCentreUpdater {
 
     @JsonProperty("id")
     private String id;
-    @JsonProperty("totHgvAuthVehicles")
-    private Integer totHgvAuthVehicles;
+    @JsonProperty("totAuthHgvVehicles")
+    private Integer totAuthHgvVehicles;
     @JsonProperty("totAuthTrailers")
     private Integer totAuthTrailers;
     @JsonProperty("trafficArea")
@@ -48,18 +48,18 @@ public class OperatingCentreUpdater {
         return this;
     }
 
-    @JsonProperty("totHgvAuthVehicles")
-    public Integer getTotHgvAuthVehicles() {
-        return totHgvAuthVehicles;
+    @JsonProperty("totAuthHgvVehicles")
+    public Integer getTotAuthHgvVehicles() {
+        return totAuthHgvVehicles;
     }
 
-    @JsonProperty("totHgvAuthVehicles")
-    public void setTotHgvAuthVehicles(Integer totHgvAuthVehicles) {
-        this.totHgvAuthVehicles = totHgvAuthVehicles;
+    @JsonProperty("totAuthHgvVehicles")
+    public void setTotAuthHgvVehicles(Integer totAuthHgvVehicles) {
+        this.totAuthHgvVehicles = totAuthHgvVehicles;
     }
 
-    public OperatingCentreUpdater withTotHgvAuthVehicles(Integer totAuthHgvVehicles) {
-        this.totHgvAuthVehicles = totAuthHgvVehicles;
+    public OperatingCentreUpdater withTotAuthHgvVehicles(Integer totAuthHgvVehicles) {
+        this.totAuthHgvVehicles = totAuthHgvVehicles;
         return this;
     }
 
@@ -141,7 +141,7 @@ public class OperatingCentreUpdater {
     public String toString() {
         return  new ToStringBuilder(ToStringStyle.JSON_STYLE)
                 .append("id", getId())
-                .append("totAuthHgvVehicles", getTotHgvAuthVehicles())
+                .append("totAuthHgvVehicles", getTotAuthHgvVehicles())
                 .append("totAuthTrailers", getTotAuthTrailers())
                 .append("trafficArea", getTrafficArea())
                 .append("enforcementArea", getEnforcementArea())
