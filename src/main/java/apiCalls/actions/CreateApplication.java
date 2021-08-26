@@ -849,7 +849,7 @@ public class CreateApplication extends BaseAPI {
         if (operatorType.equals(OperatorType.GOODS.asString())) {
             updateOperatingCentre.withTotAuthHgvVehicles(getTotalOperatingCentreHgvAuthority())
                     .withTotCommunityLicences(1)
-                    .withTAuthTrailers(getNoOfOperatingCentreTrailerAuthorised());
+                    .withTotAuthTrailers(getNoOfOperatingCentreTrailerAuthorised());
             //TODO: Community licences aren't displaying number.
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.RESTRICTED.asString()))) {
