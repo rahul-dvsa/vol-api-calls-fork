@@ -9,6 +9,7 @@ import activesupport.http.RestUtils;
 import activesupport.number.Int;
 import apiCalls.Utils.volBuilders.*;
 import apiCalls.Utils.generic.*;
+import apiCalls.enums.LicenceType;
 import apiCalls.enums.OperatorType;
 import apiCalls.enums.UserRoles;
 import io.restassured.response.ValidatableResponse;
@@ -857,6 +858,19 @@ public class UpdateLicence extends BaseAPI {
         apiResponse = RestUtils.post(interimApplicationBuilder, interimApplicationResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
+    }
+
+    public ValidatableResponse updateLgvAuthorisationOnVariation(int hgvAuthorisation, int lgvAuthorisation) {
+        if (this.application.getLicenceType().equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
+            return null;
+        } else {
+            int applicationVersion = Integer.parseInt(this.fetchApplicationInformation(this.variationApplicationId, "version", "1"));
+            String updateOperatingCentreResource = URL.build(env, String.format("application/%s/operating-centres", this.variationApplicationId)).toString();
+            OperatingCentreUpdater updateOperatingCentre = (new OperatingCentreUpdater()).withId(this.variationApplicationId).withTrafficArea(this.application.getTrafficArea().value()).withEnforcementArea(this.application.getEnforcementArea().value()).withVersion(applicationVersion).withTotAuthHgvVehicles(hgvAuthorisation).withTotCommunityLicences(1).withTotAuthTrailers(this.application.getNoOfOperatingCentreTrailerAuthorised()).withTotAuthLgvVehicles(lgvAuthorisation);
+            this.apiResponse = RestUtils.put(updateOperatingCentre, updateOperatingCentreResource, this.apiHeaders.getHeaders());
+            Utils.checkHTTPStatusCode(this.apiResponse, 200);
+            return this.apiResponse;
+        }
     }
 
 }
