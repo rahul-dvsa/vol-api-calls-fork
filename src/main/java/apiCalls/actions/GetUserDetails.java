@@ -5,6 +5,7 @@ import activesupport.system.Properties;
 
 import apiCalls.Utils.generic.Headers;
 import apiCalls.Utils.generic.Utils;
+import apiCalls.Utils.volBuilders.TokenRequestBuilder;
 import apiCalls.enums.UserType;
 import io.restassured.response.ValidatableResponse;
 
@@ -41,17 +42,21 @@ public class GetUserDetails {
     private ValidatableResponse apiResponse;
     private Headers apiHeaders = new Headers();
 
-    public ValidatableResponse getUserDetails(String userType, String userId) {
+    public ValidatableResponse getUserDetails(String username, String password, String userType) {
         String userDetailsResource;
-        apiHeaders.getHeaders().put("x-pid", Utils.config.getString("apiHeader"));
+        GetJWTToken jwtToken = new GetJWTToken();
+        String token = jwtToken.getAPIToken(username,password,userType);
+        apiHeaders.getHeaders().put("Authorization",token);
+
+        RegisterUser user = new RegisterUser();
 
         if (userType.equals(UserType.EXTERNAL.asString())) {
-            userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, userId)).toString();
+            userDetailsResource = URL.build(env, String.format("user/%s/%s", userType,user.getUserId())).toString();
             apiResponse = RestUtils.get(userDetailsResource, apiHeaders.getHeaders());
             setPid(apiResponse.extract().jsonPath().getString("pid"));
             setOrganisationId(apiResponse.extract().jsonPath().prettyPeek().getString("organisationUsers.organisation.id"));
         } else if (userType.equals(UserType.INTERNAL.asString())) {
-            userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, userId)).toString();
+            userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, user.getUserId())).toString();
             apiResponse = RestUtils.get(userDetailsResource, apiHeaders.getHeaders());
         }
 
