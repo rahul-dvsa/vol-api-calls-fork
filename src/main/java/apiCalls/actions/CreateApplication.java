@@ -688,7 +688,7 @@ public class CreateApplication extends BaseAPI {
 
     public ValidatableResponse startApplication() {
         String createApplicationResource = URL.build(env, "application").toString();
-        apiHeaders.headers.put("x-pid", getUserDetails().getPid());
+        apiHeaders.headers.put("Authorization", getUserDetails().getJwtToken());
 
         ApplicationBuilder applicationBuilder = new ApplicationBuilder().withOperatorType(getOperatorType())
                 .withLicenceType(getLicenceType()).withNiFlag(getNiFlag()).withOrganisation(getUserDetails().getOrganisationId());

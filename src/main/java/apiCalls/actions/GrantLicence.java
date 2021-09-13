@@ -8,6 +8,7 @@ import apiCalls.Utils.volBuilders.*;
 import apiCalls.Utils.generic.BaseAPI;
 import apiCalls.Utils.generic.Headers;
 import apiCalls.Utils.generic.Utils;
+import apiCalls.enums.UserType;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
@@ -25,16 +26,17 @@ import java.util.List;
 public class GrantLicence extends BaseAPI{
 
     private static final Logger LOGGER = LogManager.getLogger(GrantLicence.class);
-    private EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
-    private FakerUtils faker = new FakerUtils();
-    private Headers apiHeaders = new Headers();
-    private Dates date = new Dates(LocalDate::new);
+    private final EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
+    private final FakerUtils faker = new FakerUtils();
+    private final Headers apiHeaders = new Headers();
+    private final Dates date = new Dates(LocalDate::new);
     private ValidatableResponse apiResponse;
     private final CreateApplication application;
     private List outstandingFeesIds;
-    private List<Double> feesToPay = new ArrayList<>();
+    private final List<Double> feesToPay = new ArrayList<>();
     private int feeId;
     private String dateState;
+    private final GetJWTToken jwtToken = new GetJWTToken();
 
     private void setFeeId(int feeId){
         this.feeId = feeId;
@@ -51,7 +53,7 @@ public class GrantLicence extends BaseAPI{
     public GrantLicence (CreateApplication application) {
         this.application = application;
         setDateState(date.getFormattedDate(0,0,0,"yyyy-MM-dd"));
-        apiHeaders.headers.put("x-pid", Utils.config.getString("apiHeader"));
+        apiHeaders.headers.put("Authorization",jwtToken.getAPIToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserType.INTERNAL.asString()));
     }
 
     public ValidatableResponse grantLicence() {

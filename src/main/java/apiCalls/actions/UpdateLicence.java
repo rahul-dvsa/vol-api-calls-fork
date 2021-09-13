@@ -1,6 +1,5 @@
 package apiCalls.actions;
 
-
 import activesupport.MissingRequiredArgument;
 import activesupport.dates.Dates;
 import activesupport.dates.LocalDateCalendar;
@@ -11,6 +10,7 @@ import apiCalls.Utils.volBuilders.*;
 import apiCalls.Utils.generic.*;
 import apiCalls.enums.OperatorType;
 import apiCalls.enums.UserRoles;
+import apiCalls.enums.UserType;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
@@ -27,7 +27,7 @@ import java.util.*;
 
 public class UpdateLicence extends BaseAPI {
     private final CreateApplication application;
-
+    private GetJWTToken jwtToken = new GetJWTToken();
     private ValidatableResponse apiResponse;
 
     private Dates date = new Dates(new LocalDateCalendar());
@@ -112,21 +112,33 @@ public class UpdateLicence extends BaseAPI {
 
     private static EnvironmentType env;
 
-    public String getAdminAPIHeader() { return adminAPIHeader; }
+    public String getAdminAPIHeader() {
+        return adminAPIHeader;
+    }
 
-    public void setAdminAPIHeader(String adminAPIHeader) { this.adminAPIHeader = adminAPIHeader; }
+    public void setAdminAPIHeader(String adminAPIHeader) {
+        this.adminAPIHeader = adminAPIHeader;
+    }
 
-    public String getVariationType() { return variationType; }
+    public String getVariationType() {
+        return variationType;
+    }
 
     public void setVariationType(String variationType) {
         this.variationType = variationType;
     }
 
-    public String getVariationApplicationId() { return variationApplicationId; }
+    public String getVariationApplicationId() {
+        return variationApplicationId;
+    }
 
-    public void setVariationApplicationId(String variationApplicationId) { this.variationApplicationId = variationApplicationId; }
+    public void setVariationApplicationId(String variationApplicationId) {
+        this.variationApplicationId = variationApplicationId;
+    }
 
-    public String getCaseType() { return caseType; }
+    public String getCaseType() {
+        return caseType;
+    }
 
     public void setCaseType(String caseType) {
         this.caseType = caseType;
@@ -136,47 +148,89 @@ public class UpdateLicence extends BaseAPI {
         return caseDescription;
     }
 
-    public void setCaseDescription(String caseDescription) { this.caseDescription = caseDescription; }
+    public void setCaseDescription(String caseDescription) {
+        this.caseDescription = caseDescription;
+    }
 
-    public String getDefendantType() { return defendantType; }
+    public String getDefendantType() {
+        return defendantType;
+    }
 
-    public void setDefendantType(String defendantType) { this.defendantType = defendantType; }
+    public void setDefendantType(String defendantType) {
+        this.defendantType = defendantType;
+    }
 
-    public String getDefendantFirstname() { return defendantFirstname; }
+    public String getDefendantFirstname() {
+        return defendantFirstname;
+    }
 
-    public void setDefendantFirstname(String defendantFirstname) { this.defendantFirstname = defendantFirstname; }
+    public void setDefendantFirstname(String defendantFirstname) {
+        this.defendantFirstname = defendantFirstname;
+    }
 
-    public String getDefendantLastname() { return defendantLastname; }
+    public String getDefendantLastname() {
+        return defendantLastname;
+    }
 
-    public void setDefendantLastname(String defendantLastname) { this.defendantLastname = defendantLastname; }
+    public void setDefendantLastname(String defendantLastname) {
+        this.defendantLastname = defendantLastname;
+    }
 
-    public String getDefendantBirthDate() { return defendantBirthDate; }
+    public String getDefendantBirthDate() {
+        return defendantBirthDate;
+    }
 
-    public void setDefendantBirthDate(String defendantBirthDate) { this.defendantBirthDate = defendantBirthDate; }
+    public void setDefendantBirthDate(String defendantBirthDate) {
+        this.defendantBirthDate = defendantBirthDate;
+    }
 
-    public String getOffenceDate() { return offenceDate; }
+    public String getOffenceDate() {
+        return offenceDate;
+    }
 
-    public void setOffenceDate(String offenceDate) { this.offenceDate = offenceDate; }
+    public void setOffenceDate(String offenceDate) {
+        this.offenceDate = offenceDate;
+    }
 
-    public String getConvictionDate() { return convictionDate; }
+    public String getConvictionDate() {
+        return convictionDate;
+    }
 
-    public void setConvictionDate(String convictionDate) { this.convictionDate = convictionDate; }
+    public void setConvictionDate(String convictionDate) {
+        this.convictionDate = convictionDate;
+    }
 
-    public String getConvictionCategory() { return convictionCategory; }
+    public String getConvictionCategory() {
+        return convictionCategory;
+    }
 
-    public void setConvictionCategory(String convictionCategory) { this.convictionCategory = convictionCategory; }
+    public void setConvictionCategory(String convictionCategory) {
+        this.convictionCategory = convictionCategory;
+    }
 
-    public String getCategoryText() { return categoryText; }
+    public String getCategoryText() {
+        return categoryText;
+    }
 
-    public void setCategoryText(String categoryText) { this.categoryText = categoryText; }
+    public void setCategoryText(String categoryText) {
+        this.categoryText = categoryText;
+    }
 
-    public String getCourt() { return court; }
+    public String getCourt() {
+        return court;
+    }
 
-    public void setCourt(String court) { this.court = court; }
+    public void setCourt(String court) {
+        this.court = court;
+    }
 
-    public String getPenalty() { return penalty; }
+    public String getPenalty() {
+        return penalty;
+    }
 
-    public void setPenalty(String penalty) { this.penalty = penalty; }
+    public void setPenalty(String penalty) {
+        this.penalty = penalty;
+    }
 
     public String getCosts() {
         return costs;
@@ -186,147 +240,289 @@ public class UpdateLicence extends BaseAPI {
         this.costs = costs;
     }
 
-    public String getConvictionNotes() { return convictionNotes; }
-
-    public void setConvictionNotes(String convictionNotes) { this.convictionNotes = convictionNotes; }
-
-    public String getComplainantForename() { return complainantForename; }
-
-    public void setComplainantForename(String complainantForename) { this.complainantForename = complainantForename; }
-
-    public String getComplainantFamilyName() { return complainantFamilyName; }
-
-    public void setComplainantFamilyName(String complainantFamilyName) { this.complainantFamilyName = complainantFamilyName; }
-
-    public String getComplaintType() { return complaintType; }
-
-    public void setComplaintType(String complaintType) { this.complaintType = complaintType; }
-
-    public String getComplainantStatus() { return complainantStatus; }
-
-    public void setComplainantStatus(String complainantStatus) { this.complainantStatus = complainantStatus; }
-
-    public String getIsCompliance() { return isCompliance; }
-
-    public void setIsCompliance(String isCompliance) { this.isCompliance = isCompliance; }
-
-    public String getComplaintDate() { return complaintDate; }
-
-    public void setComplaintDate(String complaintDate) { this.complaintDate = complaintDate; }
-
-    public String getInfringementDate() { return infringementDate; }
-
-    public void setInfringementDate(String infringementDate) { this.infringementDate = infringementDate; }
-
-    public String getComplainantDescription() { return complainantDescription; }
-
-    public void setComplainantDescription(String complainantDescription) { this.complainantDescription = complainantDescription; }
-
-    public String getDriverForename() { return driverForename; }
-
-    public void setDriverForename(String driverForename) { this.driverForename = driverForename; }
-
-    public String getDriverFamilyName() { return driverFamilyName; }
-
-    public void setDriverFamilyName(String driverFamilyName) { this.driverFamilyName = driverFamilyName; }
-
-    public String getConditionUndertakingType() { return conditionUndertakingType; }
-
-    public void setConditionUndertakingType(String conditionUndertakingType) { this.conditionUndertakingType = conditionUndertakingType; }
-
-    public String getConditionUndertakingCategory() { return conditionUndertakingCategory; }
-
-    public void setConditionUndertakingCategory(String conditionUndertakingCategory) { this.conditionUndertakingCategory = conditionUndertakingCategory; }
-
-    public String getConditionsUndertakingDescription() { return conditionsUndertakingDescription; }
-
-    public void setConditionsUndertakingDescription(String conditionsUndertakingDescription) { this.conditionsUndertakingDescription = conditionsUndertakingDescription; }
-
-    public String getFulfilled() { return fulfilled; }
-
-    public void setFulfilled(String fulfilled) { this.fulfilled = fulfilled; }
-
-    public String getAttachedTo() { return attachedTo; }
-
-    public void setAttachedTo(String attachedTo) { this.attachedTo = attachedTo; }
-
-    public String getSubmissionType() { return submissionType; }
-
-    public void setSubmissionType(String submissionType) { this.submissionType = submissionType; }
-
-    public String getCaseNoteComment() { return caseNoteComment; }
-
-    public void setCaseNoteComment(String caseNoteComment) { this.caseNoteComment = caseNoteComment; }
-
-    public String getCaseNotePriority() { return caseNotePriority; }
-
-    public void setCaseNotePriority(String caseNotePriority) { this.caseNotePriority = caseNotePriority; }
-
-    public String getInternalUserId() { return internalUserId; }
-
-    public void setInternalUserId(String internalUserId) { this.internalUserId = internalUserId; }
-
-    public String getInternalUserTeam() { return internalUserTeam; }
-
-    public void setInternalUserTeam(String internalUserTeam) { this.internalUserTeam = internalUserTeam; }
-
-    public String getInternalUserForeName(){ return internalUserForeName; }
-
-    public void setInternalUserForeName(String internalUserForeName){ this.internalUserForeName = internalUserForeName; }
-
-    public String getInternalUserFamilyName() { return internalUserFamilyName; }
-
-    public void setInternalUserFamilyName(String internalUserFamilyName) { this.internalUserFamilyName = internalUserFamilyName; }
-
-    public String getInternalUserLogin() { return internalUserLogin; }
-
-    public void setInternalUserLogin(String internalUserLogin) { this.internalUserLogin = internalUserLogin; }
-
-    public String getInternalUserEmailAddress() { return internalUserEmailAddress; }
-
-    public void setInternalUserEmailAddress(String internalUserEmailAddress) { this.internalUserEmailAddress = internalUserEmailAddress; }
-
-    public String getInternalUserDOB() { return internalUserDOB; }
-
-    public void setInternalUserDOB(String internalUserDOB) { this.internalUserDOB = internalUserDOB; }
-
-    public String getInternalUserAddressLine1() { return internalUserAddressLine1; }
-
-    public void setInternalUserAddressLine1(String internalUserAddressLine1) { this.internalUserAddressLine1 = internalUserAddressLine1; }
-
-    public String getInternalUserAddressLine2() { return internalUserAddressLine2; }
-
-    public void setInternalUserAddressLine2(String internalUserAddressLine2) { this.internalUserAddressLine2 = internalUserAddressLine2; }
-
-    public String getInternalUserAddressLine3() { return internalUserAddressLine3; }
-
-    public void setInternalUserAddressLine3(String internalUserAddressLine3) { this.internalUserAddressLine3 = internalUserAddressLine3; }
-
-    public String getInternalUserAddressLine4() { return internalUserAddressLine4; }
-
-    public void setInternalUserAddressLine4(String internalUserAddressLine4) { this.internalUserAddressLine4 = internalUserAddressLine4; }
-
-    public String getInternalUserTown() { return internalUserTown; }
-
-    public void setInternalUserTown(String internalUserTown) { this.internalUserTown = internalUserTown; }
-
-    public String getInternalUserPostCode() { return internalUserPostCode; }
-
-    public void setInternalUserPostCode(String internalUserPostCode) { this.internalUserPostCode = internalUserPostCode; }
-
-    public String getCountryCode() { return countryCode; }
-
-    public void setCountryCode(String countryCode) { this.countryCode = countryCode; }
-
-    public String getDiscsStolen() { return discsStolen; }
-
-    public void setDiscsStolen(String discsStolen) { this.discsStolen = discsStolen; }
-
-    public String getDiscSequence() { return discSequence; }
-
-    public void setDiscSequence(String discSequence) { this.discSequence = discSequence; }
-
-    public String getStartNumber() { return startNumber; }
+    public String getConvictionNotes() {
+        return convictionNotes;
+    }
+
+    public void setConvictionNotes(String convictionNotes) {
+        this.convictionNotes = convictionNotes;
+    }
+
+    public String getComplainantForename() {
+        return complainantForename;
+    }
+
+    public void setComplainantForename(String complainantForename) {
+        this.complainantForename = complainantForename;
+    }
+
+    public String getComplainantFamilyName() {
+        return complainantFamilyName;
+    }
+
+    public void setComplainantFamilyName(String complainantFamilyName) {
+        this.complainantFamilyName = complainantFamilyName;
+    }
+
+    public String getComplaintType() {
+        return complaintType;
+    }
+
+    public void setComplaintType(String complaintType) {
+        this.complaintType = complaintType;
+    }
+
+    public String getComplainantStatus() {
+        return complainantStatus;
+    }
+
+    public void setComplainantStatus(String complainantStatus) {
+        this.complainantStatus = complainantStatus;
+    }
+
+    public String getIsCompliance() {
+        return isCompliance;
+    }
+
+    public void setIsCompliance(String isCompliance) {
+        this.isCompliance = isCompliance;
+    }
+
+    public String getComplaintDate() {
+        return complaintDate;
+    }
+
+    public void setComplaintDate(String complaintDate) {
+        this.complaintDate = complaintDate;
+    }
+
+    public String getInfringementDate() {
+        return infringementDate;
+    }
+
+    public void setInfringementDate(String infringementDate) {
+        this.infringementDate = infringementDate;
+    }
+
+    public String getComplainantDescription() {
+        return complainantDescription;
+    }
+
+    public void setComplainantDescription(String complainantDescription) {
+        this.complainantDescription = complainantDescription;
+    }
+
+    public String getDriverForename() {
+        return driverForename;
+    }
+
+    public void setDriverForename(String driverForename) {
+        this.driverForename = driverForename;
+    }
+
+    public String getDriverFamilyName() {
+        return driverFamilyName;
+    }
+
+    public void setDriverFamilyName(String driverFamilyName) {
+        this.driverFamilyName = driverFamilyName;
+    }
+
+    public String getConditionUndertakingType() {
+        return conditionUndertakingType;
+    }
+
+    public void setConditionUndertakingType(String conditionUndertakingType) {
+        this.conditionUndertakingType = conditionUndertakingType;
+    }
+
+    public String getConditionUndertakingCategory() {
+        return conditionUndertakingCategory;
+    }
+
+    public void setConditionUndertakingCategory(String conditionUndertakingCategory) {
+        this.conditionUndertakingCategory = conditionUndertakingCategory;
+    }
+
+    public String getConditionsUndertakingDescription() {
+        return conditionsUndertakingDescription;
+    }
+
+    public void setConditionsUndertakingDescription(String conditionsUndertakingDescription) {
+        this.conditionsUndertakingDescription = conditionsUndertakingDescription;
+    }
+
+    public String getFulfilled() {
+        return fulfilled;
+    }
+
+    public void setFulfilled(String fulfilled) {
+        this.fulfilled = fulfilled;
+    }
+
+    public String getAttachedTo() {
+        return attachedTo;
+    }
+
+    public void setAttachedTo(String attachedTo) {
+        this.attachedTo = attachedTo;
+    }
+
+    public String getSubmissionType() {
+        return submissionType;
+    }
+
+    public void setSubmissionType(String submissionType) {
+        this.submissionType = submissionType;
+    }
+
+    public String getCaseNoteComment() {
+        return caseNoteComment;
+    }
+
+    public void setCaseNoteComment(String caseNoteComment) {
+        this.caseNoteComment = caseNoteComment;
+    }
+
+    public String getCaseNotePriority() {
+        return caseNotePriority;
+    }
+
+    public void setCaseNotePriority(String caseNotePriority) {
+        this.caseNotePriority = caseNotePriority;
+    }
+
+    public String getInternalUserId() {
+        return internalUserId;
+    }
+
+    public void setInternalUserId(String internalUserId) {
+        this.internalUserId = internalUserId;
+    }
+
+    public String getInternalUserTeam() {
+        return internalUserTeam;
+    }
+
+    public void setInternalUserTeam(String internalUserTeam) {
+        this.internalUserTeam = internalUserTeam;
+    }
+
+    public String getInternalUserForeName() {
+        return internalUserForeName;
+    }
+
+    public void setInternalUserForeName(String internalUserForeName) {
+        this.internalUserForeName = internalUserForeName;
+    }
+
+    public String getInternalUserFamilyName() {
+        return internalUserFamilyName;
+    }
+
+    public void setInternalUserFamilyName(String internalUserFamilyName) {
+        this.internalUserFamilyName = internalUserFamilyName;
+    }
+
+    public String getInternalUserLogin() {
+        return internalUserLogin;
+    }
+
+    public void setInternalUserLogin(String internalUserLogin) {
+        this.internalUserLogin = internalUserLogin;
+    }
+
+    public String getInternalUserEmailAddress() {
+        return internalUserEmailAddress;
+    }
+
+    public void setInternalUserEmailAddress(String internalUserEmailAddress) {
+        this.internalUserEmailAddress = internalUserEmailAddress;
+    }
+
+    public String getInternalUserDOB() {
+        return internalUserDOB;
+    }
+
+    public void setInternalUserDOB(String internalUserDOB) {
+        this.internalUserDOB = internalUserDOB;
+    }
+
+    public String getInternalUserAddressLine1() {
+        return internalUserAddressLine1;
+    }
+
+    public void setInternalUserAddressLine1(String internalUserAddressLine1) {
+        this.internalUserAddressLine1 = internalUserAddressLine1;
+    }
+
+    public String getInternalUserAddressLine2() {
+        return internalUserAddressLine2;
+    }
+
+    public void setInternalUserAddressLine2(String internalUserAddressLine2) {
+        this.internalUserAddressLine2 = internalUserAddressLine2;
+    }
+
+    public String getInternalUserAddressLine3() {
+        return internalUserAddressLine3;
+    }
+
+    public void setInternalUserAddressLine3(String internalUserAddressLine3) {
+        this.internalUserAddressLine3 = internalUserAddressLine3;
+    }
+
+    public String getInternalUserAddressLine4() {
+        return internalUserAddressLine4;
+    }
+
+    public void setInternalUserAddressLine4(String internalUserAddressLine4) {
+        this.internalUserAddressLine4 = internalUserAddressLine4;
+    }
+
+    public String getInternalUserTown() {
+        return internalUserTown;
+    }
+
+    public void setInternalUserTown(String internalUserTown) {
+        this.internalUserTown = internalUserTown;
+    }
+
+    public String getInternalUserPostCode() {
+        return internalUserPostCode;
+    }
+
+    public void setInternalUserPostCode(String internalUserPostCode) {
+        this.internalUserPostCode = internalUserPostCode;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    public String getDiscsStolen() {
+        return discsStolen;
+    }
+
+    public void setDiscsStolen(String discsStolen) {
+        this.discsStolen = discsStolen;
+    }
+
+    public String getDiscSequence() {
+        return discSequence;
+    }
+
+    public void setDiscSequence(String discSequence) {
+        this.discSequence = discSequence;
+    }
+
+    public String getStartNumber() {
+        return startNumber;
+    }
 
     private void setStartNumber(String startNumber) {
         this.startNumber = startNumber;
@@ -340,37 +536,57 @@ public class UpdateLicence extends BaseAPI {
         this.endNumber = endNumber;
     }
 
-    public String getQueueId() { return queueId; }
+    public String getQueueId() {
+        return queueId;
+    }
 
     public void setQueueId(String queueId) {
         this.queueId = queueId;
     }
 
-    public String getInterimReason() { return interimReason; }
+    public String getInterimReason() {
+        return interimReason;
+    }
 
-    public void setInterimReason(String interimReason) { this.interimReason = interimReason; }
+    public void setInterimReason(String interimReason) {
+        this.interimReason = interimReason;
+    }
 
-    public String getInterimStartDate() { return interimStartDate; }
+    public String getInterimStartDate() {
+        return interimStartDate;
+    }
 
-    public void setInterimStartDate(String interimStartDate) { this.interimStartDate = interimStartDate; }
+    public void setInterimStartDate(String interimStartDate) {
+        this.interimStartDate = interimStartDate;
+    }
 
-    public String getInterimEndDate() { return interimEndDate; }
+    public String getInterimEndDate() {
+        return interimEndDate;
+    }
 
-    public void setInterimEndDate(String interimEndDate) { this.interimEndDate = interimEndDate; }
+    public void setInterimEndDate(String interimEndDate) {
+        this.interimEndDate = interimEndDate;
+    }
 
-    public String getGoodOrPsv() { return goodOrPsv; }
+    public String getGoodOrPsv() {
+        return goodOrPsv;
+    }
 
     private void setGoodOrPsv(String goodOrPsv) {
         this.goodOrPsv = goodOrPsv;
     }
 
-    public String getTrafficAreaName() { return trafficAreaName; }
+    public String getTrafficAreaName() {
+        return trafficAreaName;
+    }
 
     private void setTrafficAreaName(String trafficAreaName) {
         this.trafficAreaName = trafficAreaName;
     }
 
-    private void setBusinessType(String businessType) { this.businessType = businessType; }
+    private void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
 
     public String getBusinessType() {
         return businessType;
@@ -380,13 +596,21 @@ public class UpdateLicence extends BaseAPI {
         this.licenceType = licenceType;
     }
 
-    public String getLicenceType() { return licenceType; }
+    public String getLicenceType() {
+        return licenceType;
+    }
 
-    public String getLicenceStatus() { return licenceStatus; }
+    public String getLicenceStatus() {
+        return licenceStatus;
+    }
 
-    private void setLicenceStatus(String licenceStatus) { this.licenceStatus = licenceStatus; }
+    private void setLicenceStatus(String licenceStatus) {
+        this.licenceStatus = licenceStatus;
+    }
 
-    public int getCaseId() { return caseId; }
+    public int getCaseId() {
+        return caseId;
+    }
 
     private void setCaseId(int caseId) {
         this.caseId = caseId;
@@ -400,7 +624,9 @@ public class UpdateLicence extends BaseAPI {
         this.caseNoteId = caseNoteId;
     }
 
-    public int getComplaintId() { return complaintId; }
+    public int getComplaintId() {
+        return complaintId;
+    }
 
     private void setComplaintId(int complaintId) {
         this.complaintId = complaintId;
@@ -422,7 +648,9 @@ public class UpdateLicence extends BaseAPI {
         this.conditionUndertaking = conditionUndertaking;
     }
 
-    public int getSubmissionsId() { return submissionsId; }
+    public int getSubmissionsId() {
+        return submissionsId;
+    }
 
     private void setSubmissionsId(int submissionsId) {
         this.submissionsId = submissionsId;
@@ -438,7 +666,7 @@ public class UpdateLicence extends BaseAPI {
 
     public UpdateLicence(CreateApplication application) {
         this.application = application;
-        apiHeaders.headers.put("x-pid", Utils.config.getString("apiHeader"));
+        apiHeaders.headers.put("Authorization", jwtToken.getAPIToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserType.INTERNAL.asString()));
         setVariationType(null);
         setAdminAPIHeader(Utils.config.getString("apiHeader"));
 
@@ -471,8 +699,8 @@ public class UpdateLicence extends BaseAPI {
         setComplainantStatus("cs_yst");
         setIsCompliance("true");
         Dates dates = new Dates(LocalDate::new);
-        setComplaintDate(dates.getFormattedDate(0,0,-4,"yyyy-MM-dd"));
-        setInfringementDate(dates.getFormattedDate(0,0,-5,"yyyy-MM-dd"));
+        setComplaintDate(dates.getFormattedDate(0, 0, -4, "yyyy-MM-dd"));
+        setInfringementDate(dates.getFormattedDate(0, 0, -5, "yyyy-MM-dd"));
         setComplainantDescription("Driver correcting entry in driver's record book in wrong fashion");
         setDriverForename(faker.generateFirstName());
         setDriverFamilyName(faker.generateLastName());
@@ -495,8 +723,8 @@ public class UpdateLicence extends BaseAPI {
         setInternalUserTeam("1");
         setInternalUserForeName(faker.generateFirstName());
         setInternalUserFamilyName(faker.generateLastName());
-        setInternalUserLogin( String.format("%s%s%s", getInternalUserForeName(), getInternalUserFamilyName(), Int.random(10000, 99999)) );
-        setInternalUserEmailAddress( getInternalUserLogin().concat("AsTheAdminUser@dvsavol.org") );
+        setInternalUserLogin(String.format("%s%s%s", getInternalUserForeName(), getInternalUserFamilyName(), Int.random(10000, 99999)));
+        setInternalUserEmailAddress(getInternalUserLogin().concat("AsTheAdminUser@dvsavol.org"));
         setInternalUserDOB(date.getFormattedDate(0, 0, -30, "yyyy-MM-dd"));
         LinkedHashMap<String, String> internalUserAddress = faker.generateAddress();
         setInternalUserAddressLine1(internalUserAddress.get("addressLine1"));
