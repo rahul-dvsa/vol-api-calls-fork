@@ -25,6 +25,6 @@ public class GetJWTToken {
 
         Utils.checkHTTPStatusCode(tokenResponse, HttpStatus.SC_OK);
 
-        return tokenResponse.extract().body().jsonPath().getString("flags.identity.Token.AccessToken");
+        return tokenResponse.extract().body().jsonPath().getString("flags.identity.tokenId");
     }
 }
