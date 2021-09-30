@@ -39,8 +39,8 @@ public class InterimApplicationBuilder {
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonProperty("authVehicles")
-    public String getAuthVehicles() {
+    @JsonProperty("authHgvVehicles")
+    public String getAuthHgvVehicles() {
         return authHgvVehicles;
     }
 
