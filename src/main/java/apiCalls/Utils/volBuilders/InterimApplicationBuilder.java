@@ -12,8 +12,8 @@ import java.util.Map;
 
 public class InterimApplicationBuilder {
 
-    @JsonProperty("authVehicles")
-    private String authVehicles;
+    @JsonProperty("authHgvVehicles")
+    private String authHgvVehicles;
     @JsonProperty("requested")
     private String requested;
     @JsonProperty("reason")
@@ -41,16 +41,16 @@ public class InterimApplicationBuilder {
 
     @JsonProperty("authVehicles")
     public String getAuthVehicles() {
-        return authVehicles;
+        return authHgvVehicles;
     }
 
     @JsonProperty("authVehicles")
     public void setAuthVehicles(String authVehicles) {
-        this.authVehicles = authVehicles;
+        this.authHgvVehicles = authVehicles;
     }
 
     public InterimApplicationBuilder withAuthVehicles(String authVehicles){
-        this.authVehicles = authVehicles;
+        this.authHgvVehicles = authHgvVehicles;
         return this;
     }
 
@@ -232,7 +232,7 @@ public class InterimApplicationBuilder {
     @Override
     public String toString() {
         return new ToStringBuilder(ToStringStyle.JSON_STYLE)
-                .append("authVehicles", authVehicles)
+                .append("authVehicles", authHgvVehicles)
                 .append("requested", requested)
                 .append("reason", reason)
                 .append("startDate", startDate)
