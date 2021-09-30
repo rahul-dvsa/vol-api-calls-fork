@@ -44,12 +44,12 @@ public class InterimApplicationBuilder {
         return authHgvVehicles;
     }
 
-    @JsonProperty("authVehicles")
-    public void setAuthVehicles(String authVehicles) {
-        this.authHgvVehicles = authVehicles;
+    @JsonProperty("authHgvVehicles")
+    public void setAuthHgvVehicles(String authHgvVehicles) {
+        this.authHgvVehicles = authHgvVehicles;
     }
 
-    public InterimApplicationBuilder withAuthVehicles(String authVehicles){
+    public InterimApplicationBuilder withAuthHgvVehicles(String authHgvVehicles){
         this.authHgvVehicles = authHgvVehicles;
         return this;
     }
@@ -232,7 +232,7 @@ public class InterimApplicationBuilder {
     @Override
     public String toString() {
         return new ToStringBuilder(ToStringStyle.JSON_STYLE)
-                .append("authVehicles", authHgvVehicles)
+                .append("authHgvVehicles", authHgvVehicles)
                 .append("requested", requested)
                 .append("reason", reason)
                 .append("startDate", startDate)
