@@ -8,7 +8,6 @@ import activesupport.number.Int;
 import activesupport.system.Properties;
 import apiCalls.enums.*;
 import io.restassured.response.ValidatableResponse;
-import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
@@ -927,7 +926,7 @@ public class CreateApplication extends BaseAPI {
             return null;
         }
         if (getNoOfVehiclesRequested() > getOperatingCentreVehicleCap()) {
-            throw new ValueException("Cannot have more than the specified amount of vehicles on an operating centre.");
+            throw new IllegalArgumentException("Cannot have more than the specified amount of vehicles on an operating centre.");
         }
         String vehiclesResource = null;
         String vrm;
