@@ -27,6 +27,7 @@ public class CreateApplication extends BaseAPI {
     private String licenceId;
     private String operatorType;
     private String licenceType;
+    private String vehicleType;
     private String niFlag = System.getProperty("ni");
     private String isInterim;
     private String organisationName;
@@ -167,6 +168,14 @@ public class CreateApplication extends BaseAPI {
 
     public void setLicenceType(String licenceType) {
         this.licenceType = LicenceType.valueOf(licenceType.toUpperCase()).asString();
+    }
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
     }
 
     public String getNiFlag() {
@@ -596,6 +605,7 @@ public class CreateApplication extends BaseAPI {
         // Application details
         setOperatorType( "goods" );
         setLicenceType( "standard_national" );
+        setVehicleType( VehicleType.MIXED_FLEET.asString() );
         setNiFlag( "N" );
         setIsInterim( "N" );
         setNoOfAddedHgvVehicles( 5 );
@@ -722,6 +732,9 @@ public class CreateApplication extends BaseAPI {
 
         ApplicationBuilder applicationBuilder = new ApplicationBuilder().withOperatorType(getOperatorType())
                 .withLicenceType(getLicenceType()).withNiFlag(getNiFlag()).withOrganisation(getUserDetails().getOrganisationId());
+        if (operatorType.equals(OperatorType.GOODS.asString()) && licenceType.equals(LicenceType.STANDARD_INTERNATIONAL.asString())) {
+            applicationBuilder.withVehicleType(getVehicleType());
+        }
         apiResponse = RestUtils.post(applicationBuilder, createApplicationResource, apiHeaders.getHeaders());
         setApplicationId(apiResponse.extract().jsonPath().getString("id.application"));
         setLicenceId(apiResponse.extract().jsonPath().getString("id.licence"));

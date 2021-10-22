@@ -13,6 +13,8 @@ public class ApplicationBuilder {
     private String operatorType;
     @JsonProperty("licenceType")
     private String licenceType;
+    @JsonProperty("vehicleType")
+    private String vehicleType;
     @JsonProperty("niFlag")
     private String niFlag;
     @JsonProperty("organisation")
@@ -47,6 +49,21 @@ public class ApplicationBuilder {
 
     public ApplicationBuilder withLicenceType(String licenceType) {
         this.licenceType = licenceType;
+        return this;
+    }
+
+    @JsonProperty("vehicleType")
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    @JsonProperty("vehicleType")
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+    public ApplicationBuilder withVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
         return this;
     }
 
@@ -100,6 +117,7 @@ public class ApplicationBuilder {
         return new ToStringBuilder(ToStringStyle.JSON_STYLE)
                 .append("operatorType", getOperatorType())
                 .append("licenceType", getLicenceType())
+                .append("vehicleType", getVehicleType())
                 .append("niFlag", getNiFlag())
                 .append("organisation", getOrganisation())
                 .append("appliedVia", getAppliedVia()).toString();
