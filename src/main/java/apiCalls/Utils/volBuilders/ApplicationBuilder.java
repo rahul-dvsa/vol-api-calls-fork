@@ -15,6 +15,8 @@ public class ApplicationBuilder {
     private String licenceType;
     @JsonProperty("vehicleType")
     private String vehicleType;
+    @JsonProperty("lgvDeclarationConfirmation")
+    private String lgvDeclarationConfirmation;
     @JsonProperty("niFlag")
     private String niFlag;
     @JsonProperty("organisation")
@@ -64,6 +66,21 @@ public class ApplicationBuilder {
 
     public ApplicationBuilder withVehicleType(String vehicleType) {
         this.vehicleType = vehicleType;
+        return this;
+    }
+
+    @JsonProperty("lgvDeclarationConfirmation")
+    public String getLgvDeclarationConfirmation() {
+        return lgvDeclarationConfirmation;
+    }
+
+    @JsonProperty("lgvDeclarationConfirmation")
+    public void setLgvDeclarationConfirmation(String lgvDeclarationConfirmation) {
+        this.lgvDeclarationConfirmation = lgvDeclarationConfirmation;
+    }
+
+    public ApplicationBuilder withLgvDeclarationConfirmation(String lgvDeclarationConfirmation) {
+        this.lgvDeclarationConfirmation = lgvDeclarationConfirmation;
         return this;
     }
 
@@ -118,6 +135,7 @@ public class ApplicationBuilder {
                 .append("operatorType", getOperatorType())
                 .append("licenceType", getLicenceType())
                 .append("vehicleType", getVehicleType())
+                .append("lgvDeclarationConfirmation", getLgvDeclarationConfirmation())
                 .append("niFlag", getNiFlag())
                 .append("organisation", getOrganisation())
                 .append("appliedVia", getAppliedVia()).toString();
