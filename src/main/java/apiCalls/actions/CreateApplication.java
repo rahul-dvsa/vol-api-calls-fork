@@ -817,13 +817,8 @@ public class CreateApplication extends BaseAPI {
             operatingCentreBuilder.withNoOfHgvVehiclesRequired(String.valueOf(getTotalOperatingCentreHgvAuthority()))
                     .withNoOfTrailersRequired(String.valueOf(getTotalOperatingCentreTrailerAuthority()));
         }
-//        if (getNoOfAddedLgvVehicles() != 0) {
-//                    operatingCentreBuilder.withNoOfLgvVehiclesRequired(String.valueOf(getTotalOperatingCentreLgvAuthority()));
-//        }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.RESTRICTED.asString()))) {
             operatingCentreBuilder.withNoOfHgvVehiclesRequired(String.valueOf(getTotalOperatingCentreHgvAuthority()));
-            //NOTE: Because of timing constraints, psvs now store their vehicles in the hgv column and are updated via the hgv api call.
-            // This is even though the vehicles aren't hgvs. It may be fixed later but at the moment this is the new norm.
         }
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
             operatingCentreBuilder.withNoOfHgvVehiclesRequired(String.valueOf(getRestrictedVehicles()));
