@@ -19,7 +19,7 @@ public class OperatingCentreBuilder {
     @JsonProperty("application")
     private String application;
     @JsonProperty("noOfVehiclesRequired")
-    private String noOfVehiclesRequired;
+    private String noOfHgvVehiclesRequired;
     @JsonProperty("noOfTrailersRequired")
     private String noOfTrailersRequired;
     @JsonProperty("permission")
@@ -43,17 +43,17 @@ public class OperatingCentreBuilder {
     }
 
     @JsonProperty("noOfVehiclesRequired")
-    public String getNoOfVehiclesRequired() {
-        return noOfVehiclesRequired;
+    public String getNoOfHgvVehiclesRequired() {
+        return noOfHgvVehiclesRequired;
     }
 
     @JsonProperty("noOfVehiclesRequired")
-    public void setNoOfVehiclesRequired(String noOfVehiclesRequired) {
-        this.noOfVehiclesRequired = noOfVehiclesRequired;
+    public void setNoOfHgvVehiclesRequired(String noOfHgvVehiclesRequired) {
+        this.noOfHgvVehiclesRequired = noOfHgvVehiclesRequired;
     }
 
-    public OperatingCentreBuilder withNoOfVehiclesRequired(String noOfVehiclesRequired) {
-        this.noOfVehiclesRequired = noOfVehiclesRequired;
+    public OperatingCentreBuilder withNoOfHgvVehiclesRequired(String noOfHgvVehiclesRequired) {
+        this.noOfHgvVehiclesRequired = noOfHgvVehiclesRequired;
         return this;
     }
 
@@ -107,7 +107,7 @@ public class OperatingCentreBuilder {
     public String toString() {
         return  new ToStringBuilder(ToStringStyle.JSON_STYLE)
                 .append("application", getApplication())
-                .append("noOfVehiclesRequired", getNoOfVehiclesRequired())
+                .append("noOfVehiclesRequired", getNoOfHgvVehiclesRequired())
                 .append("noOfTrailersRequired", getNoOfTrailersRequired())
                 .append("permission", getPermission())
                 .append("address", getAddress()).toString();

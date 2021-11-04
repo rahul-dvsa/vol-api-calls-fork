@@ -3,11 +3,14 @@ package apiCalls.Utils.volBuilders;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
-        "totAuthVehicles",
+        "totAuthHgvVehicles",
+        "totAuthLgvVehicles",
         "totAuthTrailers",
         "trafficArea",
         "totCommunityLicences",
@@ -18,8 +21,10 @@ public class OperatingCentreUpdater {
 
     @JsonProperty("id")
     private String id;
-    @JsonProperty("totAuthVehicles")
-    private Integer totAuthVehicles;
+    @JsonProperty("totAuthHgvVehicles")
+    private Integer totAuthHgvVehicles;
+    @JsonProperty("totAuthLgvVehicles")
+    private Integer totAuthLgvVehicles;
     @JsonProperty("totAuthTrailers")
     private Integer totAuthTrailers;
     @JsonProperty("trafficArea")
@@ -46,18 +51,33 @@ public class OperatingCentreUpdater {
         return this;
     }
 
-    @JsonProperty("totAuthVehicles")
-    public Integer getTotAuthVehicles() {
-        return totAuthVehicles;
+    @JsonProperty("totAuthHgvVehicles")
+    public Integer getTotAuthHgvVehicles() {
+        return totAuthHgvVehicles;
     }
 
-    @JsonProperty("totAuthVehicles")
-    public void setTotAuthVehicles(Integer totAuthVehicles) {
-        this.totAuthVehicles = totAuthVehicles;
+    @JsonProperty("totAuthHgvVehicles")
+    public void setTotAuthHgvVehicles(Integer totAuthHgvVehicles) {
+        this.totAuthHgvVehicles = totAuthHgvVehicles;
     }
 
-    public OperatingCentreUpdater withTotAuthVehicles(Integer totAuthVehicles) {
-        this.totAuthVehicles = totAuthVehicles;
+    public OperatingCentreUpdater withTotAuthHgvVehicles(Integer totAuthHgvVehicles) {
+        this.totAuthHgvVehicles = totAuthHgvVehicles;
+        return this;
+    }
+
+    @JsonProperty("totAuthLgvVehicles")
+    public Integer getTotAuthLgvVehicles() {
+        return totAuthLgvVehicles;
+    }
+
+    @JsonProperty("totAuthLgvVehicles")
+    public void setTotAuthLgvVehicles(Integer totAuthLgvVehicles) {
+        this.totAuthLgvVehicles = totAuthLgvVehicles;
+    }
+
+    public OperatingCentreUpdater withTotAuthLgvVehicles(Integer totAuthLgvVehicles) {
+        this.totAuthLgvVehicles = totAuthLgvVehicles;
         return this;
     }
 
@@ -71,7 +91,7 @@ public class OperatingCentreUpdater {
         this.totAuthTrailers = totAuthTrailers;
     }
 
-    public OperatingCentreUpdater withTAuthTrailers(Integer totAuthTrailers) {
+    public OperatingCentreUpdater withTotAuthTrailers(Integer totAuthTrailers) {
         this.totAuthTrailers = totAuthTrailers;
         return this;
     }
@@ -137,8 +157,14 @@ public class OperatingCentreUpdater {
 
     @Override
     public String toString() {
-        return "id:" + getId() + ",totAuthVehicles:" + getTotAuthVehicles() + ",totAuthTrailers:" + getTotAuthTrailers() +
-                ",trafficArea:" + getTrafficArea() + ",enforcementArea:" + getEnforcementArea()
-        + ",totCommunityLicences:" +  getTotCommunityLicences() + ",version:" + getVersion();
+        return  new ToStringBuilder(ToStringStyle.JSON_STYLE)
+                .append("id", getId())
+                .append("totAuthHgvVehicles", getTotAuthHgvVehicles())
+                .append("totAuthLgvVehicles", getTotAuthLgvVehicles())
+                .append("totAuthTrailers", getTotAuthTrailers())
+                .append("trafficArea", getTrafficArea())
+                .append("enforcementArea", getEnforcementArea())
+                .append("totCommunityLicences", getTotCommunityLicences())
+                .append("version", getVersion()).toString();
     }
 }
