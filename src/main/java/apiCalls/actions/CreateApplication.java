@@ -731,9 +731,12 @@ public class CreateApplication extends BaseAPI {
         apiHeaders.headers.put("x-pid", getUserDetails().getPid());
 
         ApplicationBuilder applicationBuilder = new ApplicationBuilder().withOperatorType(getOperatorType())
-                .withLicenceType(getLicenceType()).withNiFlag(getNiFlag()).withOrganisation(getUserDetails().getOrganisationId());
+                .withLicenceType(getLicenceType()).withNiFlag(getNiFlag()).withOrganisation(getUserDetails().getOrganisationId())
+                .withLgvDeclarationConfirmation("0");
         if (operatorType.equals(OperatorType.GOODS.asString()) && licenceType.equals(LicenceType.STANDARD_INTERNATIONAL.asString())) {
             applicationBuilder.withVehicleType(getVehicleType());
+            if (VehicleType.LGV_ONLY_FLEET.asString().equals(getVehicleType()))
+                applicationBuilder.withLgvDeclarationConfirmation("1");
         }
         apiResponse = RestUtils.post(applicationBuilder, createApplicationResource, apiHeaders.getHeaders());
         setApplicationId(apiResponse.extract().jsonPath().getString("id.application"));
