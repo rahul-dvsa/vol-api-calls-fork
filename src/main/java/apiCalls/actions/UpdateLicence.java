@@ -654,7 +654,7 @@ public class UpdateLicence extends BaseAPI {
 
         ContactDetailsBuilder contactDetails = new ContactDetailsBuilder().withEmailAddress(getInternalUserEmailAddress()).withAddress(addressBuilder).withPerson(personBuilder);
         CreateInternalAdminUser internalAdminUser = new CreateInternalAdminUser().withContactDetails(contactDetails)
-                .withLoginId(getInternalUserLogin()).withRoles(roles).withTeam(getInternalUserTeam()).withUserType(userType);
+                .withLoginId(getInternalUserLogin()).withRoles(roles).withTeam(getInternalUserTeam()).withUserType(userType).withOSType("windows_10");
         apiResponse = RestUtils.post(internalAdminUser, internalAdminUserResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
