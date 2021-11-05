@@ -118,12 +118,12 @@ public class CreateApplication extends BaseAPI {
     private int noOfAddedHgvVehicles;
     private int noOfAddedLgvVehicles;
 
-    // On add an operating centre page
+    // On operating centres and authorisations page
     private int totalOperatingCentreHgvAuthority;
     private int totalOperatingCentreLgvAuthority;
     private int totalOperatingCentreTrailerAuthority;
 
-    // On Operating Centre and Authorisation Page
+    // On add an operating centre page
     private int noOfOperatingCentreVehicleAuthorised;
     private int noOfOperatingCentreTrailerAuthorised;
 
