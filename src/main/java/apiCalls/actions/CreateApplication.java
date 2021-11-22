@@ -863,11 +863,16 @@ public class CreateApplication extends BaseAPI {
                 .withTrafficArea(getTrafficArea().value()).withEnforcementArea(getEnforcementArea().value()).withVersion(applicationVersion);
 
         if (operatorType.equals(OperatorType.GOODS.asString())) {
-            updateOperatingCentre.withTotAuthHgvVehicles(getTotalOperatingCentreHgvAuthority())
-                    .withTotCommunityLicences(1)
-                    .withTAuthTrailers(getNoOfOperatingCentreTrailerAuthorised());
-            //TODO: Community licences aren't displaying number.
-        }
+            if (getVehicleType().equals(VehicleType.MIXED_FLEET.asString())) {
+                updateOperatingCentre.withTotAuthHgvVehicles(getTotalOperatingCentreHgvAuthority())
+                        .withTotAuthTrailers(getNoOfOperatingCentreTrailerAuthorised());
+            }
+            if (licenceType.equals(LicenceType.STANDARD_INTERNATIONAL.asString())) {
+                updateOperatingCentre.withTotAuthLgvVehicles(getTotalOperatingCentreLgvAuthority())
+                        .withTotCommunityLicences(1);
+            }
+        } //CHECK COMMUNITY LICENCES
+
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.RESTRICTED.asString()))) {
             updateOperatingCentre.withTotAuthHgvVehicles(getTotalOperatingCentreHgvAuthority())
                     .withTotCommunityLicences(1);
@@ -995,9 +1000,7 @@ public class CreateApplication extends BaseAPI {
             apiResponse = RestUtils.post(vehiclesDetails, vehiclesResource, apiHeaders.getHeaders());
             hgvVRMs[i] = vrm;
         }
-        if (getNoOfAddedHgvVehicles() == 0) {
-            Utils.checkHTTPStatusCode(apiResponse,HttpStatus.SC_OK);
-        } else {
+        if (getNoOfAddedHgvVehicles() != 0) {
             Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
         }
         setHgvVRMs(hgvVRMs);
@@ -1011,9 +1014,7 @@ public class CreateApplication extends BaseAPI {
                 apiResponse = RestUtils.post(vehiclesDetails, vehiclesResource, apiHeaders.getHeaders());
                 lgvVRMs[i] = vrm;
             }
-            if (getNoOfAddedLgvVehicles() == 0) {
-                Utils.checkHTTPStatusCode(apiResponse,HttpStatus.SC_OK);
-            } else {
+            if (getNoOfAddedLgvVehicles() != 0) {
                 Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
             }
             setLgvVRMs(lgvVRMs);
