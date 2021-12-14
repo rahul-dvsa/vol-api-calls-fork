@@ -8,6 +8,7 @@ import activesupport.http.RestUtils;
 import activesupport.number.Int;
 import apiCalls.Utils.volBuilders.*;
 import apiCalls.Utils.generic.*;
+import apiCalls.enums.LicenceType;
 import apiCalls.enums.OperatorType;
 import apiCalls.enums.UserRoles;
 import apiCalls.enums.UserType;
@@ -858,7 +859,7 @@ public class UpdateLicence extends BaseAPI {
         }
         String updateOperatingCentreResource = URL.build(env, String.format("application/%s/variation-operating-centre/%s", application.getLicenceId(), getVariationApplicationId())).toString();
         OperatingCentreVariationBuilder updateOperatingCentre = new OperatingCentreVariationBuilder().withId(getVariationApplicationId())
-                .withApplication(getVariationApplicationId()).withNoOfVehiclesRequired(String.valueOf(application.getNoOfVehiclesRequested()))
+                .withApplication(getVariationApplicationId()).withNoOfVehiclesRequired(String.valueOf(application.getNoOfAddedHgvVehicles()))
                 .withVersion(version);
         apiResponse = RestUtils.put(updateOperatingCentre, updateOperatingCentreResource, apiHeaders.getHeaders());
 
@@ -881,7 +882,7 @@ public class UpdateLicence extends BaseAPI {
 
         ContactDetailsBuilder contactDetails = new ContactDetailsBuilder().withEmailAddress(getInternalUserEmailAddress()).withAddress(addressBuilder).withPerson(personBuilder);
         CreateInternalAdminUser internalAdminUser = new CreateInternalAdminUser().withContactDetails(contactDetails)
-                .withLoginId(getInternalUserLogin()).withRoles(roles).withTeam(getInternalUserTeam()).withUserType(userType);
+                .withLoginId(getInternalUserLogin()).withRoles(roles).withTeam(getInternalUserTeam()).withUserType(userType).withOSType("windows_10");
         apiResponse = RestUtils.post(internalAdminUser, internalAdminUserResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
@@ -1069,7 +1070,7 @@ public class UpdateLicence extends BaseAPI {
         String interimApplicationResource = URL.build(env, String.format("application/%s/interim/", applicationId)).toString();
         int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationId, "version", "1"));
 
-        InterimApplicationBuilder interimApplicationBuilder = new InterimApplicationBuilder().withAuthVehicles(String.valueOf(application.getNoOfVehiclesRequested())).withAuthTrailers(String.valueOf(application.getNoOfVehiclesRequested()))
+        InterimApplicationBuilder interimApplicationBuilder = new InterimApplicationBuilder().withAuthHgvVehicles(String.valueOf(application.getNoOfAddedHgvVehicles())).withAuthTrailers(String.valueOf(application.getNoOfAddedHgvVehicles()))
                 .withRequested("Y").withReason(getInterimReason()).withStartDate(getInterimStartDate()).withEndDate(getInterimEndDate())
                 .withAction("grant").withId(applicationId).withVersion(applicationVersion);
         apiResponse = RestUtils.put(interimApplicationBuilder, interimApplicationResource, apiHeaders.getHeaders());
@@ -1087,4 +1088,21 @@ public class UpdateLicence extends BaseAPI {
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
 
+<<<<<<< HEAD
 }
+=======
+    public ValidatableResponse updateLgvAuthorisationOnVariation(int hgvAuthorisation, int lgvAuthorisation) {
+        if (this.application.getLicenceType().equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
+            return null;
+        } else {
+            int applicationVersion = Integer.parseInt(this.fetchApplicationInformation(this.variationApplicationId, "version", "1"));
+            String updateOperatingCentreResource = URL.build(env, String.format("application/%s/operating-centres", this.variationApplicationId)).toString();
+            OperatingCentreUpdater updateOperatingCentre = (new OperatingCentreUpdater()).withId(this.variationApplicationId).withTrafficArea(this.application.getTrafficArea().value()).withEnforcementArea(this.application.getEnforcementArea().value()).withVersion(applicationVersion).withTotAuthHgvVehicles(hgvAuthorisation).withTotCommunityLicences(1).withTotAuthTrailers(this.application.getNoOfOperatingCentreTrailerAuthorised()).withTotAuthLgvVehicles(lgvAuthorisation);
+            this.apiResponse = RestUtils.put(updateOperatingCentre, updateOperatingCentreResource, this.apiHeaders.getHeaders());
+            Utils.checkHTTPStatusCode(this.apiResponse, 200);
+            return this.apiResponse;
+        }
+    }
+
+}
+>>>>>>> 7ee401f56c1628001f3802017794863cee163101
