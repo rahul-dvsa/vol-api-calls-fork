@@ -53,7 +53,7 @@ public class GetUserDetails {
 
     private ValidatableResponse apiResponse;
 
-    public ValidatableResponse getUserDetails(@NotNull String username, @NotNull String password, String userType) {
+    public ValidatableResponse getUserDetails(@NotNull String username, @NotNull String password, String userType, String userId) {
         String userDetailsResource;
         Headers apiHeaders = new Headers();
         GetJWTToken jwtToken = new GetJWTToken();
@@ -63,12 +63,13 @@ public class GetUserDetails {
         apiHeaders.headers.put("Authorization",jwtToken.getAPIToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"),UserType.INTERNAL.asString()));
 
         if (userType.equals(UserType.EXTERNAL.asString())) {
-            userDetailsResource = URL.build(env, String.format("user/%s/%s", userType,user.getUserId())).toString();
+            userDetailsResource = URL.build(env, String.format("user/%s/%s", userType,userId)).toString();
             apiResponse = RestUtils.get(userDetailsResource, apiHeaders.getHeaders());
-            setJwtToken(jwtToken.getAPIToken(username,password,UserType.EXTERNAL.asString()));
+            String token = jwtToken.getAPIToken(username,password,UserType.EXTERNAL.asString());
+            setJwtToken(token);
             setOrganisationId(apiResponse.extract().jsonPath().prettyPeek().getString("organisationUsers.organisation.id"));
         } else if (userType.equals(UserType.INTERNAL.asString())) {
-            userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, user.getUserId())).toString();
+            userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, userId)).toString();
             apiResponse = RestUtils.get(userDetailsResource, apiHeaders.getHeaders());
         }
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);

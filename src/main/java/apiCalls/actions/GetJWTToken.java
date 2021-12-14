@@ -17,13 +17,12 @@ public class GetJWTToken {
     public String getAPIToken(String username, String password, String realm) {
         String jwtTokenResource;
         HashMap<String, String> header = new HashMap<>();
-        header.put("Cookie", "null");
 
-        jwtTokenResource = URL.build(env).toString().concat("/auth/login");
+        jwtTokenResource = URL.build(env).toString().concat("auth/login");
         TokenRequestBuilder tokenBody = new TokenRequestBuilder().withUsername(username).withPassword(password).withRealm(realm);
         ValidatableResponse tokenResponse = RestUtils.post(tokenBody, jwtTokenResource, header);
 
-        Utils.checkHTTPStatusCode(tokenResponse, HttpStatus.SC_OK);
+        Utils.checkHTTPStatusCode(tokenResponse, HttpStatus.SC_CREATED);
 
         return tokenResponse.extract().body().jsonPath().getString("flags.identity.tokenId");
     }
