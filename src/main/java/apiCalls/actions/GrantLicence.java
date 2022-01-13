@@ -147,9 +147,9 @@ public class GrantLicence extends BaseAPI{
         }
     }
 
-    public ValidatableResponse payGrantFees() {
+    public ValidatableResponse payGrantFees(String NIFlag) {
         String payer = faker.generateFirstName() + faker.generateLastName();
-        Double grantFees = 401.00;
+        Double grantFees = NIFlag.equals("Y") ? 449.00 : 401.00;
         String paymentMethod = "fpm_cash";
         String slipNo = "123456";
 
