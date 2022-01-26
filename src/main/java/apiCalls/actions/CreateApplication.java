@@ -26,6 +26,7 @@ public class CreateApplication extends BaseAPI {
     private String licenceId;
     private String operatorType;
     private String licenceType;
+    private String vehicleType;
     private String niFlag = System.getProperty("ni");
     private String isInterim;
     private String organisationName;
@@ -166,6 +167,14 @@ public class CreateApplication extends BaseAPI {
 
     public void setLicenceType(String licenceType) {
         this.licenceType = LicenceType.valueOf(licenceType.toUpperCase()).asString();
+    }
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
     }
 
     public String getNiFlag() {
@@ -595,6 +604,7 @@ public class CreateApplication extends BaseAPI {
         // Application details
         setOperatorType( "goods" );
         setLicenceType( "standard_national" );
+        setVehicleType( VehicleType.MIXED_FLEET.asString() );
         setNiFlag( "N" );
         setIsInterim( "N" );
         setNoOfAddedHgvVehicles( 5 );
@@ -714,13 +724,18 @@ public class CreateApplication extends BaseAPI {
         setTransportConsultantPostCode( getPostCodeByTrafficArea() );
     }
 
-
     public ValidatableResponse startApplication() {
         String createApplicationResource = URL.build(env, "application").toString();
         apiHeaders.headers.put("Authorization", getUserDetails().getJwtToken());
 
         ApplicationBuilder applicationBuilder = new ApplicationBuilder().withOperatorType(getOperatorType())
-                .withLicenceType(getLicenceType()).withNiFlag(getNiFlag()).withOrganisation(getUserDetails().getOrganisationId());
+                .withLicenceType(getLicenceType()).withNiFlag(getNiFlag()).withOrganisation(getUserDetails().getOrganisationId())
+                .withLgvDeclarationConfirmation("0");
+        if (operatorType.equals(OperatorType.GOODS.asString()) && licenceType.equals(LicenceType.STANDARD_INTERNATIONAL.asString())) {
+            applicationBuilder.withVehicleType(getVehicleType());
+            if (VehicleType.LGV_ONLY_FLEET.asString().equals(getVehicleType()))
+                applicationBuilder.withLgvDeclarationConfirmation("1");
+        }
         apiResponse = RestUtils.post(applicationBuilder, createApplicationResource, apiHeaders.getHeaders());
         setApplicationId(apiResponse.extract().jsonPath().getString("id.application"));
         setLicenceId(apiResponse.extract().jsonPath().getString("id.licence"));
@@ -841,11 +856,16 @@ public class CreateApplication extends BaseAPI {
                 .withTrafficArea(getTrafficArea().value()).withEnforcementArea(getEnforcementArea().value()).withVersion(applicationVersion);
 
         if (operatorType.equals(OperatorType.GOODS.asString())) {
-            updateOperatingCentre.withTotAuthHgvVehicles(getTotalOperatingCentreHgvAuthority())
-                    .withTotCommunityLicences(1)
-                    .withTotAuthTrailers(getNoOfOperatingCentreTrailerAuthorised());
-            //TODO: Community licences aren't displaying number.
-        }
+            if (getVehicleType().equals(VehicleType.MIXED_FLEET.asString())) {
+                updateOperatingCentre.withTotAuthHgvVehicles(getTotalOperatingCentreHgvAuthority())
+                        .withTotAuthTrailers(getNoOfOperatingCentreTrailerAuthorised());
+            }
+            if (licenceType.equals(LicenceType.STANDARD_INTERNATIONAL.asString())) {
+                updateOperatingCentre.withTotAuthLgvVehicles(getTotalOperatingCentreLgvAuthority())
+                        .withTotCommunityLicences(1);
+            }
+        } //CHECK COMMUNITY LICENCES
+
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (!licenceType.equals(LicenceType.RESTRICTED.asString()))) {
             updateOperatingCentre.withTotAuthHgvVehicles(getTotalOperatingCentreHgvAuthority())
                     .withTotCommunityLicences(1);
@@ -955,15 +975,10 @@ public class CreateApplication extends BaseAPI {
         if (getOperatorType().equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
         }
-<<<<<<< HEAD
-        if (getNoOfVehiclesRequested() > getOperatingCentreVehicleCap()) {
-            throw new IllegalArgumentException("Cannot have more than the specified amount of vehicles on an operating centre.");
-=======
         if (getNoOfAddedHgvVehicles() > getTotalOperatingCentreHgvAuthority()) {
             throw new IllegalArgumentException("Cannot have more than the specified amount of HGVs on an operating centre.");
         } else if (getNoOfAddedLgvVehicles() > getTotalOperatingCentreLgvAuthority()) {
             throw new IllegalArgumentException("Cannot have more than the specified amount of LGVs on an operating centre.");
->>>>>>> 7ee401f56c1628001f3802017794863cee163101
         }
         String[] hgvVRMs = new String[getNoOfAddedHgvVehicles()];
 
@@ -978,9 +993,7 @@ public class CreateApplication extends BaseAPI {
             apiResponse = RestUtils.post(vehiclesDetails, vehiclesResource, apiHeaders.getHeaders());
             hgvVRMs[i] = vrm;
         }
-        if (getNoOfAddedHgvVehicles() == 0) {
-            Utils.checkHTTPStatusCode(apiResponse,HttpStatus.SC_OK);
-        } else {
+        if (getNoOfAddedHgvVehicles() != 0) {
             Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
         }
         setHgvVRMs(hgvVRMs);
@@ -994,9 +1007,7 @@ public class CreateApplication extends BaseAPI {
                 apiResponse = RestUtils.post(vehiclesDetails, vehiclesResource, apiHeaders.getHeaders());
                 lgvVRMs[i] = vrm;
             }
-            if (getNoOfAddedLgvVehicles() == 0) {
-                Utils.checkHTTPStatusCode(apiResponse,HttpStatus.SC_OK);
-            } else {
+            if (getNoOfAddedLgvVehicles() != 0) {
                 Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
             }
             setLgvVRMs(lgvVRMs);

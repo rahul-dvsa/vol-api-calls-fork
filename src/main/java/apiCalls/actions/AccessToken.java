@@ -10,11 +10,12 @@ import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
 import java.util.HashMap;
-public class GetJWTToken {
 
-    EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
+public class AccessToken {
 
-    public String getAPIToken(String username, String password, String realm) {
+    static EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
+
+    public static String getToken(String username, String password, String realm) {
         String jwtTokenResource;
         HashMap<String, String> header = new HashMap<>();
 
@@ -24,6 +25,6 @@ public class GetJWTToken {
 
         Utils.checkHTTPStatusCode(tokenResponse, HttpStatus.SC_CREATED);
 
-        return tokenResponse.extract().body().jsonPath().getString("flags.identity.tokenId");
+        return tokenResponse.extract().body().jsonPath().getString("flags.identity.Token.access_token");
     }
 }

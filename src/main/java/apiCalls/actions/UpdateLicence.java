@@ -8,7 +8,6 @@ import activesupport.http.RestUtils;
 import activesupport.number.Int;
 import apiCalls.Utils.volBuilders.*;
 import apiCalls.Utils.generic.*;
-import apiCalls.enums.LicenceType;
 import apiCalls.enums.OperatorType;
 import apiCalls.enums.UserRoles;
 import apiCalls.enums.UserType;
@@ -28,7 +27,7 @@ import java.util.*;
 
 public class UpdateLicence extends BaseAPI {
     private final CreateApplication application;
-    private GetJWTToken jwtToken = new GetJWTToken();
+    private AccessToken jwtToken = new AccessToken();
     private ValidatableResponse apiResponse;
 
     private Dates date = new Dates(new LocalDateCalendar());
@@ -667,7 +666,7 @@ public class UpdateLicence extends BaseAPI {
 
     public UpdateLicence(CreateApplication application) {
         this.application = application;
-        apiHeaders.headers.put("Authorization", jwtToken.getAPIToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserType.INTERNAL.asString()));
+        apiHeaders.headers.put("Authorization", jwtToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserType.INTERNAL.asString()));
         setVariationType(null);
         setAdminAPIHeader(Utils.config.getString("apiHeader"));
 

@@ -7,11 +7,8 @@ import apiCalls.Utils.generic.Utils;
 import apiCalls.enums.UserRoles;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
-import org.apache.logging.log4j.LogManager;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
-
-import javax.xml.ws.http.HTTPException;
 
 public class GetApplicationDetails {
 
@@ -54,11 +51,11 @@ public class GetApplicationDetails {
     }
 
     public ValidatableResponse getApplicationLicenceDetails(CreateApplication createApplication) {
-        GetJWTToken jwtToken = new GetJWTToken();
+        AccessToken jwtToken = new AccessToken();
 
         String getApplicationResource = URL.build(env, String.format("application/%s", application.getApplicationId())).toString();
 
-        apiHeaders.getHeaders().put("Authorization", jwtToken.getAPIToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+        apiHeaders.getHeaders().put("Authorization", jwtToken.getToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
         apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
         setLicenceId(apiResponse.extract().jsonPath().getString("licence.id"));
         setLicenceNumber(apiResponse.extract().jsonPath().getString("licence.licNo"));

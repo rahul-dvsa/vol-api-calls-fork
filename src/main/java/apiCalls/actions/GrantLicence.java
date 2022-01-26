@@ -36,7 +36,7 @@ public class GrantLicence extends BaseAPI{
     private final List<Double> feesToPay = new ArrayList<>();
     private int feeId;
     private String dateState;
-    private final GetJWTToken jwtToken = new GetJWTToken();
+    private final AccessToken jwtToken = new AccessToken();
 
     private void setFeeId(int feeId){
         this.feeId = feeId;
@@ -53,7 +53,7 @@ public class GrantLicence extends BaseAPI{
     public GrantLicence (CreateApplication application) {
         this.application = application;
         setDateState(date.getFormattedDate(0,0,0,"yyyy-MM-dd"));
-        apiHeaders.headers.put("Authorization",jwtToken.getAPIToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserType.INTERNAL.asString()));
+        apiHeaders.headers.put("Authorization",jwtToken.getToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserType.INTERNAL.asString()));
     }
 
     public ValidatableResponse grantLicence() {
@@ -149,9 +149,9 @@ public class GrantLicence extends BaseAPI{
         }
     }
 
-    public ValidatableResponse payGrantFees() {
+    public ValidatableResponse payGrantFees(String NIFlag) {
         String payer = faker.generateFirstName() + faker.generateLastName();
-        Double grantFees = 401.00;
+        Double grantFees = NIFlag.equals("Y") ? 449.00 : 401.00;
         String paymentMethod = "fpm_cash";
         String slipNo = "123456";
 
