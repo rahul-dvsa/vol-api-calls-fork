@@ -51,11 +51,13 @@ public class GetApplicationDetails {
     }
 
     public ValidatableResponse getApplicationLicenceDetails(CreateApplication createApplication) {
-        AccessToken jwtToken = new AccessToken();
-
         String getApplicationResource = URL.build(env, String.format("application/%s", application.getApplicationId())).toString();
 
-        apiHeaders.getHeaders().put("Authorization", jwtToken.getToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+        if (env == EnvironmentType.DAILY_ASSURANCE) {
+            apiHeaders.getHeaders().put("Authorization", "Bearer" + AccessToken.getToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+        } else {
+            apiHeaders.getHeaders().put("x-pid", Utils.config.getString("apiHeader"));
+        }
         apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
         setLicenceId(apiResponse.extract().jsonPath().getString("licence.id"));
         setLicenceNumber(apiResponse.extract().jsonPath().getString("licence.licNo"));

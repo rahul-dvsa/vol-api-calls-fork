@@ -8,6 +8,7 @@ import apiCalls.Utils.volBuilders.*;
 import apiCalls.Utils.generic.BaseAPI;
 import apiCalls.Utils.generic.Headers;
 import apiCalls.Utils.generic.Utils;
+import apiCalls.enums.UserRoles;
 import apiCalls.enums.UserType;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
@@ -53,7 +54,11 @@ public class GrantLicence extends BaseAPI{
     public GrantLicence (CreateApplication application) {
         this.application = application;
         setDateState(date.getFormattedDate(0,0,0,"yyyy-MM-dd"));
-        apiHeaders.headers.put("Authorization",jwtToken.getToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserType.INTERNAL.asString()));
+        if (env == EnvironmentType.DAILY_ASSURANCE) {
+            apiHeaders.getHeaders().put("Authorization", "Bearer" + AccessToken.getToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+        } else {
+            apiHeaders.getHeaders().put("x-pid", Utils.config.getString("apiHeader"));
+        }
     }
 
     public ValidatableResponse grantLicence() {

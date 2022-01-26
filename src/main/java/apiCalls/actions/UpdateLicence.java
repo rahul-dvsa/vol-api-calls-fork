@@ -8,6 +8,7 @@ import activesupport.http.RestUtils;
 import activesupport.number.Int;
 import apiCalls.Utils.volBuilders.*;
 import apiCalls.Utils.generic.*;
+import apiCalls.enums.LicenceType;
 import apiCalls.enums.OperatorType;
 import apiCalls.enums.UserRoles;
 import apiCalls.enums.UserType;
@@ -666,7 +667,11 @@ public class UpdateLicence extends BaseAPI {
 
     public UpdateLicence(CreateApplication application) {
         this.application = application;
-        apiHeaders.headers.put("Authorization", jwtToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserType.INTERNAL.asString()));
+        if (env == EnvironmentType.DAILY_ASSURANCE) {
+            apiHeaders.getHeaders().put("Authorization", "Bearer" + AccessToken.getToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+        } else {
+            apiHeaders.getHeaders().put("x-pid", Utils.config.getString("apiHeader"));
+        }
         setVariationType(null);
         setAdminAPIHeader(Utils.config.getString("apiHeader"));
 
@@ -1087,9 +1092,6 @@ public class UpdateLicence extends BaseAPI {
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
 
-<<<<<<< HEAD
-}
-=======
     public ValidatableResponse updateLgvAuthorisationOnVariation(int hgvAuthorisation, int lgvAuthorisation) {
         if (this.application.getLicenceType().equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
@@ -1102,6 +1104,4 @@ public class UpdateLicence extends BaseAPI {
             return this.apiResponse;
         }
     }
-
 }
->>>>>>> 7ee401f56c1628001f3802017794863cee163101
