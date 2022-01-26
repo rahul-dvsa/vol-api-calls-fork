@@ -728,7 +728,7 @@ public class CreateApplication extends BaseAPI {
         String createApplicationResource = URL.build(env, "application").toString();
 
         if (env == EnvironmentType.DAILY_ASSURANCE) {
-            apiHeaders.headers.put("Authorization", getUserDetails().getJwtToken());
+            apiHeaders.headers.put("Authorization", "Bearer " + getUserDetails().getJwtToken());
         } else {
             apiHeaders.headers.put("x-pid", getUserDetails().getPid());
         }

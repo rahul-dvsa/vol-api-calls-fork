@@ -34,7 +34,7 @@ public class GetUserDetails {
         if (env == DAILY_ASSURANCE) {
             apiHeaders
                     .headers
-                    .put("Authorization", "Bearer" + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserType.INTERNAL.asString()));
+                    .put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserType.INTERNAL.asString()));
         } else {
             apiHeaders.getHeaders().put("x-pid", Utils.config.getString("apiHeader"));
         }
