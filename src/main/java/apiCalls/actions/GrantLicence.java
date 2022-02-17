@@ -54,7 +54,7 @@ public class GrantLicence extends BaseAPI{
     public GrantLicence (CreateApplication application) {
         this.application = application;
         setDateState(date.getFormattedDate(0,0,0,"yyyy-MM-dd"));
-        if (env == EnvironmentType.DAILY_ASSURANCE) {
+        if ((env == EnvironmentType.DAILY_ASSURANCE) || (env == EnvironmentType.QUALITY_ASSURANCE)) {
             apiHeaders.getHeaders().put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
         } else {
             apiHeaders.getHeaders().put("x-pid", Utils.config.getString("apiHeader"));

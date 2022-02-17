@@ -53,7 +53,7 @@ public class GetApplicationDetails {
     public ValidatableResponse getApplicationLicenceDetails(CreateApplication createApplication) {
         String getApplicationResource = URL.build(env, String.format("application/%s", application.getApplicationId())).toString();
 
-        if (env == EnvironmentType.DAILY_ASSURANCE) {
+        if ((env == EnvironmentType.DAILY_ASSURANCE) || (env == EnvironmentType.QUALITY_ASSURANCE)) {
             apiHeaders.getHeaders().put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
         } else {
             apiHeaders.getHeaders().put("x-pid", Utils.config.getString("apiHeader"));

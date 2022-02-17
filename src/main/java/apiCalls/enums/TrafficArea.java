@@ -1,10 +1,6 @@
 package apiCalls.enums;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 public enum TrafficArea {

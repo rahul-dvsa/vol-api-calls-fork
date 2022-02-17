@@ -31,7 +31,7 @@ public class GetUserDetails {
         String userDetailsResource;
         Headers apiHeaders = new Headers();
 
-        if (env == DAILY_ASSURANCE) {
+        if ((env == EnvironmentType.DAILY_ASSURANCE) || (env == EnvironmentType.QUALITY_ASSURANCE)) {
             apiHeaders
                     .headers
                     .put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserType.INTERNAL.asString()));
@@ -42,7 +42,7 @@ public class GetUserDetails {
         if (userType.equals(UserType.EXTERNAL.asString())) {
             userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, userId)).toString();
             apiResponse = RestUtils.get(userDetailsResource, apiHeaders.getHeaders());
-            if (env == DAILY_ASSURANCE) {
+            if ((env == EnvironmentType.DAILY_ASSURANCE) || (env == EnvironmentType.QUALITY_ASSURANCE)) {
                 setJwtToken(AccessToken.getToken(userId, Configuration.getTempPassword(emailAddress), Realm.SELF_SERVE.asString()));
             } else {
                 setPid(apiResponse.extract().jsonPath().getString("pid"));
