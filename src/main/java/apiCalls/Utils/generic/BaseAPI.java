@@ -3,13 +3,15 @@ package apiCalls.Utils.generic;
 import activesupport.MissingRequiredArgument;
 import activesupport.http.RestUtils;
 import activesupport.system.Properties;
+import apiCalls.actions.AccessToken;
+import apiCalls.enums.UserRoles;
 import io.restassured.response.ValidatableResponse;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
 public class BaseAPI {
 
-    protected EnvironmentType env;
+    protected static EnvironmentType env;
     private static String apiHeader = Utils.config.getString("apiHeader");
 
     public BaseAPI() {
@@ -37,7 +39,11 @@ public class BaseAPI {
 
     public static String retrieveAPIData(String url, String jsonPath, String defaultReturn) {
         Headers headers = new Headers();
-        headers.headers.put("x-pid", apiHeader);
+        if ((env == EnvironmentType.DAILY_ASSURANCE) || (env == EnvironmentType.QUALITY_ASSURANCE)) {
+            headers.getHeaders().put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+        } else {
+            headers.getHeaders().put("x-pid", Utils.config.getString("apiHeader"));
+        }
         ValidatableResponse response = RestUtils.get(url, headers.getHeaders());
         try {
             return response.extract().response().jsonPath().getString(jsonPath);

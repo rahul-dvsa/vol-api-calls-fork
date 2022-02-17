@@ -14,6 +14,8 @@ import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
+import java.util.Objects;
+
 import static org.dvsa.testing.lib.url.utils.EnvironmentType.DAILY_ASSURANCE;
 
 
@@ -27,23 +29,21 @@ public class GetUserDetails {
 
     private ValidatableResponse apiResponse;
 
-    public ValidatableResponse getUserDetails(String userType, String userId, String emailAddress) {
-        String userDetailsResource;
+
+    public ValidatableResponse getUserDetails(String userType, String userId, String username, String password) {
+        String userDetailsResource = null;
         Headers apiHeaders = new Headers();
 
-        if ((env == EnvironmentType.DAILY_ASSURANCE) || (env == EnvironmentType.QUALITY_ASSURANCE)) {
+        if ((env == DAILY_ASSURANCE) || (env == EnvironmentType.QUALITY_ASSURANCE)) {
             apiHeaders
                     .headers
                     .put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserType.INTERNAL.asString()));
-        } else {
-            apiHeaders.getHeaders().put("x-pid", Utils.config.getString("apiHeader"));
         }
-
         if (userType.equals(UserType.EXTERNAL.asString())) {
             userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, userId)).toString();
             apiResponse = RestUtils.get(userDetailsResource, apiHeaders.getHeaders());
             if ((env == EnvironmentType.DAILY_ASSURANCE) || (env == EnvironmentType.QUALITY_ASSURANCE)) {
-                setJwtToken(AccessToken.getToken(userId, Configuration.getTempPassword(emailAddress), Realm.SELF_SERVE.asString()));
+                setJwtToken(AccessToken.getToken(username, password, Realm.SELF_SERVE.asString()));
             } else {
                 setPid(apiResponse.extract().jsonPath().getString("pid"));
             }
@@ -51,9 +51,11 @@ public class GetUserDetails {
         } else if (userType.equals(UserType.INTERNAL.asString())) {
             userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, userId)).toString();
             apiResponse = RestUtils.get(userDetailsResource, apiHeaders.getHeaders());
+        } else {
+            apiHeaders.getHeaders().put("x-pid", Utils.config.getString("apiHeader"));
         }
-        Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
 
+        Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         return apiResponse;
     }
 
