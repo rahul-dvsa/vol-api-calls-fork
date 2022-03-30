@@ -12,7 +12,8 @@ import org.dvsa.testing.lib.url.utils.EnvironmentType;
 public class BaseAPI {
 
     protected static EnvironmentType env;
-    private static String apiHeader = Utils.config.getString("apiHeader");
+    static Headers headers = new Headers();
+    static String adminJWT = AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString());
 
     public BaseAPI() {
         try {
@@ -32,18 +33,13 @@ public class BaseAPI {
         return retrieveAPIData(url, jsonPath, defaultReturn);
     }
 
-    public String fetchInternalUserInformation(String userId, String jsonPath, String defaultReturn){
+    public String fetchInternalUserInformation(String userId, String jsonPath, String defaultReturn) {
         String url = URL.build(env, String.format("user/internal/%s", userId)).toString();
         return retrieveAPIData(url, jsonPath, defaultReturn);
     }
 
     public static String retrieveAPIData(String url, String jsonPath, String defaultReturn) {
-        Headers headers = new Headers();
-        if ((env == EnvironmentType.DAILY_ASSURANCE) || (env == EnvironmentType.QUALITY_ASSURANCE)) {
-            headers.getHeaders().put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
-        } else {
-            headers.getHeaders().put("x-pid", Utils.config.getString("apiHeader"));
-        }
+        headers.getHeaders().put("Authorization", "Bearer " + adminJWT);
         ValidatableResponse response = RestUtils.get(url, headers.getHeaders());
         try {
             return response.extract().response().jsonPath().getString(jsonPath);

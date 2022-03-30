@@ -36,11 +36,7 @@ public class GetUserDetails {
         if (userType.equals(UserType.EXTERNAL.asString())) {
             userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, userId)).toString();
             apiResponse = RestUtils.get(userDetailsResource, apiHeaders.getHeaders());
-            if ((env == EnvironmentType.DAILY_ASSURANCE) || (env == EnvironmentType.QUALITY_ASSURANCE)) {
-                setJwtToken(AccessToken.getToken(username, password, Realm.SELF_SERVE.asString()));
-            } else {
-                setPid(apiResponse.extract().jsonPath().getString("pid"));
-            }
+            setJwtToken(AccessToken.getToken(username, password, Realm.SELF_SERVE.asString()));
             setOrganisationId(apiResponse.extract().jsonPath().prettyPeek().getString("organisationUsers.organisation.id"));
         } else if (userType.equals(UserType.INTERNAL.asString())) {
             userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, userId)).toString();
