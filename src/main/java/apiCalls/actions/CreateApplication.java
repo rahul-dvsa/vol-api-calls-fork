@@ -11,10 +11,13 @@ import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.LinkedHashMap;
 
 public class CreateApplication extends BaseAPI {
+    private static final Logger LOGGER = LogManager.getLogger(CreateApplication.class);
 
     FakerUtils faker = new FakerUtils();
 
@@ -1101,10 +1104,12 @@ public class CreateApplication extends BaseAPI {
 
     public ValidatableResponse addBusinessType() {
         String organisationVersion = fetchApplicationInformation(getApplicationId(), "licence.organisation.version", "1");
+        LOGGER.info("AP Version Number: ".concat(organisationVersion));
         String updateBusinessTypeResource = URL.build(env, String.format("organisation/%s/business-type/", getUserDetails().getOrganisationId())).toString();
 
         BusinessTypeBuilder businessTypeBuilder = new BusinessTypeBuilder().withBusinessType(getUser().getBusinessType()).withVersion(organisationVersion)
                 .withId(getUserDetails().getOrganisationId()).withApplication(getApplicationId());
+        LOGGER.info("AP Request: ".concat(String.valueOf(businessTypeBuilder)));
         apiResponse = RestUtils.put(businessTypeBuilder, updateBusinessTypeResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
