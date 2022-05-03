@@ -1104,7 +1104,7 @@ public class CreateApplication extends BaseAPI {
 
     public ValidatableResponse addBusinessType() {
         String organisationVersion = fetchApplicationInformation(getApplicationId(), "licence.organisation.version", "1");
-        LOGGER.info("AP Version Number: ".concat(organisationVersion));
+        LOGGER.info("AP Version Number: " + organisationVersion);
         String updateBusinessTypeResource = URL.build(env, String.format("organisation/%s/business-type/", getUserDetails().getOrganisationId())).toString();
 
         BusinessTypeBuilder businessTypeBuilder = new BusinessTypeBuilder().withBusinessType(getUser().getBusinessType()).withVersion(organisationVersion)
