@@ -33,5 +33,4 @@ public class ECMTPermitApplicationAPI extends BaseAPI {
 
         return response.extract().body().as(ECMTApplicationModel.class);
     }
-
 }

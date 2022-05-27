@@ -9,7 +9,6 @@ import apiCalls.Utils.generic.BaseAPI;
 import apiCalls.Utils.generic.Headers;
 import apiCalls.Utils.generic.Utils;
 import apiCalls.enums.UserRoles;
-import apiCalls.enums.UserType;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
@@ -52,6 +51,7 @@ public class GrantLicence extends BaseAPI{
     }
 
     public GrantLicence (CreateApplication application) {
+        AccessToken accessToken = new AccessToken();
         this.application = application;
         setDateState(date.getFormattedDate(0,0,0,"yyyy-MM-dd"));
             apiHeaders.getHeaders().put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
@@ -91,7 +91,6 @@ public class GrantLicence extends BaseAPI{
         apiResponse = RestUtils.put(overview, overviewResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
-
     }
 
     public void getOutstandingFees() {
@@ -125,7 +124,6 @@ public class GrantLicence extends BaseAPI{
                 .withPaymentMethod(paymentMethod).withReceived(feesToPay.stream().mapToDouble(Double::doubleValue).sum()).withReceiptDate(getDateState()).withPayer(payer).withSlipNo(slipNo);
         apiResponse = RestUtils.post(feesBuilder, payOutstandingFeesResource, apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
-
     }
 
     public void grant() {

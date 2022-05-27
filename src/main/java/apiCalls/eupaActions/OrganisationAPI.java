@@ -27,7 +27,6 @@ public class OrganisationAPI extends BaseAPI {
         URL.build(EnvironmentType.getEnum(env), path);
         response = RestUtils.get(String.valueOf(URL.getURL()), getHeaders());
 
-        System.out.print("\n\nRESPONSE:\n\n");
         prettyPrintJson(response.extract().asString());
 
         response.statusCode(expectedResponseCode);
@@ -38,5 +37,4 @@ public class OrganisationAPI extends BaseAPI {
     private static OrganisationModel getOrganisationModel(String path) {
         return getOrganisationModel(path, OrganisationModel.class, HttpStatus.SC_OK);
     }
-
 }

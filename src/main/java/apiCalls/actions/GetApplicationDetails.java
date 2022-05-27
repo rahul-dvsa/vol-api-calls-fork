@@ -11,7 +11,6 @@ import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
 public class GetApplicationDetails {
-
     private ValidatableResponse apiResponse;
 
     private CreateApplication application;

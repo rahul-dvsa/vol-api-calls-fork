@@ -17,7 +17,6 @@ import org.dvsa.testing.lib.url.utils.EnvironmentType;
 public class GetUserDetails {
 
     private String jwtToken;
-    private String pid;
     private String organisationId;
 
     private final EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
@@ -28,7 +27,6 @@ public class GetUserDetails {
     public ValidatableResponse getUserDetails(String userType, String userId, String username, String password) {
         String userDetailsResource;
         Headers apiHeaders = new Headers();
-
         apiHeaders
                 .headers
                 .put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserType.INTERNAL.asString()));
@@ -41,11 +39,7 @@ public class GetUserDetails {
         } else if (userType.equals(UserType.INTERNAL.asString())) {
             userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, userId)).toString();
             apiResponse = RestUtils.get(userDetailsResource, apiHeaders.getHeaders());
-            if ((env == EnvironmentType.DAILY_ASSURANCE) || (env == EnvironmentType.QUALITY_ASSURANCE)) {
-                setJwtToken(AccessToken.getToken(username, password, Realm.INTERNAL.asString()));
-            } else {
-                setPid(apiResponse.extract().jsonPath().getString("pid"));
-            }
+            setJwtToken(AccessToken.getToken(username, password, Realm.INTERNAL.asString()));
         }
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         return apiResponse;
@@ -57,14 +51,6 @@ public class GetUserDetails {
 
     public String getJwtToken() {
         return jwtToken;
-    }
-
-    public void setPid(String pid) {
-        this.pid = pid;
-    }
-
-    public String getPid() {
-        return pid;
     }
 
     public String getOrganisationId() {

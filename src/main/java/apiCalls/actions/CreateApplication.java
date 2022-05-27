@@ -18,8 +18,9 @@ public class CreateApplication extends BaseAPI {
 
     FakerUtils faker = new FakerUtils();
 
-    private static int version = 1;
+    private static final int version = 1;
 
+    private AccessToken accessToken;
     private RegisterUser user;
     private GetUserDetails userDetails;
     private String applicationId;
@@ -29,7 +30,6 @@ public class CreateApplication extends BaseAPI {
     private String vehicleType;
     private String niFlag = System.getProperty("ni");
     private String isInterim;
-    private String organisationName;
     private String organisationEmailAddress;
     private String phoneNumber;
     private String companyNumber;
@@ -134,7 +134,7 @@ public class CreateApplication extends BaseAPI {
 
     public Headers apiHeaders = new Headers();
 
-    private EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
+    private final EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
 
     private ValidatableResponse apiResponse;
 
@@ -948,6 +948,13 @@ public class CreateApplication extends BaseAPI {
 
     public void setHours(double hours) {
         this.hours = hours;
+    }
+    public AccessToken getAccessToken(){
+        return accessToken;
+    }
+
+    public void setAccessToken(AccessToken accessToken) {
+        this.accessToken = accessToken;
     }
 
     public CreateApplication(RegisterUser registerUser, GetUserDetails getUserDetails) {

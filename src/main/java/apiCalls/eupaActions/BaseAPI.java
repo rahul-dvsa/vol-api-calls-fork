@@ -3,6 +3,8 @@ package apiCalls.eupaActions;
 import activesupport.http.RestUtils;
 import activesupport.system.Properties;
 import apiCalls.Utils.generic.Utils;
+import apiCalls.actions.AccessToken;
+import apiCalls.enums.UserRoles;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
@@ -15,14 +17,13 @@ import java.util.Map;
 
 public abstract class BaseAPI {
 
-    private static Map<String, String> headers = new HashMap<>();
-    private static String apiHeader = Utils.config.getString("apiHeader");
+    private static final Map<String, String> headers = new HashMap<>();
 
     static {
         RestUtils.urlEncoding(false);
         URL.build(EnvironmentType.getEnum(Properties.get("env", true)));
         // TODO: Investigate how to retrieve this value from the system.
-        setHeader("x-pid", apiHeader);
+        setHeader( "Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
         setHeader("api", "dvsa");
     }
 
@@ -46,7 +47,6 @@ public abstract class BaseAPI {
         Gson gson = new GsonBuilder().setLenient().setPrettyPrinting().create();
         JsonParser jp = new JsonParser();
         try {
-            System.out.print("\nRESPONSE:\n");
             System.out.println(gson.toJson(jp.parse(jsonString)));
         } catch (Exception ex) {}
     }

@@ -3,6 +3,8 @@ package apiCalls.eupaActions.internal;
 import activesupport.http.RestUtils;
 import activesupport.system.Properties;
 import apiCalls.Utils.generic.Utils;
+import apiCalls.actions.AccessToken;
+import apiCalls.enums.UserRoles;
 import apiCalls.eupaActions.BaseAPI;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
@@ -17,21 +19,16 @@ public class LicenceAPI extends BaseAPI {
     private static String apiHeader = Utils.config.getString("apiHeader");
 
     public static String licenceNumber(@NotNull String licenceId){
-        String oldXPID = getHeader("x-pid"); // Needed as other calls might expect an external x-pid
-        updateHeader("x-pid", apiHeader);
+        updateHeader( "Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
 
         String env = Properties.get("env", true);
         URL.build(EnvironmentType.getEnum(env), baseResource.concat(licenceId));
 
         response = RestUtils.get(String.valueOf(URL.getURL()), getHeaders());
 
-        System.out.print("\n\nRESPONSE:\n\n");
         prettyPrintJson(response.extract().asString());
 
         response.statusCode(HttpStatus.SC_OK);
-        updateHeader("x-pid", oldXPID);
-
         return response.extract().path("licNo");
     }
-
 }

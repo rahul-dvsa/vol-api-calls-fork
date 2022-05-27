@@ -10,10 +10,9 @@ import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
 public class BaseAPI {
-
     protected static EnvironmentType env;
     static Headers headers = new Headers();
-    static String adminJWT = AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString());
+     String adminJWT = AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString());
 
     public BaseAPI() {
         try {
@@ -38,7 +37,7 @@ public class BaseAPI {
         return retrieveAPIData(url, jsonPath, defaultReturn);
     }
 
-    public static String retrieveAPIData(String url, String jsonPath, String defaultReturn) {
+    public  String retrieveAPIData(String url, String jsonPath, String defaultReturn) {
         headers.getHeaders().put("Authorization", "Bearer " + adminJWT);
         ValidatableResponse response = RestUtils.get(url, headers.getHeaders());
         try {

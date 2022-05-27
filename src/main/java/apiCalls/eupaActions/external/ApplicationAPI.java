@@ -431,5 +431,4 @@ public class ApplicationAPI extends BaseAPI {
 
         response.statusCode(HttpStatus.SC_CREATED);
     }
-
 }
