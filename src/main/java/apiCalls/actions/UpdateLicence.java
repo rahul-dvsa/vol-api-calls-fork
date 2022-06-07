@@ -669,7 +669,6 @@ public class UpdateLicence extends BaseAPI {
         this.application = application;
         apiHeaders.getHeaders().put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
         setVariationType(null);
-        setAdminAPIHeader(Utils.config.getString("apiHeader"));
 
         // Case Details
         setCaseType("case_t_lic");

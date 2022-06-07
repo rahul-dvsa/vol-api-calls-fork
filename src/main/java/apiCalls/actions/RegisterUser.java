@@ -123,7 +123,6 @@ public class RegisterUser {
 
     public ValidatableResponse registerUser() {
         String registerResource = URL.build(env, "user/selfserve/register").toString();
-        apiHeaders.getHeaders().put("api", "vol");
 
         PersonBuilder personBuilder = new PersonBuilder().withTitle(getTitle()).withForename(getForeName()).withFamilyName(getFamilyName()).withBirthDate(getBirthDate());
         ContactDetailsBuilder contactDetailsBuilder = new ContactDetailsBuilder().withEmailAddress(getEmailAddress()).withPerson(personBuilder);
