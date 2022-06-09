@@ -114,7 +114,7 @@ public class RegisterUser {
         setForeName( faker.generateFirstName().concat(String.valueOf(Int.random(100, 999))) );
         setFamilyName( faker.generateLastName().concat(String.valueOf(Int.random(100, 999))) );
         setBirthDate( Int.random(1900, 2018) + "-" + Int.random(1, 12) + "-" + Int.random(1, 28) );
-        setUserName( String.format("%s.%s%s", getForeName(), getFamilyName(), Int.random(1000,9999)) );
+        setUserName( String.format("%s%s%s", getForeName(), getFamilyName(), Int.random(1000,9999)) );
         setEmailAddress( String.format("%s_%s%s.tester@dvsa.com", getForeName(), getFamilyName(), Int.random(10000, 99999)) );
         setTitle( UserTitle.MR.asString() );
         setOrganisationName( faker.generateCompanyName() );
