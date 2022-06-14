@@ -50,7 +50,8 @@ public class GrantLicence extends BaseAPI{
         this.dateState = dateState;
     }
 
-    public GrantLicence () {
+    public GrantLicence (CreateApplication application) {
+        this.application = application;
         setDateState(date.getFormattedDate(0,0,0,"yyyy-MM-dd"));
             apiHeaders.getHeaders().put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
     }
