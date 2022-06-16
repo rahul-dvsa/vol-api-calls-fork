@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GrantLicence extends BaseAPI{
+public class GrantLicence extends BaseAPI {
 
     private static final Logger LOGGER = LogManager.getLogger(GrantLicence.class);
     private final EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
@@ -38,7 +38,7 @@ public class GrantLicence extends BaseAPI{
     private String dateState;
     private final AccessToken jwtToken = new AccessToken();
 
-    private void setFeeId(int feeId){
+    private void setFeeId(int feeId) {
         this.feeId = feeId;
     }
 
@@ -50,10 +50,10 @@ public class GrantLicence extends BaseAPI{
         this.dateState = dateState;
     }
 
-    public GrantLicence (CreateApplication application) {
+    public GrantLicence(CreateApplication application) {
         this.application = application;
-        setDateState(date.getFormattedDate(0,0,0,"yyyy-MM-dd"));
-            apiHeaders.getHeaders().put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+        setDateState(date.getFormattedDate(0, 0, 0, "yyyy-MM-dd"));
+        apiHeaders.getHeaders().put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
     }
 
     public ValidatableResponse grantLicence() {
@@ -136,7 +136,7 @@ public class GrantLicence extends BaseAPI{
             LOGGER.info(apiResponse.extract().response().asString());
             throw new HTTPException(apiResponse.extract().statusCode());
         } else if (apiResponse.extract().response().asString().contains("fee")) {
-            setFeeId( apiResponse.extract().response().jsonPath().getInt("id.fee") );
+            setFeeId(apiResponse.extract().response().jsonPath().getInt("id.fee"));
             try {
                 String apiMessages = apiResponse.extract().jsonPath().get("messages").toString();
                 Assert.assertTrue(apiMessages.contains("Application status updated"));
@@ -184,7 +184,7 @@ public class GrantLicence extends BaseAPI{
             LOGGER.info(apiResponse.extract().response().asString());
             throw new HTTPException(apiResponse.extract().statusCode());
         } else if (apiResponse.extract().response().asString().contains("fee")) {
-            setFeeId( apiResponse.extract().response().jsonPath().getInt("id.fee") );
+            setFeeId(apiResponse.extract().response().jsonPath().getInt("id.fee"));
         }
     }
 
@@ -198,7 +198,7 @@ public class GrantLicence extends BaseAPI{
             LOGGER.info(apiResponse.extract().response().asString());
             throw new HTTPException(apiResponse.extract().statusCode());
         } else if (apiResponse.extract().response().asString().contains("fee")) {
-            setFeeId( apiResponse.extract().response().jsonPath().getInt("id.fee") );
+            setFeeId(apiResponse.extract().response().jsonPath().getInt("id.fee"));
         }
     }
 }
