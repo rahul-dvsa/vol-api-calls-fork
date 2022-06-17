@@ -3,14 +3,16 @@ package apiCalls.Utils.generic;
 import activesupport.MissingRequiredArgument;
 import activesupport.http.RestUtils;
 import activesupport.system.Properties;
+import apiCalls.actions.AccessToken;
+import apiCalls.enums.UserRoles;
 import io.restassured.response.ValidatableResponse;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
 public class BaseAPI {
-
-    protected EnvironmentType env;
-    private static String apiHeader = Utils.config.getString("apiHeader");
+    protected static EnvironmentType env;
+    static Headers headers = new Headers();
+     String adminJWT = AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString());
 
     public BaseAPI() {
         try {
@@ -30,14 +32,13 @@ public class BaseAPI {
         return retrieveAPIData(url, jsonPath, defaultReturn);
     }
 
-    public String fetchInternalUserInformation(String userId, String jsonPath, String defaultReturn){
+    public String fetchInternalUserInformation(String userId, String jsonPath, String defaultReturn) {
         String url = URL.build(env, String.format("user/internal/%s", userId)).toString();
         return retrieveAPIData(url, jsonPath, defaultReturn);
     }
 
-    public static String retrieveAPIData(String url, String jsonPath, String defaultReturn) {
-        Headers headers = new Headers();
-        headers.headers.put("x-pid", apiHeader);
+    public  String retrieveAPIData(String url, String jsonPath, String defaultReturn) {
+        headers.getHeaders().put("Authorization", "Bearer " + adminJWT);
         ValidatableResponse response = RestUtils.get(url, headers.getHeaders());
         try {
             return response.extract().response().jsonPath().getString(jsonPath);

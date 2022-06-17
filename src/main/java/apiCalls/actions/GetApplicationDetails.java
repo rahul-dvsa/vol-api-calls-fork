@@ -4,16 +4,13 @@ import activesupport.http.RestUtils;
 import activesupport.system.Properties;
 import apiCalls.Utils.generic.Headers;
 import apiCalls.Utils.generic.Utils;
+import apiCalls.enums.UserRoles;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
-import org.apache.logging.log4j.LogManager;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
-import javax.xml.ws.http.HTTPException;
-
 public class GetApplicationDetails {
-
     private ValidatableResponse apiResponse;
 
     private CreateApplication application;
@@ -54,7 +51,7 @@ public class GetApplicationDetails {
 
     public ValidatableResponse getApplicationLicenceDetails(CreateApplication createApplication) {
         String getApplicationResource = URL.build(env, String.format("application/%s", application.getApplicationId())).toString();
-        apiHeaders.getHeaders().put("x-pid", Utils.config.getString("apiHeader"));
+        apiHeaders.getHeaders().put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
         apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
         setLicenceId(apiResponse.extract().jsonPath().getString("licence.id"));
         setLicenceNumber(apiResponse.extract().jsonPath().getString("licence.licNo"));

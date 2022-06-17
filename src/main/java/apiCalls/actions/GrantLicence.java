@@ -8,6 +8,7 @@ import apiCalls.Utils.volBuilders.*;
 import apiCalls.Utils.generic.BaseAPI;
 import apiCalls.Utils.generic.Headers;
 import apiCalls.Utils.generic.Utils;
+import apiCalls.enums.UserRoles;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
@@ -22,21 +23,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GrantLicence extends BaseAPI{
+public class GrantLicence extends BaseAPI {
 
     private static final Logger LOGGER = LogManager.getLogger(GrantLicence.class);
-    private EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
-    private FakerUtils faker = new FakerUtils();
-    private Headers apiHeaders = new Headers();
-    private Dates date = new Dates(LocalDate::new);
+    private final EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
+    private final FakerUtils faker = new FakerUtils();
+    private final Headers apiHeaders = new Headers();
+    private final Dates date = new Dates(LocalDate::new);
     private ValidatableResponse apiResponse;
     private final CreateApplication application;
     private List outstandingFeesIds;
-    private List<Double> feesToPay = new ArrayList<>();
+    private final List<Double> feesToPay = new ArrayList<>();
     private int feeId;
     private String dateState;
+    private final AccessToken jwtToken = new AccessToken();
 
-    private void setFeeId(int feeId){
+    private void setFeeId(int feeId) {
         this.feeId = feeId;
     }
 
@@ -48,10 +50,10 @@ public class GrantLicence extends BaseAPI{
         this.dateState = dateState;
     }
 
-    public GrantLicence (CreateApplication application) {
+    public GrantLicence(CreateApplication application) {
         this.application = application;
-        setDateState(date.getFormattedDate(0,0,0,"yyyy-MM-dd"));
-        apiHeaders.headers.put("x-pid", Utils.config.getString("apiHeader"));
+        setDateState(date.getFormattedDate(0, 0, 0, "yyyy-MM-dd"));
+        apiHeaders.getHeaders().put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
     }
 
     public ValidatableResponse grantLicence() {
@@ -88,7 +90,6 @@ public class GrantLicence extends BaseAPI{
         apiResponse = RestUtils.put(overview, overviewResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
-
     }
 
     public void getOutstandingFees() {
@@ -122,7 +123,6 @@ public class GrantLicence extends BaseAPI{
                 .withPaymentMethod(paymentMethod).withReceived(feesToPay.stream().mapToDouble(Double::doubleValue).sum()).withReceiptDate(getDateState()).withPayer(payer).withSlipNo(slipNo);
         apiResponse = RestUtils.post(feesBuilder, payOutstandingFeesResource, apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
-
     }
 
     public void grant() {
@@ -136,7 +136,7 @@ public class GrantLicence extends BaseAPI{
             LOGGER.info(apiResponse.extract().response().asString());
             throw new HTTPException(apiResponse.extract().statusCode());
         } else if (apiResponse.extract().response().asString().contains("fee")) {
-            setFeeId( apiResponse.extract().response().jsonPath().getInt("id.fee") );
+            setFeeId(apiResponse.extract().response().jsonPath().getInt("id.fee"));
             try {
                 String apiMessages = apiResponse.extract().jsonPath().get("messages").toString();
                 Assert.assertTrue(apiMessages.contains("Application status updated"));
@@ -184,7 +184,7 @@ public class GrantLicence extends BaseAPI{
             LOGGER.info(apiResponse.extract().response().asString());
             throw new HTTPException(apiResponse.extract().statusCode());
         } else if (apiResponse.extract().response().asString().contains("fee")) {
-            setFeeId( apiResponse.extract().response().jsonPath().getInt("id.fee") );
+            setFeeId(apiResponse.extract().response().jsonPath().getInt("id.fee"));
         }
     }
 
@@ -198,7 +198,7 @@ public class GrantLicence extends BaseAPI{
             LOGGER.info(apiResponse.extract().response().asString());
             throw new HTTPException(apiResponse.extract().statusCode());
         } else if (apiResponse.extract().response().asString().contains("fee")) {
-            setFeeId( apiResponse.extract().response().jsonPath().getInt("id.fee") );
+            setFeeId(apiResponse.extract().response().jsonPath().getInt("id.fee"));
         }
     }
 }
