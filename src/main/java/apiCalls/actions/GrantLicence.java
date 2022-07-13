@@ -16,7 +16,6 @@ import org.apache.logging.log4j.Logger;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 import org.joda.time.LocalDate;
-import org.junit.Assert;
 
 import javax.xml.ws.http.HTTPException;
 import java.util.ArrayList;
@@ -137,11 +136,8 @@ public class GrantLicence extends BaseAPI {
             throw new HTTPException(apiResponse.extract().statusCode());
         } else if (apiResponse.extract().response().asString().contains("fee")) {
             setFeeId(apiResponse.extract().response().jsonPath().getInt("id.fee"));
-            try {
-                String apiMessages = apiResponse.extract().jsonPath().get("messages").toString();
-                Assert.assertTrue(apiMessages.contains("Application status updated"));
-                Assert.assertTrue(apiMessages.contains("Licence status updated"));
-            } catch (AssertionError e) {
+            String apiMessages = apiResponse.extract().jsonPath().get("messages").toString();
+            if (!apiMessages.contains("Application status updated") && (!apiMessages.contains("Licence status updated"))) {
                 throw new AssertionError("Licence failed to grant through the API.");
             }
         }

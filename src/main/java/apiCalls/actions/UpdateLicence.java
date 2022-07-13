@@ -11,17 +11,14 @@ import apiCalls.Utils.generic.*;
 import apiCalls.enums.LicenceType;
 import apiCalls.enums.OperatorType;
 import apiCalls.enums.UserRoles;
-import apiCalls.enums.UserType;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.exceptions.MalformedURLException;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 import activesupport.system.Properties;
-import org.hamcrest.Matchers;
 import org.joda.time.LocalDate;
 
-import static org.junit.Assert.assertThat;
 
 import java.util.*;
 
@@ -1044,9 +1041,13 @@ public class UpdateLicence extends BaseAPI {
                 .withLicenceType(application.getLicenceType()).withNiFlag(application.getNiFlag()).withStartNumber(getStartNumber());
         apiResponse = RestUtils.post(printDiscBuilder, discPrintResource, apiHeaders.getHeaders());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
-        assertThat(apiResponse.extract().body().jsonPath().get("id.queue"), Matchers.notNullValue());
-        setQueueId(apiResponse.extract().jsonPath().get("id.queue").toString());
-        confirmDiscPrint();
+        if (apiResponse.extract().body().jsonPath().get("id.queue").toString() == null){
+            throw new AssertionError("Queue id is empty");
+        }else {
+            setQueueId(apiResponse.extract().jsonPath().get("id.queue").toString());
+            confirmDiscPrint();
+
+        }
     }
 
     private void confirmDiscPrint() {
