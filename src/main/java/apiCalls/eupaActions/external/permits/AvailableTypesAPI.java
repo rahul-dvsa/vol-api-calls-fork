@@ -11,13 +11,11 @@ import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
 public class AvailableTypesAPI extends BaseAPI {
 
-    private static String baseResource = "permits/available-types/";
-    private static ValidatableResponse response;
-
     public static TypesModel types() {
+        String baseResource = "permits/available-types/";
         URL.build(EnvironmentType.getEnum(Properties.get("env")), baseResource);
 
-        response = RestUtils.get(String.valueOf(URL.getURL()), getHeaders());
+        ValidatableResponse response = RestUtils.get(String.valueOf(URL.getURL()), getHeaders());
 
         prettyPrintJson(response.extract().asString());
 
@@ -25,5 +23,4 @@ public class AvailableTypesAPI extends BaseAPI {
 
         return response.extract().body().as(TypesModel.class);
     }
-
 }

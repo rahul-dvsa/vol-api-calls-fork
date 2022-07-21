@@ -9,10 +9,11 @@ import io.restassured.response.ValidatableResponse;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
+
 public class BaseAPI {
     protected static EnvironmentType env;
     static Headers headers = new Headers();
-     String adminJWT = AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString());
+
 
     public BaseAPI() {
         try {
@@ -20,6 +21,11 @@ public class BaseAPI {
         } catch (MissingRequiredArgument missingRequiredArgument) {
             missingRequiredArgument.printStackTrace();
         }
+    }
+
+    public String adminJWT() {
+        AccessToken accessToken = new AccessToken();
+        return accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString());
     }
 
     public String fetchApplicationInformation(String applicationNumber, String jsonPath, String defaultReturn) {
@@ -37,8 +43,8 @@ public class BaseAPI {
         return retrieveAPIData(url, jsonPath, defaultReturn);
     }
 
-    public  String retrieveAPIData(String url, String jsonPath, String defaultReturn) {
-        headers.getHeaders().put("Authorization", "Bearer " + adminJWT);
+    public String retrieveAPIData(String url, String jsonPath, String defaultReturn) {
+        headers.getHeaders().put("Authorization", "Bearer " + adminJWT());
         ValidatableResponse response = RestUtils.get(url, headers.getHeaders());
         try {
             return response.extract().response().jsonPath().getString(jsonPath);

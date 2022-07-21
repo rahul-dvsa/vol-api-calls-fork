@@ -105,9 +105,7 @@ public class RegisterUser {
 
     private EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
 
-    private ValidatableResponse apiResponse;
-
-    private Headers apiHeaders = new Headers();
+    private final Headers apiHeaders = new Headers();
 
     public RegisterUser() {
         FakerUtils faker = new FakerUtils();
@@ -130,7 +128,7 @@ public class RegisterUser {
         SelfServeUserRegistrationDetailsBuilder selfServeUserRegistrationDetailsBuilder = new SelfServeUserRegistrationDetailsBuilder().withLoginId(getUserName()).withContactDetails(contactDetailsBuilder)
                 .withOrganisationName(getOrganisationName()).withBusinessType(getBusinessType());
 
-        apiResponse = RestUtils.post(selfServeUserRegistrationDetailsBuilder, registerResource, apiHeaders.getHeaders());
+        ValidatableResponse apiResponse = RestUtils.post(selfServeUserRegistrationDetailsBuilder, registerResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
         setUserId(apiResponse.extract().jsonPath().getString("id.user"));

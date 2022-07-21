@@ -18,9 +18,10 @@ import org.jetbrains.annotations.NotNull;
 public class CaseWorkerAPI extends BaseAPI {
 
     private static ValidatableResponse response;
+    private static AccessToken accessToken = new AccessToken();
 
     public static void overview(@NotNull OverviewModel overview) {
-        updateHeader("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+        updateHeader("Authorization", "Bearer " + accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
         URL.build(EnvironmentType.getEnum(Properties.get("env", true)), String.format("application/%s/overview/", overview.getApplicationId()));
         int version = 1;
 
@@ -41,7 +42,7 @@ public class CaseWorkerAPI extends BaseAPI {
     }
 
     public static StandardResponseModel grantApplication(@NotNull GrantApplicationModel grantApplication) {
-        updateHeader( "Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+        updateHeader( "Authorization", "Bearer " + accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
         URL.build(EnvironmentType.getEnum(Properties.get("env", true)), String.format("application/%s/grant/", grantApplication.getId()));
 
         response = RestUtils.put(grantApplication, String.valueOf(URL.getURL()), getHeaders());

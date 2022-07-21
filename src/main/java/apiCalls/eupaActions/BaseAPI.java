@@ -20,11 +20,11 @@ public abstract class BaseAPI {
     private static final Map<String, String> headers = new HashMap<>();
 
     static {
+        AccessToken accessToken = new AccessToken();
         RestUtils.urlEncoding(false);
         URL.build(EnvironmentType.getEnum(Properties.get("env", true)));
         // TODO: Investigate how to retrieve this value from the system.
-        setHeader( "Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
-        setHeader("api", "dvsa");
+        setHeader( "Authorization", "Bearer " + accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
     }
 
     public static Map<String, String> getHeaders() {

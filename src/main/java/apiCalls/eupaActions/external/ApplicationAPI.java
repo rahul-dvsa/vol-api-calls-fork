@@ -18,9 +18,9 @@ import java.util.concurrent.TimeUnit;
 
 public class ApplicationAPI extends BaseAPI {
     private static ValidatableResponse response;
-    private static String baseResource = "application";
 
     public static StandardResponseModel create(@NotNull ApplicationModel applicationModel) {
+        String baseResource = "application";
         URL.build(EnvironmentType.getEnum(Properties.get("env")), baseResource);
 
         response = RestUtils.post(applicationModel, String.valueOf(URL.getURL()), getHeaders());

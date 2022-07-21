@@ -23,7 +23,8 @@ public class IrhpPermitWindowAPI {
     private static Headers apiHeaders = new Headers();
 
     public static OpenByCountryModel openByCountry(String[] countryIds) {
-        apiHeaders.headers.put( "Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+        AccessToken accessToken = new AccessToken();
+        apiHeaders.headers.put( "Authorization", "Bearer " + accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
         String openCountries = URL.build(env,"irhp-permit-window/open-by-country").toString();
 
         Map<String, String> map = new HashMap<>();

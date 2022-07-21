@@ -12,10 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class ECMTPermitApplicationAPI extends BaseAPI {
 
-    private static ValidatableResponse response;
-    private static String baseResource = "permits/ecmt-permit-application/";
-
     public static ECMTApplicationModel get(@NotNull String organisationId){
+        String baseResource = "permits/ecmt-permit-application/";
         URL.build(
                 EnvironmentType.getEnum(Properties.get("env")),
                 baseResource.concat(
@@ -24,7 +22,7 @@ public class ECMTPermitApplicationAPI extends BaseAPI {
                 )
         );
         String url = URL.getURL().toString().substring(0, URL.getURL().toString().length() - 1);
-        response = RestUtils.get(url, getHeaders());
+        ValidatableResponse response = RestUtils.get(url, getHeaders());
 
         System.out.print("\n\nRESPONSE:\n\n");
         prettyPrintJson(response.extract().asString());

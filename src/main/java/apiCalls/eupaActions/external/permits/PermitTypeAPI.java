@@ -13,7 +13,7 @@ import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
 public class PermitTypeAPI extends BaseAPI {
 
-    private static String baseResource = "irhp-permit-type/";
+    private static final String baseResource = "irhp-permit-type/";
     private static ValidatableResponse response;
 
     public static PermitTypeModel permitDetails(TypeModel type) {

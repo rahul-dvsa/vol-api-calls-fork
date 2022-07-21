@@ -13,9 +13,9 @@ import java.util.HashMap;
 
 public class AccessToken {
 
-    static EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
+    EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
 
-    public static String getToken(String username, String password, String realm) {
+    public String getToken(String username, String password, String realm) {
         String jwtTokenResource;
         HashMap<String, String> header = new HashMap<>();
 

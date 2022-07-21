@@ -18,24 +18,20 @@ import org.dvsa.testing.lib.url.utils.EnvironmentType;
 import org.joda.time.LocalDate;
 
 import javax.xml.ws.http.HTTPException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-public class GrantLicence extends BaseAPI {
+public class GrantLicence {
 
     private static final Logger LOGGER = LogManager.getLogger(GrantLicence.class);
     private final EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
     private final FakerUtils faker = new FakerUtils();
     private final Headers apiHeaders = new Headers();
-    private final Dates date = new Dates(LocalDate::new);
     private ValidatableResponse apiResponse;
     private final CreateApplication application;
     private List outstandingFeesIds;
     private final List<Double> feesToPay = new ArrayList<>();
     private int feeId;
     private String dateState;
-    private final AccessToken jwtToken = new AccessToken();
 
     private void setFeeId(int feeId) {
         this.feeId = feeId;
@@ -51,8 +47,15 @@ public class GrantLicence extends BaseAPI {
 
     public GrantLicence(CreateApplication application) {
         this.application = application;
+        Dates date = new Dates(LocalDate::new);
         setDateState(date.getFormattedDate(0, 0, 0, "yyyy-MM-dd"));
-        apiHeaders.getHeaders().put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+    }
+
+    public HashMap<String, String> header() {
+        AccessToken accessToken = new AccessToken();
+        String header = accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString());
+        apiHeaders.getHeaders().put("Authorization", "Bearer " + header);
+        return apiHeaders.headers;
     }
 
     public ValidatableResponse grantLicence() {
@@ -70,14 +73,14 @@ public class GrantLicence extends BaseAPI {
      */
 
     public void createOverview() {
-
+        BaseAPI baseAPI = new BaseAPI();
         String overviewResource = URL.build(env, String.format("application/%s/overview/", application.getApplicationId())).toString();
         String status = "1";
         String overrideOption = "Y";
         String transportArea = "D";
-        String trackingId = fetchApplicationInformation(application.getApplicationId(), "applicationTracking.id", null);
-        int applicationVersion = Integer.parseInt(fetchApplicationInformation(application.getApplicationId(), "version", "1"));
-        int applicationTrackingVersion = Integer.parseInt(fetchApplicationInformation(application.getApplicationId(), "applicationTracking.version", "1"));
+        String trackingId = baseAPI.fetchApplicationInformation(application.getApplicationId(), "applicationTracking.id", null);
+        int applicationVersion = Integer.parseInt(baseAPI.fetchApplicationInformation(application.getApplicationId(), "version", "1"));
+        int applicationTrackingVersion = Integer.parseInt(baseAPI.fetchApplicationInformation(application.getApplicationId(), "applicationTracking.version", "1"));
 
         TrackingBuilder tracking = new TrackingBuilder().withId(trackingId).withVersion(applicationTrackingVersion).withAddressesStatus(status).withBusinessDetailsStatus(status).withBusinessTypeStatus(status)
                 .withCommunityLicencesStatus(status).withConditionsUndertakingsStatus(status).withConvictionsPenaltiesStatus(status).withFinancialEvidenceStatus(status)
@@ -86,7 +89,7 @@ public class GrantLicence extends BaseAPI {
                 .withTaxiPhvStatus(status);
         OverviewBuilder overview = new OverviewBuilder().withId(application.getApplicationId()).withVersion(applicationVersion).withLeadTcArea(transportArea).withOverrideOppositionDate(overrideOption)
                 .withTracking(tracking);
-        apiResponse = RestUtils.put(overview, overviewResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(overview, overviewResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
     }
@@ -94,7 +97,7 @@ public class GrantLicence extends BaseAPI {
     public void getOutstandingFees() {
 
         String getOutstandingFeesResource = URL.build(env, String.format("application/%s/outstanding-fees/", application.getApplicationId())).toString();
-        apiResponse = RestUtils.get(getOutstandingFeesResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.get(getOutstandingFeesResource, header());
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
             LOGGER.info(apiResponse.extract().statusCode());
             LOGGER.info(apiResponse.extract().response().asString());
@@ -120,7 +123,7 @@ public class GrantLicence extends BaseAPI {
         String payOutstandingFeesResource = URL.build(env, "transaction/pay-outstanding-fees/").toString();
         FeesBuilder feesBuilder = new FeesBuilder().withFeeIds(outstandingFeesIds).withOrganisationId(application.getUserDetails().getOrganisationId()).withApplicationId(application.getApplicationId())
                 .withPaymentMethod(paymentMethod).withReceived(feesToPay.stream().mapToDouble(Double::doubleValue).sum()).withReceiptDate(getDateState()).withPayer(payer).withSlipNo(slipNo);
-        apiResponse = RestUtils.post(feesBuilder, payOutstandingFeesResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(feesBuilder, payOutstandingFeesResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
 
@@ -128,7 +131,7 @@ public class GrantLicence extends BaseAPI {
         String grantApplicationResource = URL.build(env, String.format("application/%s/grant/", application.getApplicationId())).toString();
         GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(application.getApplicationId()).withDuePeriod("9")
                 .withAuthority("grant_authority_dl").withCaseworkerNotes("This notes are from the API");
-        apiResponse = RestUtils.put(grantApplication, grantApplicationResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(grantApplication, grantApplicationResource, header());
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
             LOGGER.info(apiResponse.extract().statusCode());
@@ -153,7 +156,7 @@ public class GrantLicence extends BaseAPI {
 
         FeesBuilder feesBuilder = new FeesBuilder().withFeeIds(Collections.singletonList(feeId)).withOrganisationId(application.getUserDetails().getOrganisationId()).withApplicationId(application.getApplicationId())
                 .withPaymentMethod(paymentMethod).withReceived(grantFees).withReceiptDate(getDateState()).withPayer(payer).withSlipNo(slipNo);
-        apiResponse = RestUtils.post(feesBuilder, payOutstandingFeesResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(feesBuilder, payOutstandingFeesResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
 
@@ -163,8 +166,7 @@ public class GrantLicence extends BaseAPI {
     private void variationGrant() {
         String grantApplicationResource = URL.build(env, String.format("variation/%s/grant/", application.getApplicationId())).toString();
         GenericBuilder grantVariationBuilder = new GenericBuilder().withId(application.getApplicationId());
-        apiResponse = RestUtils.put(grantVariationBuilder, grantApplicationResource, apiHeaders.getHeaders());
-        apiResponse = RestUtils.put(grantVariationBuilder, grantApplicationResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(grantVariationBuilder, grantApplicationResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
 
@@ -173,7 +175,7 @@ public class GrantLicence extends BaseAPI {
     public void refuse(String applicationId) {
         String grantApplicationResource = URL.build(env, String.format("application/%s/refuse/", applicationId)).toString();
         GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(applicationId).withCaseworkerNotes("This notes are from the API");
-        apiResponse = RestUtils.put(grantApplication, grantApplicationResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(grantApplication, grantApplicationResource, header());
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
             LOGGER.info(apiResponse.extract().statusCode());
@@ -187,7 +189,7 @@ public class GrantLicence extends BaseAPI {
     public void withdraw(String applicationId) {
         String grantApplicationResource = URL.build(env, String.format("application/%s/withdraw/", applicationId)).toString();
         GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(applicationId).withReason("reg_in_error");
-        apiResponse = RestUtils.put(grantApplication, grantApplicationResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(grantApplication, grantApplicationResource, header());
 
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
             LOGGER.info(apiResponse.extract().statusCode());

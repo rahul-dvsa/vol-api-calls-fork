@@ -25,14 +25,13 @@ import java.util.*;
 
 public class UpdateLicence extends BaseAPI {
     private final CreateApplication application;
-    private AccessToken jwtToken = new AccessToken();
     private ValidatableResponse apiResponse;
 
-    private Dates date = new Dates(new LocalDateCalendar());
+    private final Dates date = new Dates(new LocalDateCalendar());
 
-    private FakerUtils faker = new FakerUtils();
+    private final FakerUtils faker = new FakerUtils();
 
-    private Headers apiHeaders = new Headers();
+    private final Headers apiHeaders = new Headers();
 
     private String adminAPIHeader;
     private String variationType;
@@ -664,7 +663,6 @@ public class UpdateLicence extends BaseAPI {
 
     public UpdateLicence(CreateApplication application) {
         this.application = application;
-        apiHeaders.getHeaders().put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
         setVariationType(null);
 
         // Case Details
@@ -741,11 +739,18 @@ public class UpdateLicence extends BaseAPI {
         setInterimEndDate(date.getFormattedDate(0, 5, 0, "yyyy-MM-dd"));
     }
 
+    public HashMap<String, String> header(){
+        AccessToken accessToken = new AccessToken();
+        String header = accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString());
+        apiHeaders.getHeaders().put("Authorization", "Bearer " + header);
+        return apiHeaders.headers;
+    }
+
     public void createVariation() {
         String licenceHistoryResource = URL.build(env, String.format("licence/%s/variation", application.getLicenceId())).toString();
 
         VariationBuilder variation = new VariationBuilder().withId(application.getLicenceId()).withFeeRequired("N").withAppliedVia("applied_via_phone").withVariationType(getVariationType());
-        apiResponse = RestUtils.post(variation, licenceHistoryResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(variation, licenceHistoryResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
 
@@ -757,7 +762,7 @@ public class UpdateLicence extends BaseAPI {
         Integer variationApplicationVersion = Integer.parseInt(fetchApplicationInformation(getVariationApplicationId(), "version", "1"));
 
         GenericBuilder genericBuilder = new GenericBuilder().withId(getVariationApplicationId()).withVersion(variationApplicationVersion).withLicenceType(application.getLicenceType());
-        apiResponse = RestUtils.put(genericBuilder, typeOfLicenceResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(genericBuilder, typeOfLicenceResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
     }
@@ -767,7 +772,7 @@ public class UpdateLicence extends BaseAPI {
 
         CaseBuilder caseBuilder = new CaseBuilder().withId(application.getLicenceId()).withCaseType(getCaseType()).withCategorys(caseCategories)
                 .withDescription(getCaseDescription()).withOutcomes(caseOutcomes).withApplication(application.getApplicationId());
-        apiResponse = RestUtils.post(caseBuilder, caseResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(caseBuilder, caseResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
 
@@ -783,7 +788,7 @@ public class UpdateLicence extends BaseAPI {
                 .withCourt(getCourt()).withMsi("Y").withPenalty(getPenalty()).withNotes(getConvictionNotes()).withTakenIntoConsideration("Y")
                 .withIsDeclared("Y").withIsDealtWith("Y").withDefendantType(getDefendantType()).withPersonFirstname(getDefendantFirstname())
                 .withPersonLastname(getDefendantLastname()).withOffenceDate(getOffenceDate());
-        apiResponse = RestUtils.post(caseConvictionBuilder, convictionResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(caseConvictionBuilder, convictionResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
 
@@ -797,7 +802,7 @@ public class UpdateLicence extends BaseAPI {
                 .withComplainantFamilyName(getComplainantFamilyName()).withComplaintType(getComplaintType()).withStatus(getComplainantStatus())
                 .withIsCompliance(getIsCompliance()).withComplaintDate(getComplaintDate()).withInfringementDate(getInfringementDate())
                 .withDescription(getComplainantDescription()).withDriverForename(getDriverForename()).withDriverFamilyName(getDriverFamilyName());
-        apiResponse = RestUtils.post(complaintBuilder, complaintResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(complaintBuilder, complaintResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
 
@@ -811,7 +816,7 @@ public class UpdateLicence extends BaseAPI {
                 .withApplication(application.getApplicationId()).withCase(Integer.toString(getCaseId())).withType(getConditionUndertakingType())
                 .withConditionCategory(getConditionUndertakingCategory()).withFulfilled(getFulfilled()).withAttachedTo(getAttachedTo())
                 .withNotes(getConditionsUndertakingDescription());
-        apiResponse = RestUtils.post(conditionsBuilder, conditionsUndertakingResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(conditionsBuilder, conditionsUndertakingResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
 
@@ -821,7 +826,7 @@ public class UpdateLicence extends BaseAPI {
     public void createSubmission() throws MalformedURLException {
         String submissionResource = URL.build(env, "submission").toString();
         CaseSubmissionBuilder submissionBuilder = new CaseSubmissionBuilder().withCase(Integer.toString(getCaseId())).withSubmissionType(getSubmissionType());
-        apiResponse = RestUtils.post(submissionBuilder, submissionResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(submissionBuilder, submissionResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
 
@@ -833,7 +838,7 @@ public class UpdateLicence extends BaseAPI {
         String caseNoteResource = URL.build(env, "processing/note").toString();
         CaseNotesBuilder caseNotesBuilder = new CaseNotesBuilder().withCase(Integer.toString(getCaseId())).withLicence(application.getLicenceId())
                 .withApplication(application.getApplicationId()).withComment(getCaseNoteComment()).withPriority(getCaseNotePriority());
-        apiResponse = RestUtils.post(caseNotesBuilder, caseNoteResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(caseNotesBuilder, caseNoteResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
 
@@ -842,7 +847,7 @@ public class UpdateLicence extends BaseAPI {
 
     public ValidatableResponse getCaseDetails(String resource, int id) {
         String caseDetailsResource = URL.build(env, String.format("%s/%s", resource, id)).toString();
-        apiResponse = RestUtils.get(caseDetailsResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.get(caseDetailsResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
 
@@ -857,7 +862,7 @@ public class UpdateLicence extends BaseAPI {
         OperatingCentreVariationBuilder updateOperatingCentre = new OperatingCentreVariationBuilder().withId(getVariationApplicationId())
                 .withApplication(getVariationApplicationId()).withNoOfVehiclesRequired(String.valueOf(application.getNoOfAddedHgvVehicles()))
                 .withVersion(version);
-        apiResponse = RestUtils.put(updateOperatingCentre, updateOperatingCentreResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(updateOperatingCentre, updateOperatingCentreResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
 
@@ -879,7 +884,7 @@ public class UpdateLicence extends BaseAPI {
         ContactDetailsBuilder contactDetails = new ContactDetailsBuilder().withEmailAddress(getInternalUserEmailAddress()).withAddress(addressBuilder).withPerson(personBuilder);
         CreateInternalAdminUser internalAdminUser = new CreateInternalAdminUser().withContactDetails(contactDetails)
                 .withLoginId(getInternalUserLogin()).withRoles(roles).withTeam(getInternalUserTeam()).withUserType(userType).withOSType("windows_10");
-        apiResponse = RestUtils.post(internalAdminUser, internalAdminUserResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(internalAdminUser, internalAdminUserResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
         setInternalUserId(apiResponse.extract().response().jsonPath().getString("id.user"));
@@ -903,7 +908,7 @@ public class UpdateLicence extends BaseAPI {
         CreateInternalAdminUser internalAdminUser = new CreateInternalAdminUser().withContactDetails(contactDetails)
                 .withLoginId(getInternalUserLogin()).withTeam(getInternalUserTeam())
                 .withUserType(UserRoles.INTERNAL.asString()).withVersion(version).withOSType(osType).withId(userId);
-        apiResponse = RestUtils.put(internalAdminUser, internalAdminUserResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(internalAdminUser, internalAdminUserResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
 
@@ -914,7 +919,7 @@ public class UpdateLicence extends BaseAPI {
         String grantVariation = URL.build(env, String.format("variation/%s/%s", getVariationApplicationId(), resource)).toString();
 
         GenericBuilder genericBuilder = new GenericBuilder().withId(getVariationApplicationId());
-        apiResponse = RestUtils.put(genericBuilder, grantVariation, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(genericBuilder, grantVariation, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         return apiResponse;
     }
@@ -922,7 +927,7 @@ public class UpdateLicence extends BaseAPI {
     public String getLicenceTrafficArea() {
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
-        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.get(getApplicationResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setTrafficAreaName(apiResponse.extract().jsonPath().getString("trafficArea.name"));
         return getTrafficAreaName();
@@ -931,7 +936,7 @@ public class UpdateLicence extends BaseAPI {
     public String getLicenceStatusDetails() {
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
-        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.get(getApplicationResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setLicenceStatus(apiResponse.extract().jsonPath().getString("status.description"));
         return getLicenceStatus();
@@ -940,7 +945,7 @@ public class UpdateLicence extends BaseAPI {
     public String getOperatorTypeDetails() {
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
-        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.get(getApplicationResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setGoodOrPsv(apiResponse.extract().jsonPath().getString("goodsOrPsv.description"));
         return getGoodOrPsv();
@@ -949,7 +954,7 @@ public class UpdateLicence extends BaseAPI {
     public String getBusinessTypeDetails() {
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
-        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.get(getApplicationResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setBusinessType(apiResponse.extract().jsonPath().getString("organisation.type.description"));
 
@@ -959,7 +964,7 @@ public class UpdateLicence extends BaseAPI {
     public String getLicenceTypeDetails() {
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
-        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.get(getApplicationResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setLicenceType(apiResponse.extract().jsonPath().getString("licenceType.description"));
         return getLicenceType();
@@ -969,7 +974,7 @@ public class UpdateLicence extends BaseAPI {
         String typeOfLicenceResource = URL.build(env, String.format("licence/%s/decisions/%s", application.getLicenceId(), status)).toString();
 
         GenericBuilder genericBuilder = new GenericBuilder().withId(application.getLicenceId());
-        apiResponse = RestUtils.post(genericBuilder, typeOfLicenceResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(genericBuilder, typeOfLicenceResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
 
@@ -977,7 +982,7 @@ public class UpdateLicence extends BaseAPI {
         String surrenderLicenceResource = URL.build(env, String.format("licence/%s/surrender", licenceId)).toString();
 
         SurrendersBuilder surrendersBuilder = new SurrendersBuilder().withLicence(licenceId);
-        apiResponse = RestUtils.post(surrendersBuilder, surrenderLicenceResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(surrendersBuilder, surrenderLicenceResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
         return apiResponse;
     }
@@ -987,7 +992,7 @@ public class UpdateLicence extends BaseAPI {
 
         SurrendersBuilder surrendersBuilder = new SurrendersBuilder().withLicence(application.getLicenceId())
                 .withId(surrenderId.toString()).withDiscsStolen(getDiscsStolen()).withVersion(version);
-        apiResponse = RestUtils.put(surrendersBuilder, updateSurrender, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(surrendersBuilder, updateSurrender, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         return apiResponse;
     }
@@ -997,7 +1002,7 @@ public class UpdateLicence extends BaseAPI {
 
         GenericBuilder genericBuilder = new GenericBuilder().withLicence(application.getLicenceId()).withId(surrenderId.toString());
 
-        apiResponse = RestUtils.delete(genericBuilder, deleteSurrender, apiHeaders.getHeaders());
+        apiResponse = RestUtils.delete(genericBuilder, deleteSurrender, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         return apiResponse;
     }
@@ -1008,7 +1013,7 @@ public class UpdateLicence extends BaseAPI {
         FeatureToggleBuilder featureToggleBuilder = new FeatureToggleBuilder().withId(toggleId).withFriendlyName(friendlyName).withConfigName(configName)
                 .withStatus(status);
 
-        apiResponse = RestUtils.put(featureToggleBuilder, updateFeatureToggleResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(featureToggleBuilder, updateFeatureToggleResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         apiResponse.statusCode(HttpStatus.SC_OK);
     }
@@ -1022,7 +1027,7 @@ public class UpdateLicence extends BaseAPI {
             queryParams.put("discSequence", getDiscSequence());
         }
         String discNumberingResource = URL.build(env, "disc-sequence/discs-numbering").toString();
-        apiResponse = RestUtils.getWithQueryParams(discNumberingResource, queryParams, apiHeaders.getHeaders());
+        apiResponse = RestUtils.getWithQueryParams(discNumberingResource, queryParams, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setStartNumber(apiResponse.extract().jsonPath().get("results.startNumber").toString());
         setEndNumber(apiResponse.extract().jsonPath().get("results.endNumber").toString());
@@ -1039,7 +1044,7 @@ public class UpdateLicence extends BaseAPI {
         String discPrintResource = URL.build(env, String.format("%s-disc/print-discs/", operator)).toString();
         PrintDiscBuilder printDiscBuilder = new PrintDiscBuilder().withDiscSequence(getDiscSequence())
                 .withLicenceType(application.getLicenceType()).withNiFlag(application.getNiFlag()).withStartNumber(getStartNumber());
-        apiResponse = RestUtils.post(printDiscBuilder, discPrintResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(printDiscBuilder, discPrintResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
         if (apiResponse.extract().body().jsonPath().get("id.queue").toString() == null){
             throw new AssertionError("Queue id is empty");
@@ -1061,7 +1066,7 @@ public class UpdateLicence extends BaseAPI {
         ConfirmPrintBuilder confirmPrintBuilder = new ConfirmPrintBuilder().withDiscSequence(getDiscSequence())
                 .withEndNumber(getEndNumber()).withStartNumber(getStartNumber()).withIsSuccessfull(true)
                 .withLicenceType(application.getLicenceType()).withNiFlag(application.getNiFlag()).withQueueId(getQueueId());
-        apiResponse = RestUtils.post(confirmPrintBuilder, discConfirmResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(confirmPrintBuilder, discConfirmResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
 
@@ -1073,7 +1078,7 @@ public class UpdateLicence extends BaseAPI {
         InterimApplicationBuilder interimApplicationBuilder = new InterimApplicationBuilder().withAuthHgvVehicles(String.valueOf(application.getNoOfAddedHgvVehicles())).withAuthTrailers(String.valueOf(application.getNoOfAddedHgvVehicles()))
                 .withRequested("Y").withReason(getInterimReason()).withStartDate(getInterimStartDate()).withEndDate(getInterimEndDate())
                 .withAction("grant").withId(applicationId).withVersion(applicationVersion);
-        apiResponse = RestUtils.put(interimApplicationBuilder, interimApplicationResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(interimApplicationBuilder, interimApplicationResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
     }
@@ -1083,7 +1088,7 @@ public class UpdateLicence extends BaseAPI {
         String interimApplicationResource = URL.build(env, String.format("application/%s/interim/grant/", applicationId)).toString();
 
         InterimApplicationBuilder interimApplicationBuilder = new InterimApplicationBuilder().withId(applicationId);
-        apiResponse = RestUtils.post(interimApplicationBuilder, interimApplicationResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(interimApplicationBuilder, interimApplicationResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
@@ -1095,7 +1100,7 @@ public class UpdateLicence extends BaseAPI {
             int applicationVersion = Integer.parseInt(this.fetchApplicationInformation(this.variationApplicationId, "version", "1"));
             String updateOperatingCentreResource = URL.build(env, String.format("application/%s/operating-centres", this.variationApplicationId)).toString();
             OperatingCentreUpdater updateOperatingCentre = (new OperatingCentreUpdater()).withId(this.variationApplicationId).withTrafficArea(this.application.getTrafficArea().value()).withEnforcementArea(this.application.getEnforcementArea().value()).withVersion(applicationVersion).withTotAuthHgvVehicles(hgvAuthorisation).withTotCommunityLicences(1).withTotAuthTrailers(this.application.getNoOfOperatingCentreTrailerAuthorised()).withTotAuthLgvVehicles(lgvAuthorisation);
-            this.apiResponse = RestUtils.put(updateOperatingCentre, updateOperatingCentreResource, this.apiHeaders.getHeaders());
+            this.apiResponse = RestUtils.put(updateOperatingCentre, updateOperatingCentreResource, header());
             Utils.checkHTTPStatusCode(this.apiResponse, 200);
             return this.apiResponse;
         }

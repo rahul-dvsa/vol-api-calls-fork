@@ -15,16 +15,15 @@ import org.jetbrains.annotations.NotNull;
 public class LicenceAPI extends BaseAPI {
 
     private static final String baseResource = "licence/";
-    private static ValidatableResponse response;
-    private static String apiHeader = Utils.config.getString("apiHeader");
 
     public static String licenceNumber(@NotNull String licenceId){
-        updateHeader( "Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+        AccessToken accessToken = new AccessToken();
+        updateHeader( "Authorization", "Bearer " + accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
 
         String env = Properties.get("env", true);
         URL.build(EnvironmentType.getEnum(env), baseResource.concat(licenceId));
 
-        response = RestUtils.get(String.valueOf(URL.getURL()), getHeaders());
+        ValidatableResponse response = RestUtils.get(String.valueOf(URL.getURL()), getHeaders());
 
         prettyPrintJson(response.extract().asString());
 

@@ -29,7 +29,8 @@ public class UserAPI extends BaseAPI {
      * @return The user that was registered.
      */
     public static PersonModel register(@NotNull UserRegistrationDetailsModel userRegistrationDetailsModel){
-        BaseAPI.setHeader("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+        AccessToken accessToken = new AccessToken();
+        BaseAPI.setHeader("Authorization", "Bearer " + accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
         URL.build(EnvironmentType.getEnum(Properties.get("env", true)), baseResource + "register");
         int maxTries = 5;
 
@@ -84,5 +85,4 @@ public class UserAPI extends BaseAPI {
 
         return user;
     }
-
 }

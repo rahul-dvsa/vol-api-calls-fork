@@ -11,9 +11,8 @@ import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
 public class GetApplicationDetails {
-    private ValidatableResponse apiResponse;
 
-    private CreateApplication application;
+    private final CreateApplication application;
     private String applicationStatus;
     private String licenceId;
     private String licenceNumber;
@@ -49,10 +48,11 @@ public class GetApplicationDetails {
         this.licenceNumber = licenceNumber;
     }
 
-    public ValidatableResponse getApplicationLicenceDetails(CreateApplication createApplication) {
+    public ValidatableResponse getApplicationLicenceDetails() {
+        AccessToken accessToken = new AccessToken();
         String getApplicationResource = URL.build(env, String.format("application/%s", application.getApplicationId())).toString();
-        apiHeaders.getHeaders().put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
-        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
+        apiHeaders.getHeaders().put("Authorization", "Bearer " + accessToken.getToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+        ValidatableResponse apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
         setLicenceId(apiResponse.extract().jsonPath().getString("licence.id"));
         setLicenceNumber(apiResponse.extract().jsonPath().getString("licence.licNo"));
         setApplicationStatus(apiResponse.extract().jsonPath().getString("licenceType.status.olbsKey"));
