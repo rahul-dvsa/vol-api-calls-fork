@@ -21,9 +21,7 @@ public abstract class BaseAPI {
 
     static {
         AccessToken accessToken = new AccessToken();
-        RestUtils.urlEncoding(false);
         URL.build(EnvironmentType.getEnum(Properties.get("env", true)));
-        // TODO: Investigate how to retrieve this value from the system.
         setHeader( "Authorization", "Bearer " + accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
     }
 
@@ -50,5 +48,4 @@ public abstract class BaseAPI {
             System.out.println(gson.toJson(jp.parse(jsonString)));
         } catch (Exception ex) {}
     }
-
 }
