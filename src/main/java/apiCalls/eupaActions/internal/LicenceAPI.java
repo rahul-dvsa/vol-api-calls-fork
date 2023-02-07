@@ -7,6 +7,7 @@ import apiCalls.actions.AccessToken;
 import apiCalls.enums.UserRoles;
 import apiCalls.eupaActions.BaseAPI;
 import io.restassured.response.ValidatableResponse;
+import org.apache.hc.core5.http.HttpException;
 import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
@@ -16,7 +17,7 @@ public class LicenceAPI extends BaseAPI {
 
     private static final String baseResource = "licence/";
 
-    public static String licenceNumber(@NotNull String licenceId){
+    public static String licenceNumber(@NotNull String licenceId) throws HttpException {
         AccessToken accessToken = new AccessToken();
         updateHeader( "Authorization", "Bearer " + accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
 

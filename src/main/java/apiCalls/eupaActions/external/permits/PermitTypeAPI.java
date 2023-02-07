@@ -14,7 +14,6 @@ import org.dvsa.testing.lib.url.utils.EnvironmentType;
 public class PermitTypeAPI extends BaseAPI {
 
     private static final String baseResource = "irhp-permit-type/";
-    private static ValidatableResponse response;
 
     public static PermitTypeModel permitDetails(TypeModel type) {
         String path = type.getId()
@@ -22,7 +21,7 @@ public class PermitTypeAPI extends BaseAPI {
 
         URL.build(EnvironmentType.getEnum(Properties.get("env")), baseResource + path);
 
-        response = RestUtils.get(Utils.removeLastSlash(URL.getURL()), getHeaders());
+        ValidatableResponse response = RestUtils.get(Utils.removeLastSlash(URL.getURL()), getHeaders());
 
         prettyPrintJson(response.extract().asString());
 

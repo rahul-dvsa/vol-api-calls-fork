@@ -5,6 +5,7 @@ import activesupport.system.Properties;
 import apiCalls.Utils.generic.Utils;
 import apiCalls.Utils.volBuilders.TokenRequestBuilder;
 import io.restassured.response.ValidatableResponse;
+import org.apache.hc.core5.http.HttpException;
 import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
@@ -15,7 +16,7 @@ public class AccessToken {
 
     EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
 
-    public String getToken(String username, String password, String realm) {
+    public String getToken(String username, String password, String realm) throws HttpException {
         String jwtTokenResource;
         HashMap<String, String> header = new HashMap<>();
 

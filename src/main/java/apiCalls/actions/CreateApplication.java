@@ -8,6 +8,7 @@ import activesupport.number.Int;
 import activesupport.system.Properties;
 import apiCalls.enums.*;
 import io.restassured.response.ValidatableResponse;
+import org.apache.hc.core5.http.HttpException;
 import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
@@ -1082,7 +1083,7 @@ public class CreateApplication {
         setTransportConsultantPostCode(getPostCodeByTrafficArea());
     }
 
-    public ValidatableResponse startApplication() {
+    public ValidatableResponse startApplication() throws HttpException {
         String createApplicationResource = URL.build(env, "application").toString();
         apiHeaders.headers.put("Authorization", "Bearer " + getUserDetails().getJwtToken());
         ApplicationBuilder applicationBuilder = new ApplicationBuilder().withOperatorType(getOperatorType())
@@ -1102,7 +1103,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addBusinessType() {
+    public ValidatableResponse addBusinessType() throws HttpException {
         String organisationVersion = baseAPI.fetchApplicationInformation(getApplicationId(), "licence.organisation.version", "1");
         LOGGER.info("AP Version Number: " + organisationVersion);
         String updateBusinessTypeResource = URL.build(env, String.format("organisation/%s/business-type/", getUserDetails().getOrganisationId())).toString();
@@ -1117,7 +1118,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addBusinessDetails() {
+    public ValidatableResponse addBusinessDetails() throws HttpException {
         String organisationVersion = baseAPI.fetchApplicationInformation(getApplicationId(), "licence.organisation.version", "1");
         String updateBusinessDetailsResource = URL.build(env, String.format("organisation/business-details/application/%s", getApplicationId())).toString();
 
@@ -1134,7 +1135,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addAddressDetails() {
+    public ValidatableResponse addAddressDetails() throws HttpException {
         String applicationAddressResource = URL.build(env, String.format("application/%s/addresses/", getApplicationId())).toString();
 
         ContactDetailsBuilder contactDetailsBuilder = new ContactDetailsBuilder().withPhoneNumber(getPhoneNumber()).withEmailAddress(getOrganisationEmailAddress());
@@ -1163,7 +1164,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addDirectors() {
+    public ValidatableResponse addDirectors() throws HttpException {
         String addPersonResource = URL.build(env, String.format("application/%s/people/", getApplicationId())).toString();
         PersonBuilder addPerson = new PersonBuilder().withId(getApplicationId()).withTitle(getDirectorTitle())
                 .withForename(getDirectorForeName()).withFamilyName(getDirectorFamilyName()).withBirthDate(getDirectorDOB());
@@ -1174,7 +1175,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addOperatingCentre() {
+    public ValidatableResponse addOperatingCentre() throws HttpException {
         if (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
         }
@@ -1205,7 +1206,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse updateOperatingCentre() {
+    public ValidatableResponse updateOperatingCentre() throws HttpException {
         if (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
         }
@@ -1241,7 +1242,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addFinancialEvidence() {
+    public ValidatableResponse addFinancialEvidence() throws HttpException {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
             return null;
         }
@@ -1258,7 +1259,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addTransportManager() {
+    public ValidatableResponse addTransportManager() throws HttpException {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
@@ -1283,7 +1284,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse submitTransport() {
+    public ValidatableResponse submitTransport() throws HttpException {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
@@ -1296,7 +1297,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addTmResponsibilities() {
+    public ValidatableResponse addTmResponsibilities() throws HttpException {
         if (getOperatorType().equals(OperatorType.GOODS.asString()) && (getLicenceType().equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
@@ -1315,7 +1316,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse submitTmResponsibilities() {
+    public ValidatableResponse submitTmResponsibilities() throws HttpException {
         if (getOperatorType().equals(OperatorType.PUBLIC.asString()) && (getLicenceType().equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
@@ -1330,7 +1331,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addVehicleDetails() {
+    public ValidatableResponse addVehicleDetails() throws HttpException {
         if (getOperatorType().equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
         }
@@ -1374,7 +1375,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse submitVehicleDeclaration() {
+    public ValidatableResponse submitVehicleDeclaration() throws HttpException {
         if (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
         }
@@ -1393,7 +1394,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addFinancialHistory() {
+    public ValidatableResponse addFinancialHistory() throws HttpException {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
@@ -1412,7 +1413,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addApplicationSafetyAndComplianceDetails() {
+    public ValidatableResponse addApplicationSafetyAndComplianceDetails() throws HttpException {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
@@ -1434,7 +1435,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addSafetyInspector() {
+    public ValidatableResponse addSafetyInspector() throws HttpException {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
@@ -1450,7 +1451,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addConvictionsDetails() {
+    public ValidatableResponse addConvictionsDetails() throws HttpException {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
@@ -1466,7 +1467,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addLicenceHistory() {
+    public ValidatableResponse addLicenceHistory() throws HttpException {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
@@ -1484,7 +1485,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse submitTaxiPhv() {
+    public ValidatableResponse submitTaxiPhv() throws HttpException {
         String phLicenceNumber = "phv".concat(String.valueOf(Int.random(100000, 999999)));
         String councilName = "Volhampton";
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
@@ -1501,7 +1502,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse applicationReviewAndDeclare() {
+    public ValidatableResponse applicationReviewAndDeclare() throws HttpException {
 
         int applicationVersion = Integer.parseInt(baseAPI.fetchApplicationInformation(getApplicationId(), "version", "1"));
         String reviewResource = URL.build(env, String.format("application/%s/declaration/", getApplicationId())).toString();
@@ -1516,7 +1517,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse submitApplication() {
+    public ValidatableResponse submitApplication() throws HttpException {
         String submitResource = URL.build(env, String.format("application/%s/submit", applicationId)).toString();
         int applicationVersion = Integer.parseInt(baseAPI.fetchApplicationInformation(applicationId, "version", "1"));
 

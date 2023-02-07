@@ -14,6 +14,7 @@ import apiCalls.Utils.generic.Utils;
 import apiCalls.enums.BusinessType;
 import apiCalls.enums.UserTitle;
 import io.restassured.response.ValidatableResponse;
+import org.apache.hc.core5.http.HttpException;
 import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
@@ -119,7 +120,7 @@ public class RegisterUser {
         setBusinessType( BusinessType.LIMITED_COMPANY.asString() );
     }
 
-    public ValidatableResponse registerUser() {
+    public ValidatableResponse registerUser() throws HttpException {
         String registerResource = URL.build(env, "user/selfserve/register").toString();
 
         PersonBuilder personBuilder = new PersonBuilder().withTitle(getTitle()).withForename(getForeName()).withFamilyName(getFamilyName()).withBirthDate(getBirthDate());

@@ -10,6 +10,7 @@ import apiCalls.Utils.generic.Headers;
 import apiCalls.Utils.generic.Utils;
 import apiCalls.enums.UserRoles;
 import io.restassured.response.ValidatableResponse;
+import org.apache.hc.core5.http.HttpException;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +18,6 @@ import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 import org.joda.time.LocalDate;
 
-import javax.xml.ws.http.HTTPException;
 import java.util.*;
 
 public class GrantLicence {
@@ -51,14 +51,14 @@ public class GrantLicence {
         setDateState(date.getFormattedDate(0, 0, 0, "yyyy-MM-dd"));
     }
 
-    public HashMap<String, String> header() {
+    public HashMap<String, String> header() throws HttpException {
         AccessToken accessToken = new AccessToken();
         String header = accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString());
         apiHeaders.getHeaders().put("Authorization", "Bearer " + header);
         return apiHeaders.headers;
     }
 
-    public ValidatableResponse grantLicence() {
+    public ValidatableResponse grantLicence() throws HttpException {
         createOverview();
         getOutstandingFees();
         payOutstandingFees();
@@ -72,7 +72,7 @@ public class GrantLicence {
      * Second set applicationId within your CreateApplication object and then call the methods within GrantLicence.
      */
 
-    public void createOverview() {
+    public void createOverview() throws HttpException {
         BaseAPI baseAPI = new BaseAPI();
         String overviewResource = URL.build(env, String.format("application/%s/overview/", application.getApplicationId())).toString();
         String status = "1";
@@ -94,14 +94,14 @@ public class GrantLicence {
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
     }
 
-    public void getOutstandingFees() {
+    public void getOutstandingFees() throws HttpException {
 
         String getOutstandingFeesResource = URL.build(env, String.format("application/%s/outstanding-fees/", application.getApplicationId())).toString();
         apiResponse = RestUtils.get(getOutstandingFeesResource, header());
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
             LOGGER.info(apiResponse.extract().statusCode());
             LOGGER.info(apiResponse.extract().response().asString());
-            throw new HTTPException(apiResponse.extract().statusCode());
+            throw new HttpException("Invalid response code: " + apiResponse.extract().statusCode());
         } else if (!apiResponse.extract().response().body().jsonPath().getList("outstandingFees.id").isEmpty()) {
             outstandingFeesIds = apiResponse.extract().response().body().jsonPath().getList("outstandingFees.id");
             List<String> fees = apiResponse.extract().response().body().jsonPath().get("outstandingFees.grossAmount");
@@ -115,7 +115,7 @@ public class GrantLicence {
         }
     }
 
-    public void payOutstandingFees() {
+    public void payOutstandingFees() throws HttpException {
         String payer = faker.generateFirstName() + faker.generateLastName();
         String paymentMethod = "fpm_cash";
         String slipNo = "123456";
@@ -127,7 +127,7 @@ public class GrantLicence {
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
 
-    public void grant() {
+    public void grant() throws HttpException {
         String grantApplicationResource = URL.build(env, String.format("application/%s/grant/", application.getApplicationId())).toString();
         GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(application.getApplicationId()).withDuePeriod("9")
                 .withAuthority("grant_authority_dl").withCaseworkerNotes("This notes are from the API");
@@ -136,7 +136,7 @@ public class GrantLicence {
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
             LOGGER.info(apiResponse.extract().statusCode());
             LOGGER.info(apiResponse.extract().response().asString());
-            throw new HTTPException(apiResponse.extract().statusCode());
+            throw new HttpException("Invalid response code: " + apiResponse.extract().statusCode());
         } else if (apiResponse.extract().response().asString().contains("fee")) {
             setFeeId(apiResponse.extract().response().jsonPath().getInt("id.fee"));
             String apiMessages = apiResponse.extract().jsonPath().get("messages").toString();
@@ -146,7 +146,7 @@ public class GrantLicence {
         }
     }
 
-    public ValidatableResponse payGrantFees(String NIFlag) {
+    public ValidatableResponse payGrantFees(String NIFlag) throws HttpException {
         String payer = faker.generateFirstName() + faker.generateLastName();
         Double grantFees = NIFlag.equals("Y") ? 449.00 : 401.00;
         String paymentMethod = "fpm_cash";
@@ -163,7 +163,7 @@ public class GrantLicence {
         return apiResponse;
     }
 
-    private void variationGrant() {
+    private void variationGrant() throws HttpException {
         String grantApplicationResource = URL.build(env, String.format("variation/%s/grant/", application.getApplicationId())).toString();
         GenericBuilder grantVariationBuilder = new GenericBuilder().withId(application.getApplicationId());
         apiResponse = RestUtils.put(grantVariationBuilder, grantApplicationResource, header());
@@ -172,7 +172,7 @@ public class GrantLicence {
 
     }
 
-    public void refuse(String applicationId) {
+    public void refuse(String applicationId) throws HttpException {
         String grantApplicationResource = URL.build(env, String.format("application/%s/refuse/", applicationId)).toString();
         GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(applicationId).withCaseworkerNotes("This notes are from the API");
         apiResponse = RestUtils.put(grantApplication, grantApplicationResource, header());
@@ -180,13 +180,13 @@ public class GrantLicence {
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
             LOGGER.info(apiResponse.extract().statusCode());
             LOGGER.info(apiResponse.extract().response().asString());
-            throw new HTTPException(apiResponse.extract().statusCode());
+            throw new HttpException("Invalid response code: " + apiResponse.extract().statusCode());
         } else if (apiResponse.extract().response().asString().contains("fee")) {
             setFeeId(apiResponse.extract().response().jsonPath().getInt("id.fee"));
         }
     }
 
-    public void withdraw(String applicationId) {
+    public void withdraw(String applicationId) throws HttpException {
         String grantApplicationResource = URL.build(env, String.format("application/%s/withdraw/", applicationId)).toString();
         GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(applicationId).withReason("reg_in_error");
         apiResponse = RestUtils.put(grantApplication, grantApplicationResource, header());
@@ -194,7 +194,7 @@ public class GrantLicence {
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
             LOGGER.info(apiResponse.extract().statusCode());
             LOGGER.info(apiResponse.extract().response().asString());
-            throw new HTTPException(apiResponse.extract().statusCode());
+            throw new HttpException("Invalid response code: " + apiResponse.extract().statusCode());
         } else if (apiResponse.extract().response().asString().contains("fee")) {
             setFeeId(apiResponse.extract().response().jsonPath().getInt("id.fee"));
         }

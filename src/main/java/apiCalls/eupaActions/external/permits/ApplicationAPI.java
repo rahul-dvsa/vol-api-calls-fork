@@ -54,5 +54,4 @@ public class ApplicationAPI extends BaseAPI {
         HashMap<String, Integer> result = response.extract().body().jsonPath().get("$");
         return new HashSet<>(result.values());
     }
-
 }

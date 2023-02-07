@@ -9,6 +9,7 @@ import apiCalls.enums.Realm;
 import apiCalls.enums.UserType;
 import io.restassured.response.ValidatableResponse;
 
+import org.apache.hc.core5.http.HttpException;
 import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
@@ -24,7 +25,7 @@ public class GetUserDetails {
     private ValidatableResponse apiResponse;
 
 
-    public ValidatableResponse getUserDetails(String userType, String userId, String username, String password) {
+    public ValidatableResponse getUserDetails(String userType, String userId, String username, String password) throws HttpException {
         String userDetailsResource;
         AccessToken accessToken = new AccessToken();
         Headers apiHeaders = new Headers();
