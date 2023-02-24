@@ -120,7 +120,7 @@ public class RegisterUser {
         setBusinessType( BusinessType.LIMITED_COMPANY.asString() );
     }
 
-    public ValidatableResponse registerUser() throws HttpException {
+    public synchronized ValidatableResponse registerUser() throws HttpException {
         String registerResource = URL.build(env, "user/selfserve/register").toString();
 
         PersonBuilder personBuilder = new PersonBuilder().withTitle(getTitle()).withForename(getForeName()).withFamilyName(getFamilyName()).withBirthDate(getBirthDate());

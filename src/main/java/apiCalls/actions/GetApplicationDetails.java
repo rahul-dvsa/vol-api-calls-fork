@@ -49,7 +49,7 @@ public class GetApplicationDetails {
         this.licenceNumber = licenceNumber;
     }
 
-    public ValidatableResponse getApplicationLicenceDetails() throws HttpException {
+    public synchronized ValidatableResponse getApplicationLicenceDetails() throws HttpException {
         AccessToken accessToken = new AccessToken();
         String getApplicationResource = URL.build(env, String.format("application/%s", application.getApplicationId())).toString();
         apiHeaders.getHeaders().put("Authorization", "Bearer " + accessToken.getToken(Utils.config.getString("adminUser"),Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));

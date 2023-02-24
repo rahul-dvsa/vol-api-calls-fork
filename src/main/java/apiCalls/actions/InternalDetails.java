@@ -26,7 +26,7 @@ public class InternalDetails {
         return apiHeaders.headers;
     }
 
-    public ValidatableResponse getFinancialStandingRates () throws HttpException {
+    public synchronized ValidatableResponse getFinancialStandingRates () throws HttpException {
         String financialStandingRateEndpoint = URL.build(env, "financial-standing-rate").toString();
         ValidatableResponse apiResponse = RestUtils.get(financialStandingRateEndpoint, header());
 

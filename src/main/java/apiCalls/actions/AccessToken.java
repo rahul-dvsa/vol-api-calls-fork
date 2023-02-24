@@ -16,7 +16,7 @@ public class AccessToken {
 
     EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
 
-    public String getToken(String username, String password, String realm) throws HttpException {
+    public synchronized String getToken(String username, String password, String realm) throws HttpException {
         String jwtTokenResource;
         HashMap<String, String> header = new HashMap<>();
 

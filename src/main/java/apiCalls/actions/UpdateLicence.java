@@ -740,14 +740,14 @@ public class UpdateLicence extends BaseAPI {
         setInterimEndDate(date.getFormattedDate(0, 5, 0, "yyyy-MM-dd"));
     }
 
-    public HashMap<String, String> header() throws HttpException {
+    public synchronized HashMap<String, String> header() throws HttpException {
         AccessToken accessToken = new AccessToken();
         String header = accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString());
         apiHeaders.getHeaders().put("Authorization", "Bearer " + header);
         return apiHeaders.headers;
     }
 
-    public void createVariation() throws HttpException {
+    public synchronized void createVariation() throws HttpException {
         String licenceHistoryResource = URL.build(env, String.format("licence/%s/variation", application.getLicenceId())).toString();
 
         VariationBuilder variation = new VariationBuilder().withId(application.getLicenceId()).withFeeRequired("N").withAppliedVia("applied_via_phone").withVariationType(getVariationType());
@@ -758,7 +758,7 @@ public class UpdateLicence extends BaseAPI {
         setVariationApplicationId(String.valueOf(apiResponse.extract().jsonPath().getInt("id.application")));
     }
 
-    public void updateLicenceType() throws HttpException {
+    public synchronized void updateLicenceType() throws HttpException {
         String typeOfLicenceResource = URL.build(env, String.format("variation/%s/type-of-licence", application.getLicenceId())).toString();
         Integer variationApplicationVersion = Integer.parseInt(fetchApplicationInformation(getVariationApplicationId(), "version", "1"));
 
@@ -768,7 +768,7 @@ public class UpdateLicence extends BaseAPI {
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
     }
 
-    public void createCase() throws MalformedURLException, HttpException {
+    public synchronized void createCase() throws MalformedURLException, HttpException {
         String caseResource = URL.build(env, "cases").toString();
 
         CaseBuilder caseBuilder = new CaseBuilder().withId(application.getLicenceId()).withCaseType(getCaseType()).withCategorys(caseCategories)
@@ -780,7 +780,7 @@ public class UpdateLicence extends BaseAPI {
         setCaseId(apiResponse.extract().body().jsonPath().get("id.case"));
     }
 
-    public void addConviction() throws MalformedURLException, HttpException {
+    public synchronized void addConviction() throws MalformedURLException, HttpException {
 
         String convictionResource = URL.build(env, "conviction").toString();
 
@@ -796,7 +796,7 @@ public class UpdateLicence extends BaseAPI {
         setConvictionId(apiResponse.extract().jsonPath().getInt("id.conviction"));
     }
 
-    public void addComplaint() throws HttpException {
+    public synchronized void addComplaint() throws HttpException {
 
         String complaintResource = URL.build(env, "complaint").toString();
         CaseComplaintBuilder complaintBuilder = new CaseComplaintBuilder().withCase(getCaseId()).withComplainantForename(getComplainantForename())
@@ -810,7 +810,7 @@ public class UpdateLicence extends BaseAPI {
         setComplaintId(apiResponse.extract().jsonPath().getInt("id.complaint"));
     }
 
-    public void addConditionsUndertakings() throws MalformedURLException, HttpException {
+    public synchronized void addConditionsUndertakings() throws MalformedURLException, HttpException {
 
         String conditionsUndertakingResource = URL.build(env, "condition-undertaking").toString();
         CaseConditionsBuilder conditionsBuilder = new CaseConditionsBuilder().withLicence(application.getLicenceId())
@@ -824,7 +824,7 @@ public class UpdateLicence extends BaseAPI {
         setConditionUndertaking(apiResponse.extract().jsonPath().getInt("id.conditionUndertaking"));
     }
 
-    public void createSubmission() throws MalformedURLException, HttpException {
+    public synchronized void createSubmission() throws MalformedURLException, HttpException {
         String submissionResource = URL.build(env, "submission").toString();
         CaseSubmissionBuilder submissionBuilder = new CaseSubmissionBuilder().withCase(Integer.toString(getCaseId())).withSubmissionType(getSubmissionType());
         apiResponse = RestUtils.post(submissionBuilder, submissionResource, header());
@@ -834,7 +834,7 @@ public class UpdateLicence extends BaseAPI {
         setSubmissionsId(apiResponse.extract().jsonPath().getInt("id.submission"));
     }
 
-    public void createCaseNote() throws MalformedURLException, HttpException {
+    public synchronized void createCaseNote() throws MalformedURLException, HttpException {
 
         String caseNoteResource = URL.build(env, "processing/note").toString();
         CaseNotesBuilder caseNotesBuilder = new CaseNotesBuilder().withCase(Integer.toString(getCaseId())).withLicence(application.getLicenceId())
@@ -846,7 +846,7 @@ public class UpdateLicence extends BaseAPI {
         setCaseNoteId(apiResponse.extract().jsonPath().getInt("id.note"));
     }
 
-    public ValidatableResponse getCaseDetails(String resource, int id) throws HttpException {
+    public synchronized ValidatableResponse getCaseDetails(String resource, int id) throws HttpException {
         String caseDetailsResource = URL.build(env, String.format("%s/%s", resource, id)).toString();
         apiResponse = RestUtils.get(caseDetailsResource, header());
 
@@ -855,7 +855,7 @@ public class UpdateLicence extends BaseAPI {
         return apiResponse;
     }
 
-    public ValidatableResponse variationUpdateOperatingCentre() throws HttpException {
+    public synchronized ValidatableResponse variationUpdateOperatingCentre() throws HttpException {
         if (application.getLicenceType().equals("special_restricted")) {
             throw new IllegalArgumentException("Cannot update operating centre for special_restricted licence");
         }
@@ -870,7 +870,7 @@ public class UpdateLicence extends BaseAPI {
         return apiResponse;
     }
 
-    public String createInternalUser(String userRole, String userType) throws HttpException {
+    public synchronized String createInternalUser(String userRole, String userType) throws HttpException {
         List<String> roles = new ArrayList<>();
         roles.add(userRole);
         String internalAdminUserResource = URL.build(env, "user/internal").toString();
@@ -892,7 +892,7 @@ public class UpdateLicence extends BaseAPI {
         return getInternalUserId();
     }
 
-    public ValidatableResponse updateInternalUserDetails(String userId, String osType) throws HttpException {
+    public synchronized ValidatableResponse updateInternalUserDetails(String userId, String osType) throws HttpException {
         String version = fetchInternalUserInformation(userId, "version", "1");
 
         String internalAdminUserResource = URL.build(env, String.format("user/internal/%s", userId)).toString();
@@ -916,7 +916,7 @@ public class UpdateLicence extends BaseAPI {
         return apiResponse;
     }
 
-    public ValidatableResponse grantVariation(String resource) throws MalformedURLException, HttpException {
+    public synchronized ValidatableResponse grantVariation(String resource) throws MalformedURLException, HttpException {
         String grantVariation = URL.build(env, String.format("variation/%s/%s", getVariationApplicationId(), resource)).toString();
 
         GenericBuilder genericBuilder = new GenericBuilder().withId(getVariationApplicationId());
@@ -925,7 +925,7 @@ public class UpdateLicence extends BaseAPI {
         return apiResponse;
     }
 
-    public String getLicenceTrafficArea() throws HttpException {
+    public synchronized String getLicenceTrafficArea() throws HttpException {
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
         apiResponse = RestUtils.get(getApplicationResource, header());
@@ -934,7 +934,7 @@ public class UpdateLicence extends BaseAPI {
         return getTrafficAreaName();
     }
 
-    public String getLicenceStatusDetails() throws HttpException {
+    public synchronized String getLicenceStatusDetails() throws HttpException {
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
         apiResponse = RestUtils.get(getApplicationResource, header());
@@ -943,7 +943,7 @@ public class UpdateLicence extends BaseAPI {
         return getLicenceStatus();
     }
 
-    public String getOperatorTypeDetails() throws HttpException {
+    public synchronized String getOperatorTypeDetails() throws HttpException {
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
         apiResponse = RestUtils.get(getApplicationResource, header());
@@ -952,7 +952,7 @@ public class UpdateLicence extends BaseAPI {
         return getGoodOrPsv();
     }
 
-    public String getBusinessTypeDetails() throws HttpException {
+    public synchronized String getBusinessTypeDetails() throws HttpException {
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
         apiResponse = RestUtils.get(getApplicationResource, header());
@@ -962,7 +962,7 @@ public class UpdateLicence extends BaseAPI {
         return getBusinessType();
     }
 
-    public String getLicenceTypeDetails() throws HttpException {
+    public synchronized String getLicenceTypeDetails() throws HttpException {
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
         apiResponse = RestUtils.get(getApplicationResource, header());
@@ -971,7 +971,7 @@ public class UpdateLicence extends BaseAPI {
         return getLicenceType();
     }
 
-    public void updateLicenceStatus(String status) throws HttpException {
+    public synchronized void updateLicenceStatus(String status) throws HttpException {
         String typeOfLicenceResource = URL.build(env, String.format("licence/%s/decisions/%s", application.getLicenceId(), status)).toString();
 
         GenericBuilder genericBuilder = new GenericBuilder().withId(application.getLicenceId());
@@ -979,7 +979,7 @@ public class UpdateLicence extends BaseAPI {
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
 
-    public ValidatableResponse surrenderLicence(String licenceId) throws HttpException {
+    public synchronized ValidatableResponse surrenderLicence(String licenceId) throws HttpException {
         String surrenderLicenceResource = URL.build(env, String.format("licence/%s/surrender", licenceId)).toString();
 
         SurrendersBuilder surrendersBuilder = new SurrendersBuilder().withLicence(licenceId);
@@ -988,7 +988,7 @@ public class UpdateLicence extends BaseAPI {
         return apiResponse;
     }
 
-    public ValidatableResponse updateSurrender(Integer surrenderId) throws HttpException {
+    public synchronized ValidatableResponse updateSurrender(Integer surrenderId) throws HttpException {
         String updateSurrender = URL.build(env, String.format("licence/%s/surrender", application.getLicenceId())).toString();
 
         SurrendersBuilder surrendersBuilder = new SurrendersBuilder().withLicence(application.getLicenceId())
@@ -998,7 +998,7 @@ public class UpdateLicence extends BaseAPI {
         return apiResponse;
     }
 
-    public ValidatableResponse deleteSurrender(Integer surrenderId) throws HttpException {
+    public synchronized ValidatableResponse deleteSurrender(Integer surrenderId) throws HttpException {
         String deleteSurrender = URL.build(env, String.format("licence/%s/surrender", application.getLicenceId())).toString();
 
         GenericBuilder genericBuilder = new GenericBuilder().withLicence(application.getLicenceId()).withId(surrenderId.toString());
@@ -1008,7 +1008,7 @@ public class UpdateLicence extends BaseAPI {
         return apiResponse;
     }
 
-    public void updateFeatureToggle(String toggleId, String friendlyName, String configName, String status) throws HttpException {
+    public synchronized void updateFeatureToggle(String toggleId, String friendlyName, String configName, String status) throws HttpException {
         String updateFeatureToggleResource = URL.build(env, String.format("feature-toggle/%s/", toggleId)).toString();
 
         FeatureToggleBuilder featureToggleBuilder = new FeatureToggleBuilder().withId(toggleId).withFriendlyName(friendlyName).withConfigName(configName)
@@ -1019,7 +1019,7 @@ public class UpdateLicence extends BaseAPI {
         apiResponse.statusCode(HttpStatus.SC_OK);
     }
 
-    private void getDiscInformation() throws HttpException {
+    private synchronized void getDiscInformation() throws HttpException {
         Map<String, String> queryParams = new HashMap<>();
         {
             queryParams.put("niFlag", "N");
@@ -1034,7 +1034,7 @@ public class UpdateLicence extends BaseAPI {
         setEndNumber(apiResponse.extract().jsonPath().get("results.endNumber").toString());
     }
 
-    public void printLicenceDiscs() throws HttpException {
+    public synchronized void printLicenceDiscs() throws HttpException {
         String operator;
         getDiscInformation();
         if (application.getOperatorType().equals(OperatorType.GOODS.asString())) {
@@ -1056,7 +1056,7 @@ public class UpdateLicence extends BaseAPI {
         }
     }
 
-    private void confirmDiscPrint() throws HttpException {
+    private synchronized void confirmDiscPrint() throws HttpException {
         String operator;
         if (application.getOperatorType().equals(OperatorType.GOODS.asString())) {
             operator = "goods";
@@ -1071,7 +1071,7 @@ public class UpdateLicence extends BaseAPI {
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
 
-    public void submitInterimApplication(String applicationId) throws HttpException {
+    public synchronized void submitInterimApplication(String applicationId) throws HttpException {
 
         String interimApplicationResource = URL.build(env, String.format("application/%s/interim/", applicationId)).toString();
         int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationId, "version", "1"));
@@ -1084,7 +1084,7 @@ public class UpdateLicence extends BaseAPI {
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
     }
 
-    public void grantInterimApplication(String applicationId) throws HttpException {
+    public synchronized void grantInterimApplication(String applicationId) throws HttpException {
         submitInterimApplication(applicationId);
         String interimApplicationResource = URL.build(env, String.format("application/%s/interim/grant/", applicationId)).toString();
 
@@ -1094,7 +1094,7 @@ public class UpdateLicence extends BaseAPI {
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
 
-    public ValidatableResponse updateLgvAuthorisationOnVariation(int hgvAuthorisation, int lgvAuthorisation) throws HttpException {
+    public synchronized ValidatableResponse updateLgvAuthorisationOnVariation(int hgvAuthorisation, int lgvAuthorisation) throws HttpException {
         if (this.application.getLicenceType().equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
         } else {

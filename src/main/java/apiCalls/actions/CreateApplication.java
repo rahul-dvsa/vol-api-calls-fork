@@ -1083,7 +1083,7 @@ public class CreateApplication {
         setTransportConsultantPostCode(getPostCodeByTrafficArea());
     }
 
-    public ValidatableResponse startApplication() throws HttpException {
+    public synchronized ValidatableResponse startApplication() throws HttpException {
         String createApplicationResource = URL.build(env, "application").toString();
         apiHeaders.headers.put("Authorization", "Bearer " + getUserDetails().getJwtToken());
         ApplicationBuilder applicationBuilder = new ApplicationBuilder().withOperatorType(getOperatorType())
@@ -1103,7 +1103,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addBusinessType() throws HttpException {
+    public synchronized ValidatableResponse addBusinessType() throws HttpException {
         String organisationVersion = baseAPI.fetchApplicationInformation(getApplicationId(), "licence.organisation.version", "1");
         LOGGER.info("AP Version Number: " + organisationVersion);
         String updateBusinessTypeResource = URL.build(env, String.format("organisation/%s/business-type/", getUserDetails().getOrganisationId())).toString();
@@ -1118,7 +1118,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addBusinessDetails() throws HttpException {
+    public synchronized ValidatableResponse addBusinessDetails() throws HttpException {
         String organisationVersion = baseAPI.fetchApplicationInformation(getApplicationId(), "licence.organisation.version", "1");
         String updateBusinessDetailsResource = URL.build(env, String.format("organisation/business-details/application/%s", getApplicationId())).toString();
 
@@ -1135,7 +1135,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addAddressDetails() throws HttpException {
+    public synchronized ValidatableResponse addAddressDetails() throws HttpException {
         String applicationAddressResource = URL.build(env, String.format("application/%s/addresses/", getApplicationId())).toString();
 
         ContactDetailsBuilder contactDetailsBuilder = new ContactDetailsBuilder().withPhoneNumber(getPhoneNumber()).withEmailAddress(getOrganisationEmailAddress());
@@ -1164,7 +1164,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addDirectors() throws HttpException {
+    public synchronized ValidatableResponse addDirectors() throws HttpException {
         String addPersonResource = URL.build(env, String.format("application/%s/people/", getApplicationId())).toString();
         PersonBuilder addPerson = new PersonBuilder().withId(getApplicationId()).withTitle(getDirectorTitle())
                 .withForename(getDirectorForeName()).withFamilyName(getDirectorFamilyName()).withBirthDate(getDirectorDOB());
@@ -1175,7 +1175,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addOperatingCentre() throws HttpException {
+    public synchronized ValidatableResponse addOperatingCentre() throws HttpException {
         if (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
         }
@@ -1206,7 +1206,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse updateOperatingCentre() throws HttpException {
+    public synchronized ValidatableResponse updateOperatingCentre() throws HttpException {
         if (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
         }
@@ -1242,7 +1242,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addFinancialEvidence() throws HttpException {
+    public synchronized ValidatableResponse addFinancialEvidence() throws HttpException {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.RESTRICTED.asString()))) {
             return null;
         }
@@ -1259,7 +1259,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addTransportManager() throws HttpException {
+    public synchronized ValidatableResponse addTransportManager() throws HttpException {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
@@ -1284,7 +1284,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse submitTransport() throws HttpException {
+    public synchronized ValidatableResponse submitTransport() throws HttpException {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
@@ -1297,7 +1297,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addTmResponsibilities() throws HttpException {
+    public synchronized ValidatableResponse addTmResponsibilities() throws HttpException {
         if (getOperatorType().equals(OperatorType.GOODS.asString()) && (getLicenceType().equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
@@ -1316,7 +1316,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse submitTmResponsibilities() throws HttpException {
+    public synchronized ValidatableResponse submitTmResponsibilities() throws HttpException {
         if (getOperatorType().equals(OperatorType.PUBLIC.asString()) && (getLicenceType().equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
@@ -1331,7 +1331,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addVehicleDetails() throws HttpException {
+    public synchronized ValidatableResponse addVehicleDetails() throws HttpException {
         if (getOperatorType().equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
         }
@@ -1375,7 +1375,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse submitVehicleDeclaration() throws HttpException {
+    public synchronized ValidatableResponse submitVehicleDeclaration() throws HttpException {
         if (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
         }
@@ -1394,7 +1394,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addFinancialHistory() throws HttpException {
+    public synchronized ValidatableResponse addFinancialHistory() throws HttpException {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
@@ -1413,7 +1413,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addApplicationSafetyAndComplianceDetails() throws HttpException {
+    public synchronized ValidatableResponse addApplicationSafetyAndComplianceDetails() throws HttpException {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
@@ -1435,7 +1435,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addSafetyInspector() throws HttpException {
+    public synchronized ValidatableResponse addSafetyInspector() throws HttpException {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
@@ -1451,7 +1451,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addConvictionsDetails() throws HttpException {
+    public synchronized ValidatableResponse addConvictionsDetails() throws HttpException {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
@@ -1467,7 +1467,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse addLicenceHistory() throws HttpException {
+    public synchronized ValidatableResponse addLicenceHistory() throws HttpException {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
@@ -1485,7 +1485,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse submitTaxiPhv() throws HttpException {
+    public synchronized ValidatableResponse submitTaxiPhv() throws HttpException {
         String phLicenceNumber = "phv".concat(String.valueOf(Int.random(100000, 999999)));
         String councilName = "Volhampton";
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
@@ -1502,7 +1502,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse applicationReviewAndDeclare() throws HttpException {
+    public synchronized ValidatableResponse applicationReviewAndDeclare() throws HttpException {
 
         int applicationVersion = Integer.parseInt(baseAPI.fetchApplicationInformation(getApplicationId(), "version", "1"));
         String reviewResource = URL.build(env, String.format("application/%s/declaration/", getApplicationId())).toString();
@@ -1517,7 +1517,7 @@ public class CreateApplication {
         return apiResponse;
     }
 
-    public ValidatableResponse submitApplication() throws HttpException {
+    public synchronized ValidatableResponse submitApplication() throws HttpException {
         String submitResource = URL.build(env, String.format("application/%s/submit", applicationId)).toString();
         int applicationVersion = Integer.parseInt(baseAPI.fetchApplicationInformation(applicationId, "version", "1"));
 

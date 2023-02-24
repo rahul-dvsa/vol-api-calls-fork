@@ -58,7 +58,7 @@ public class GrantLicence {
         return apiHeaders.headers;
     }
 
-    public ValidatableResponse grantLicence() throws HttpException {
+    public synchronized ValidatableResponse grantLicence() throws HttpException {
         createOverview();
         getOutstandingFees();
         payOutstandingFees();
@@ -72,7 +72,7 @@ public class GrantLicence {
      * Second set applicationId within your CreateApplication object and then call the methods within GrantLicence.
      */
 
-    public void createOverview() throws HttpException {
+    public synchronized void createOverview() throws HttpException {
         BaseAPI baseAPI = new BaseAPI();
         String overviewResource = URL.build(env, String.format("application/%s/overview/", application.getApplicationId())).toString();
         String status = "1";
@@ -94,8 +94,7 @@ public class GrantLicence {
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
     }
 
-    public void getOutstandingFees() throws HttpException {
-
+    public synchronized void getOutstandingFees() throws HttpException {
         String getOutstandingFeesResource = URL.build(env, String.format("application/%s/outstanding-fees/", application.getApplicationId())).toString();
         apiResponse = RestUtils.get(getOutstandingFeesResource, header());
         if (apiResponse.extract().statusCode() != HttpStatus.SC_OK) {
@@ -115,7 +114,7 @@ public class GrantLicence {
         }
     }
 
-    public void payOutstandingFees() throws HttpException {
+    public synchronized void payOutstandingFees() throws HttpException {
         String payer = faker.generateFirstName() + faker.generateLastName();
         String paymentMethod = "fpm_cash";
         String slipNo = "123456";
@@ -127,7 +126,7 @@ public class GrantLicence {
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
 
-    public void grant() throws HttpException {
+    public synchronized void grant() throws HttpException {
         String grantApplicationResource = URL.build(env, String.format("application/%s/grant/", application.getApplicationId())).toString();
         GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(application.getApplicationId()).withDuePeriod("9")
                 .withAuthority("grant_authority_dl").withCaseworkerNotes("This notes are from the API");
@@ -146,7 +145,7 @@ public class GrantLicence {
         }
     }
 
-    public ValidatableResponse payGrantFees(String NIFlag) throws HttpException {
+    public synchronized ValidatableResponse payGrantFees(String NIFlag) throws HttpException {
         String payer = faker.generateFirstName() + faker.generateLastName();
         Double grantFees = NIFlag.equals("Y") ? 449.00 : 401.00;
         String paymentMethod = "fpm_cash";
@@ -163,7 +162,7 @@ public class GrantLicence {
         return apiResponse;
     }
 
-    private void variationGrant() throws HttpException {
+    private synchronized void variationGrant() throws HttpException {
         String grantApplicationResource = URL.build(env, String.format("variation/%s/grant/", application.getApplicationId())).toString();
         GenericBuilder grantVariationBuilder = new GenericBuilder().withId(application.getApplicationId());
         apiResponse = RestUtils.put(grantVariationBuilder, grantApplicationResource, header());
@@ -172,7 +171,7 @@ public class GrantLicence {
 
     }
 
-    public void refuse(String applicationId) throws HttpException {
+    public synchronized void refuse(String applicationId) throws HttpException {
         String grantApplicationResource = URL.build(env, String.format("application/%s/refuse/", applicationId)).toString();
         GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(applicationId).withCaseworkerNotes("This notes are from the API");
         apiResponse = RestUtils.put(grantApplication, grantApplicationResource, header());
@@ -186,7 +185,7 @@ public class GrantLicence {
         }
     }
 
-    public void withdraw(String applicationId) throws HttpException {
+    public synchronized void withdraw(String applicationId) throws HttpException {
         String grantApplicationResource = URL.build(env, String.format("application/%s/withdraw/", applicationId)).toString();
         GrantApplicationBuilder grantApplication = new GrantApplicationBuilder().withId(applicationId).withReason("reg_in_error");
         apiResponse = RestUtils.put(grantApplication, grantApplicationResource, header());

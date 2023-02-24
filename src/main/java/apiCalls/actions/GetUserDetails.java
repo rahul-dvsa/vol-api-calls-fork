@@ -25,7 +25,7 @@ public class GetUserDetails {
     private ValidatableResponse apiResponse;
 
 
-    public ValidatableResponse getUserDetails(String userType, String userId, String username, String password) throws HttpException {
+    public synchronized ValidatableResponse getUserDetails(String userType, String userId, String username, String password) throws HttpException {
         String userDetailsResource;
         AccessToken accessToken = new AccessToken();
         Headers apiHeaders = new Headers();
