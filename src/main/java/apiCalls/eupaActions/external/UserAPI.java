@@ -10,6 +10,7 @@ import apiCalls.actions.AccessToken;
 import apiCalls.enums.UserRoles;
 import apiCalls.eupaActions.BaseAPI;
 import io.restassured.response.ValidatableResponse;
+import org.apache.hc.core5.http.HttpException;
 import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
@@ -28,8 +29,9 @@ public class UserAPI extends BaseAPI {
      * @param userRegistrationDetailsModel This is a Model of the account details.
      * @return The user that was registered.
      */
-    public static PersonModel register(@NotNull UserRegistrationDetailsModel userRegistrationDetailsModel){
-        BaseAPI.setHeader("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+    public static PersonModel register(@NotNull UserRegistrationDetailsModel userRegistrationDetailsModel) throws HttpException {
+        AccessToken accessToken = new AccessToken();
+        BaseAPI.setHeader("Authorization", "Bearer " + accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
         URL.build(EnvironmentType.getEnum(Properties.get("env", true)), baseResource + "register");
         int maxTries = 5;
 
@@ -84,5 +86,4 @@ public class UserAPI extends BaseAPI {
 
         return user;
     }
-
 }

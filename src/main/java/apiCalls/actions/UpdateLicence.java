@@ -11,31 +11,28 @@ import apiCalls.Utils.generic.*;
 import apiCalls.enums.LicenceType;
 import apiCalls.enums.OperatorType;
 import apiCalls.enums.UserRoles;
-import apiCalls.enums.UserType;
 import io.restassured.response.ValidatableResponse;
+import org.apache.hc.core5.http.HttpException;
 import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.exceptions.MalformedURLException;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 import activesupport.system.Properties;
-import org.hamcrest.Matchers;
 import org.joda.time.LocalDate;
 
-import static org.junit.Assert.assertThat;
 
 import java.util.*;
 
 
 public class UpdateLicence extends BaseAPI {
     private final CreateApplication application;
-    private AccessToken jwtToken = new AccessToken();
     private ValidatableResponse apiResponse;
 
-    private Dates date = new Dates(new LocalDateCalendar());
+    private final Dates date = new Dates(new LocalDateCalendar());
 
-    private FakerUtils faker = new FakerUtils();
+    private final FakerUtils faker = new FakerUtils();
 
-    private Headers apiHeaders = new Headers();
+    private final Headers apiHeaders = new Headers();
 
     private String adminAPIHeader;
     private String variationType;
@@ -667,7 +664,6 @@ public class UpdateLicence extends BaseAPI {
 
     public UpdateLicence(CreateApplication application) {
         this.application = application;
-        apiHeaders.getHeaders().put("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
         setVariationType(null);
 
         // Case Details
@@ -744,40 +740,47 @@ public class UpdateLicence extends BaseAPI {
         setInterimEndDate(date.getFormattedDate(0, 5, 0, "yyyy-MM-dd"));
     }
 
-    public void createVariation() {
+    public synchronized HashMap<String, String> header() throws HttpException {
+        AccessToken accessToken = new AccessToken();
+        String header = accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString());
+        apiHeaders.getHeaders().put("Authorization", "Bearer " + header);
+        return apiHeaders.headers;
+    }
+
+    public synchronized void createVariation() throws HttpException {
         String licenceHistoryResource = URL.build(env, String.format("licence/%s/variation", application.getLicenceId())).toString();
 
         VariationBuilder variation = new VariationBuilder().withId(application.getLicenceId()).withFeeRequired("N").withAppliedVia("applied_via_phone").withVariationType(getVariationType());
-        apiResponse = RestUtils.post(variation, licenceHistoryResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(variation, licenceHistoryResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
 
         setVariationApplicationId(String.valueOf(apiResponse.extract().jsonPath().getInt("id.application")));
     }
 
-    public void updateLicenceType() {
+    public synchronized void updateLicenceType() throws HttpException {
         String typeOfLicenceResource = URL.build(env, String.format("variation/%s/type-of-licence", application.getLicenceId())).toString();
         Integer variationApplicationVersion = Integer.parseInt(fetchApplicationInformation(getVariationApplicationId(), "version", "1"));
 
         GenericBuilder genericBuilder = new GenericBuilder().withId(getVariationApplicationId()).withVersion(variationApplicationVersion).withLicenceType(application.getLicenceType());
-        apiResponse = RestUtils.put(genericBuilder, typeOfLicenceResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(genericBuilder, typeOfLicenceResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
     }
 
-    public void createCase() throws MalformedURLException {
+    public synchronized void createCase() throws MalformedURLException, HttpException {
         String caseResource = URL.build(env, "cases").toString();
 
         CaseBuilder caseBuilder = new CaseBuilder().withId(application.getLicenceId()).withCaseType(getCaseType()).withCategorys(caseCategories)
                 .withDescription(getCaseDescription()).withOutcomes(caseOutcomes).withApplication(application.getApplicationId());
-        apiResponse = RestUtils.post(caseBuilder, caseResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(caseBuilder, caseResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
 
         setCaseId(apiResponse.extract().body().jsonPath().get("id.case"));
     }
 
-    public void addConviction() throws MalformedURLException {
+    public synchronized void addConviction() throws MalformedURLException, HttpException {
 
         String convictionResource = URL.build(env, "conviction").toString();
 
@@ -786,73 +789,73 @@ public class UpdateLicence extends BaseAPI {
                 .withCourt(getCourt()).withMsi("Y").withPenalty(getPenalty()).withNotes(getConvictionNotes()).withTakenIntoConsideration("Y")
                 .withIsDeclared("Y").withIsDealtWith("Y").withDefendantType(getDefendantType()).withPersonFirstname(getDefendantFirstname())
                 .withPersonLastname(getDefendantLastname()).withOffenceDate(getOffenceDate());
-        apiResponse = RestUtils.post(caseConvictionBuilder, convictionResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(caseConvictionBuilder, convictionResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
 
         setConvictionId(apiResponse.extract().jsonPath().getInt("id.conviction"));
     }
 
-    public void addComplaint() {
+    public synchronized void addComplaint() throws HttpException {
 
         String complaintResource = URL.build(env, "complaint").toString();
         CaseComplaintBuilder complaintBuilder = new CaseComplaintBuilder().withCase(getCaseId()).withComplainantForename(getComplainantForename())
                 .withComplainantFamilyName(getComplainantFamilyName()).withComplaintType(getComplaintType()).withStatus(getComplainantStatus())
                 .withIsCompliance(getIsCompliance()).withComplaintDate(getComplaintDate()).withInfringementDate(getInfringementDate())
                 .withDescription(getComplainantDescription()).withDriverForename(getDriverForename()).withDriverFamilyName(getDriverFamilyName());
-        apiResponse = RestUtils.post(complaintBuilder, complaintResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(complaintBuilder, complaintResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
 
         setComplaintId(apiResponse.extract().jsonPath().getInt("id.complaint"));
     }
 
-    public void addConditionsUndertakings() throws MalformedURLException {
+    public synchronized void addConditionsUndertakings() throws MalformedURLException, HttpException {
 
         String conditionsUndertakingResource = URL.build(env, "condition-undertaking").toString();
         CaseConditionsBuilder conditionsBuilder = new CaseConditionsBuilder().withLicence(application.getLicenceId())
                 .withApplication(application.getApplicationId()).withCase(Integer.toString(getCaseId())).withType(getConditionUndertakingType())
                 .withConditionCategory(getConditionUndertakingCategory()).withFulfilled(getFulfilled()).withAttachedTo(getAttachedTo())
                 .withNotes(getConditionsUndertakingDescription());
-        apiResponse = RestUtils.post(conditionsBuilder, conditionsUndertakingResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(conditionsBuilder, conditionsUndertakingResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
 
         setConditionUndertaking(apiResponse.extract().jsonPath().getInt("id.conditionUndertaking"));
     }
 
-    public void createSubmission() throws MalformedURLException {
+    public synchronized void createSubmission() throws MalformedURLException, HttpException {
         String submissionResource = URL.build(env, "submission").toString();
         CaseSubmissionBuilder submissionBuilder = new CaseSubmissionBuilder().withCase(Integer.toString(getCaseId())).withSubmissionType(getSubmissionType());
-        apiResponse = RestUtils.post(submissionBuilder, submissionResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(submissionBuilder, submissionResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
 
         setSubmissionsId(apiResponse.extract().jsonPath().getInt("id.submission"));
     }
 
-    public void createCaseNote() throws MalformedURLException {
+    public synchronized void createCaseNote() throws MalformedURLException, HttpException {
 
         String caseNoteResource = URL.build(env, "processing/note").toString();
         CaseNotesBuilder caseNotesBuilder = new CaseNotesBuilder().withCase(Integer.toString(getCaseId())).withLicence(application.getLicenceId())
                 .withApplication(application.getApplicationId()).withComment(getCaseNoteComment()).withPriority(getCaseNotePriority());
-        apiResponse = RestUtils.post(caseNotesBuilder, caseNoteResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(caseNotesBuilder, caseNoteResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
 
         setCaseNoteId(apiResponse.extract().jsonPath().getInt("id.note"));
     }
 
-    public ValidatableResponse getCaseDetails(String resource, int id) {
+    public synchronized ValidatableResponse getCaseDetails(String resource, int id) throws HttpException {
         String caseDetailsResource = URL.build(env, String.format("%s/%s", resource, id)).toString();
-        apiResponse = RestUtils.get(caseDetailsResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.get(caseDetailsResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
 
         return apiResponse;
     }
 
-    public ValidatableResponse variationUpdateOperatingCentre() {
+    public synchronized ValidatableResponse variationUpdateOperatingCentre() throws HttpException {
         if (application.getLicenceType().equals("special_restricted")) {
             throw new IllegalArgumentException("Cannot update operating centre for special_restricted licence");
         }
@@ -860,14 +863,14 @@ public class UpdateLicence extends BaseAPI {
         OperatingCentreVariationBuilder updateOperatingCentre = new OperatingCentreVariationBuilder().withId(getVariationApplicationId())
                 .withApplication(getVariationApplicationId()).withNoOfVehiclesRequired(String.valueOf(application.getNoOfAddedHgvVehicles()))
                 .withVersion(version);
-        apiResponse = RestUtils.put(updateOperatingCentre, updateOperatingCentreResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(updateOperatingCentre, updateOperatingCentreResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
 
         return apiResponse;
     }
 
-    public String createInternalUser(String userRole, String userType) {
+    public synchronized String createInternalUser(String userRole, String userType) throws HttpException {
         List<String> roles = new ArrayList<>();
         roles.add(userRole);
         String internalAdminUserResource = URL.build(env, "user/internal").toString();
@@ -882,14 +885,14 @@ public class UpdateLicence extends BaseAPI {
         ContactDetailsBuilder contactDetails = new ContactDetailsBuilder().withEmailAddress(getInternalUserEmailAddress()).withAddress(addressBuilder).withPerson(personBuilder);
         CreateInternalAdminUser internalAdminUser = new CreateInternalAdminUser().withContactDetails(contactDetails)
                 .withLoginId(getInternalUserLogin()).withRoles(roles).withTeam(getInternalUserTeam()).withUserType(userType).withOSType("windows_10");
-        apiResponse = RestUtils.post(internalAdminUser, internalAdminUserResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(internalAdminUser, internalAdminUserResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
         setInternalUserId(apiResponse.extract().response().jsonPath().getString("id.user"));
         return getInternalUserId();
     }
 
-    public ValidatableResponse updateInternalUserDetails(String userId, String osType) {
+    public synchronized ValidatableResponse updateInternalUserDetails(String userId, String osType) throws HttpException {
         String version = fetchInternalUserInformation(userId, "version", "1");
 
         String internalAdminUserResource = URL.build(env, String.format("user/internal/%s", userId)).toString();
@@ -906,117 +909,117 @@ public class UpdateLicence extends BaseAPI {
         CreateInternalAdminUser internalAdminUser = new CreateInternalAdminUser().withContactDetails(contactDetails)
                 .withLoginId(getInternalUserLogin()).withTeam(getInternalUserTeam())
                 .withUserType(UserRoles.INTERNAL.asString()).withVersion(version).withOSType(osType).withId(userId);
-        apiResponse = RestUtils.put(internalAdminUser, internalAdminUserResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(internalAdminUser, internalAdminUserResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
 
         return apiResponse;
     }
 
-    public ValidatableResponse grantVariation(String resource) throws MalformedURLException {
+    public synchronized ValidatableResponse grantVariation(String resource) throws MalformedURLException, HttpException {
         String grantVariation = URL.build(env, String.format("variation/%s/%s", getVariationApplicationId(), resource)).toString();
 
         GenericBuilder genericBuilder = new GenericBuilder().withId(getVariationApplicationId());
-        apiResponse = RestUtils.put(genericBuilder, grantVariation, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(genericBuilder, grantVariation, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         return apiResponse;
     }
 
-    public String getLicenceTrafficArea() {
+    public synchronized String getLicenceTrafficArea() throws HttpException {
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
-        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.get(getApplicationResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setTrafficAreaName(apiResponse.extract().jsonPath().getString("trafficArea.name"));
         return getTrafficAreaName();
     }
 
-    public String getLicenceStatusDetails() {
+    public synchronized String getLicenceStatusDetails() throws HttpException {
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
-        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.get(getApplicationResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setLicenceStatus(apiResponse.extract().jsonPath().getString("status.description"));
         return getLicenceStatus();
     }
 
-    public String getOperatorTypeDetails() {
+    public synchronized String getOperatorTypeDetails() throws HttpException {
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
-        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.get(getApplicationResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setGoodOrPsv(apiResponse.extract().jsonPath().getString("goodsOrPsv.description"));
         return getGoodOrPsv();
     }
 
-    public String getBusinessTypeDetails() {
+    public synchronized String getBusinessTypeDetails() throws HttpException {
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
-        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.get(getApplicationResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setBusinessType(apiResponse.extract().jsonPath().getString("organisation.type.description"));
 
         return getBusinessType();
     }
 
-    public String getLicenceTypeDetails() {
+    public synchronized String getLicenceTypeDetails() throws HttpException {
         String getApplicationResource = URL.build(env, String.format("licence/%s", application.getLicenceId())).toString();
 
-        apiResponse = RestUtils.get(getApplicationResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.get(getApplicationResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setLicenceType(apiResponse.extract().jsonPath().getString("licenceType.description"));
         return getLicenceType();
     }
 
-    public void updateLicenceStatus(String status) {
+    public synchronized void updateLicenceStatus(String status) throws HttpException {
         String typeOfLicenceResource = URL.build(env, String.format("licence/%s/decisions/%s", application.getLicenceId(), status)).toString();
 
         GenericBuilder genericBuilder = new GenericBuilder().withId(application.getLicenceId());
-        apiResponse = RestUtils.post(genericBuilder, typeOfLicenceResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(genericBuilder, typeOfLicenceResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
 
-    public ValidatableResponse surrenderLicence(String licenceId) {
+    public synchronized ValidatableResponse surrenderLicence(String licenceId) throws HttpException {
         String surrenderLicenceResource = URL.build(env, String.format("licence/%s/surrender", licenceId)).toString();
 
         SurrendersBuilder surrendersBuilder = new SurrendersBuilder().withLicence(licenceId);
-        apiResponse = RestUtils.post(surrendersBuilder, surrenderLicenceResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(surrendersBuilder, surrenderLicenceResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
         return apiResponse;
     }
 
-    public ValidatableResponse updateSurrender(Integer surrenderId) {
+    public synchronized ValidatableResponse updateSurrender(Integer surrenderId) throws HttpException {
         String updateSurrender = URL.build(env, String.format("licence/%s/surrender", application.getLicenceId())).toString();
 
         SurrendersBuilder surrendersBuilder = new SurrendersBuilder().withLicence(application.getLicenceId())
                 .withId(surrenderId.toString()).withDiscsStolen(getDiscsStolen()).withVersion(version);
-        apiResponse = RestUtils.put(surrendersBuilder, updateSurrender, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(surrendersBuilder, updateSurrender, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         return apiResponse;
     }
 
-    public ValidatableResponse deleteSurrender(Integer surrenderId) {
+    public synchronized ValidatableResponse deleteSurrender(Integer surrenderId) throws HttpException {
         String deleteSurrender = URL.build(env, String.format("licence/%s/surrender", application.getLicenceId())).toString();
 
         GenericBuilder genericBuilder = new GenericBuilder().withLicence(application.getLicenceId()).withId(surrenderId.toString());
 
-        apiResponse = RestUtils.delete(genericBuilder, deleteSurrender, apiHeaders.getHeaders());
+        apiResponse = RestUtils.delete(genericBuilder, deleteSurrender, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         return apiResponse;
     }
 
-    public void updateFeatureToggle(String toggleId, String friendlyName, String configName, String status) {
+    public synchronized void updateFeatureToggle(String toggleId, String friendlyName, String configName, String status) throws HttpException {
         String updateFeatureToggleResource = URL.build(env, String.format("feature-toggle/%s/", toggleId)).toString();
 
         FeatureToggleBuilder featureToggleBuilder = new FeatureToggleBuilder().withId(toggleId).withFriendlyName(friendlyName).withConfigName(configName)
                 .withStatus(status);
 
-        apiResponse = RestUtils.put(featureToggleBuilder, updateFeatureToggleResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(featureToggleBuilder, updateFeatureToggleResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         apiResponse.statusCode(HttpStatus.SC_OK);
     }
 
-    private void getDiscInformation() {
+    private synchronized void getDiscInformation() throws HttpException {
         Map<String, String> queryParams = new HashMap<>();
         {
             queryParams.put("niFlag", "N");
@@ -1025,13 +1028,13 @@ public class UpdateLicence extends BaseAPI {
             queryParams.put("discSequence", getDiscSequence());
         }
         String discNumberingResource = URL.build(env, "disc-sequence/discs-numbering").toString();
-        apiResponse = RestUtils.getWithQueryParams(discNumberingResource, queryParams, apiHeaders.getHeaders());
+        apiResponse = RestUtils.getWithQueryParams(discNumberingResource, queryParams, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         setStartNumber(apiResponse.extract().jsonPath().get("results.startNumber").toString());
         setEndNumber(apiResponse.extract().jsonPath().get("results.endNumber").toString());
     }
 
-    public void printLicenceDiscs() {
+    public synchronized void printLicenceDiscs() throws HttpException {
         String operator;
         getDiscInformation();
         if (application.getOperatorType().equals(OperatorType.GOODS.asString())) {
@@ -1042,14 +1045,18 @@ public class UpdateLicence extends BaseAPI {
         String discPrintResource = URL.build(env, String.format("%s-disc/print-discs/", operator)).toString();
         PrintDiscBuilder printDiscBuilder = new PrintDiscBuilder().withDiscSequence(getDiscSequence())
                 .withLicenceType(application.getLicenceType()).withNiFlag(application.getNiFlag()).withStartNumber(getStartNumber());
-        apiResponse = RestUtils.post(printDiscBuilder, discPrintResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(printDiscBuilder, discPrintResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
-        assertThat(apiResponse.extract().body().jsonPath().get("id.queue"), Matchers.notNullValue());
-        setQueueId(apiResponse.extract().jsonPath().get("id.queue").toString());
-        confirmDiscPrint();
+        if (apiResponse.extract().body().jsonPath().get("id.queue").toString() == null){
+            throw new AssertionError("Queue id is empty");
+        }else {
+            setQueueId(apiResponse.extract().jsonPath().get("id.queue").toString());
+            confirmDiscPrint();
+
+        }
     }
 
-    private void confirmDiscPrint() {
+    private synchronized void confirmDiscPrint() throws HttpException {
         String operator;
         if (application.getOperatorType().equals(OperatorType.GOODS.asString())) {
             operator = "goods";
@@ -1060,11 +1067,11 @@ public class UpdateLicence extends BaseAPI {
         ConfirmPrintBuilder confirmPrintBuilder = new ConfirmPrintBuilder().withDiscSequence(getDiscSequence())
                 .withEndNumber(getEndNumber()).withStartNumber(getStartNumber()).withIsSuccessfull(true)
                 .withLicenceType(application.getLicenceType()).withNiFlag(application.getNiFlag()).withQueueId(getQueueId());
-        apiResponse = RestUtils.post(confirmPrintBuilder, discConfirmResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(confirmPrintBuilder, discConfirmResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
 
-    public void submitInterimApplication(String applicationId) {
+    public synchronized void submitInterimApplication(String applicationId) throws HttpException {
 
         String interimApplicationResource = URL.build(env, String.format("application/%s/interim/", applicationId)).toString();
         int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationId, "version", "1"));
@@ -1072,29 +1079,29 @@ public class UpdateLicence extends BaseAPI {
         InterimApplicationBuilder interimApplicationBuilder = new InterimApplicationBuilder().withAuthHgvVehicles(String.valueOf(application.getNoOfAddedHgvVehicles())).withAuthTrailers(String.valueOf(application.getNoOfAddedHgvVehicles()))
                 .withRequested("Y").withReason(getInterimReason()).withStartDate(getInterimStartDate()).withEndDate(getInterimEndDate())
                 .withAction("grant").withId(applicationId).withVersion(applicationVersion);
-        apiResponse = RestUtils.put(interimApplicationBuilder, interimApplicationResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.put(interimApplicationBuilder, interimApplicationResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
     }
 
-    public void grantInterimApplication(String applicationId) {
+    public synchronized void grantInterimApplication(String applicationId) throws HttpException {
         submitInterimApplication(applicationId);
         String interimApplicationResource = URL.build(env, String.format("application/%s/interim/grant/", applicationId)).toString();
 
         InterimApplicationBuilder interimApplicationBuilder = new InterimApplicationBuilder().withId(applicationId);
-        apiResponse = RestUtils.post(interimApplicationBuilder, interimApplicationResource, apiHeaders.getHeaders());
+        apiResponse = RestUtils.post(interimApplicationBuilder, interimApplicationResource, header());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
     }
 
-    public ValidatableResponse updateLgvAuthorisationOnVariation(int hgvAuthorisation, int lgvAuthorisation) {
+    public synchronized ValidatableResponse updateLgvAuthorisationOnVariation(int hgvAuthorisation, int lgvAuthorisation) throws HttpException {
         if (this.application.getLicenceType().equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
         } else {
             int applicationVersion = Integer.parseInt(this.fetchApplicationInformation(this.variationApplicationId, "version", "1"));
             String updateOperatingCentreResource = URL.build(env, String.format("application/%s/operating-centres", this.variationApplicationId)).toString();
             OperatingCentreUpdater updateOperatingCentre = (new OperatingCentreUpdater()).withId(this.variationApplicationId).withTrafficArea(this.application.getTrafficArea().value()).withEnforcementArea(this.application.getEnforcementArea().value()).withVersion(applicationVersion).withTotAuthHgvVehicles(hgvAuthorisation).withTotCommunityLicences(1).withTotAuthTrailers(this.application.getNoOfOperatingCentreTrailerAuthorised()).withTotAuthLgvVehicles(lgvAuthorisation);
-            this.apiResponse = RestUtils.put(updateOperatingCentre, updateOperatingCentreResource, this.apiHeaders.getHeaders());
+            this.apiResponse = RestUtils.put(updateOperatingCentre, updateOperatingCentreResource, header());
             Utils.checkHTTPStatusCode(this.apiResponse, 200);
             return this.apiResponse;
         }

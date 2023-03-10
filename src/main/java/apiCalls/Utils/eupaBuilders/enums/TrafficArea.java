@@ -2,7 +2,7 @@ package apiCalls.Utils.eupaBuilders.enums;
 
 import activesupport.number.Int;
 import com.fasterxml.jackson.annotation.JsonValue;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;

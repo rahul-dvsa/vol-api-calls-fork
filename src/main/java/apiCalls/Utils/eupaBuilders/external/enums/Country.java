@@ -1,7 +1,7 @@
 package apiCalls.Utils.eupaBuilders.external.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 public enum Country {

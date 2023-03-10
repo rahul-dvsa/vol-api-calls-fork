@@ -14,6 +14,7 @@ import apiCalls.Utils.generic.Utils;
 import apiCalls.enums.BusinessType;
 import apiCalls.enums.UserTitle;
 import io.restassured.response.ValidatableResponse;
+import org.apache.hc.core5.http.HttpException;
 import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
@@ -105,9 +106,7 @@ public class RegisterUser {
 
     private EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
 
-    private ValidatableResponse apiResponse;
-
-    private Headers apiHeaders = new Headers();
+    private final Headers apiHeaders = new Headers();
 
     public RegisterUser() {
         FakerUtils faker = new FakerUtils();
@@ -121,7 +120,7 @@ public class RegisterUser {
         setBusinessType( BusinessType.LIMITED_COMPANY.asString() );
     }
 
-    public ValidatableResponse registerUser() {
+    public synchronized ValidatableResponse registerUser() throws HttpException {
         String registerResource = URL.build(env, "user/selfserve/register").toString();
 
         PersonBuilder personBuilder = new PersonBuilder().withTitle(getTitle()).withForename(getForeName()).withFamilyName(getFamilyName()).withBirthDate(getBirthDate());
@@ -130,7 +129,7 @@ public class RegisterUser {
         SelfServeUserRegistrationDetailsBuilder selfServeUserRegistrationDetailsBuilder = new SelfServeUserRegistrationDetailsBuilder().withLoginId(getUserName()).withContactDetails(contactDetailsBuilder)
                 .withOrganisationName(getOrganisationName()).withBusinessType(getBusinessType());
 
-        apiResponse = RestUtils.post(selfServeUserRegistrationDetailsBuilder, registerResource, apiHeaders.getHeaders());
+        ValidatableResponse apiResponse = RestUtils.post(selfServeUserRegistrationDetailsBuilder, registerResource, apiHeaders.getHeaders());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
         setUserId(apiResponse.extract().jsonPath().getString("id.user"));

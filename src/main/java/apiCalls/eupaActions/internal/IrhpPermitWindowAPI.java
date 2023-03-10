@@ -8,6 +8,7 @@ import apiCalls.Utils.generic.Utils;
 import apiCalls.actions.AccessToken;
 import apiCalls.enums.UserRoles;
 import io.restassured.response.ValidatableResponse;
+import org.apache.hc.core5.http.HttpException;
 import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
@@ -22,8 +23,9 @@ public class IrhpPermitWindowAPI {
     private static ValidatableResponse apiResponse;
     private static Headers apiHeaders = new Headers();
 
-    public static OpenByCountryModel openByCountry(String[] countryIds) {
-        apiHeaders.headers.put( "Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+    public static OpenByCountryModel openByCountry(String[] countryIds) throws HttpException {
+        AccessToken accessToken = new AccessToken();
+        apiHeaders.headers.put( "Authorization", "Bearer " + accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
         String openCountries = URL.build(env,"irhp-permit-window/open-by-country").toString();
 
         Map<String, String> map = new HashMap<>();
@@ -38,9 +40,8 @@ public class IrhpPermitWindowAPI {
         return apiResponse.extract().as(OpenByCountryModel.class);
     }
 
-    public static OpenByCountryModel openByCountry() {
+    public static OpenByCountryModel openByCountry() throws HttpException {
         List<String> countryIds = IrhpPermitStockAPI.availableCountries().getAllCountryIds();
         return openByCountry(countryIds.toArray(new String[0]));
     }
-
 }

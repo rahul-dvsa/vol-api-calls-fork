@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 
 public class OpenWindowsAPI extends BaseAPI {
 
-    private static String baseResource = "permits/open-windows/";
+    private static final String baseResource = "permits/open-windows/";
     private static ValidatableResponse response;
 
     public static WindowsModel openWindows(TypeModel type) {

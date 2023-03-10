@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class ApplicationAPI extends BaseAPI {
 
-    private static String baseResource = "irhp-application/";
+    private static final String baseResource = "irhp-application/";
     private static ValidatableResponse response;
 
     public static PermitApplicationModel active(String licenceID, TypeModel type) {
@@ -54,5 +54,4 @@ public class ApplicationAPI extends BaseAPI {
         HashMap<String, Integer> result = response.extract().body().jsonPath().get("$");
         return new HashSet<>(result.values());
     }
-
 }

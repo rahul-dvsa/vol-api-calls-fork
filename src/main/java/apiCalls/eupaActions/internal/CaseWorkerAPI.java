@@ -10,6 +10,7 @@ import apiCalls.actions.AccessToken;
 import apiCalls.enums.UserRoles;
 import apiCalls.eupaActions.BaseAPI;
 import io.restassured.response.ValidatableResponse;
+import org.apache.hc.core5.http.HttpException;
 import org.apache.http.HttpStatus;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
@@ -18,9 +19,10 @@ import org.jetbrains.annotations.NotNull;
 public class CaseWorkerAPI extends BaseAPI {
 
     private static ValidatableResponse response;
+    private static AccessToken accessToken = new AccessToken();
 
-    public static void overview(@NotNull OverviewModel overview) {
-        updateHeader("Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+    public static void overview(@NotNull OverviewModel overview) throws HttpException {
+        updateHeader("Authorization", "Bearer " + accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
         URL.build(EnvironmentType.getEnum(Properties.get("env", true)), String.format("application/%s/overview/", overview.getApplicationId()));
         int version = 1;
 
@@ -40,8 +42,8 @@ public class CaseWorkerAPI extends BaseAPI {
         response.statusCode(HttpStatus.SC_OK);
     }
 
-    public static StandardResponseModel grantApplication(@NotNull GrantApplicationModel grantApplication) {
-        updateHeader( "Authorization", "Bearer " + AccessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+    public static StandardResponseModel grantApplication(@NotNull GrantApplicationModel grantApplication) throws HttpException {
+        updateHeader( "Authorization", "Bearer " + accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
         URL.build(EnvironmentType.getEnum(Properties.get("env", true)), String.format("application/%s/grant/", grantApplication.getId()));
 
         response = RestUtils.put(grantApplication, String.valueOf(URL.getURL()), getHeaders());
