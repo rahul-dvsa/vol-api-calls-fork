@@ -20,7 +20,7 @@ import org.joda.time.LocalDate;
 
 import java.util.*;
 
-public class GrantLicence {
+public class GrantLicence extends BaseAPI{
 
     private static final Logger LOGGER = LogManager.getLogger(GrantLicence.class);
     private final EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
@@ -28,7 +28,7 @@ public class GrantLicence {
     private final Headers apiHeaders = new Headers();
     private ValidatableResponse apiResponse;
     private final CreateApplication application;
-    private List outstandingFeesIds;
+    private List<Integer> outstandingFeesIds;
     private final List<Double> feesToPay = new ArrayList<>();
     private int feeId;
     private String dateState;
@@ -73,14 +73,13 @@ public class GrantLicence {
      */
 
     public synchronized void createOverview() throws HttpException {
-        BaseAPI baseAPI = new BaseAPI();
         String overviewResource = URL.build(env, String.format("application/%s/overview/", application.getApplicationId())).toString();
         String status = "1";
         String overrideOption = "Y";
         String transportArea = "D";
-        String trackingId = baseAPI.fetchApplicationInformation(application.getApplicationId(), "applicationTracking.id", null);
-        int applicationVersion = Integer.parseInt(baseAPI.fetchApplicationInformation(application.getApplicationId(), "version", "1"));
-        int applicationTrackingVersion = Integer.parseInt(baseAPI.fetchApplicationInformation(application.getApplicationId(), "applicationTracking.version", "1"));
+        String trackingId = fetchApplicationInformation(application.getApplicationId(), "applicationTracking.id", null);
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(application.getApplicationId(), "version", "1"));
+        int applicationTrackingVersion = Integer.parseInt(fetchApplicationInformation(application.getApplicationId(), "applicationTracking.version", "1"));
 
         TrackingBuilder tracking = new TrackingBuilder().withId(trackingId).withVersion(applicationTrackingVersion).withAddressesStatus(status).withBusinessDetailsStatus(status).withBusinessTypeStatus(status)
                 .withCommunityLicencesStatus(status).withConditionsUndertakingsStatus(status).withConvictionsPenaltiesStatus(status).withFinancialEvidenceStatus(status)

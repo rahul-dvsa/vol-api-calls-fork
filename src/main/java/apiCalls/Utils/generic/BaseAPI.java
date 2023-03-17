@@ -11,40 +11,30 @@ import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
 
-public class BaseAPI {
-    protected static EnvironmentType env;
+public class BaseAPI extends AccessToken {
+    protected static EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
     static Headers headers = new Headers();
 
-
-    public BaseAPI() {
-        try {
-            env = EnvironmentType.getEnum(Properties.get("env", true));
-        } catch (MissingRequiredArgument missingRequiredArgument) {
-            missingRequiredArgument.printStackTrace();
-        }
+    public synchronized String adminJWT() throws HttpException {
+        return getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString());
     }
 
-    public String adminJWT() throws HttpException {
-        AccessToken accessToken = new AccessToken();
-        return accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString());
-    }
-
-    public String fetchApplicationInformation(String applicationNumber, String jsonPath, String defaultReturn) throws HttpException {
+    public synchronized String fetchApplicationInformation(String applicationNumber, String jsonPath, String defaultReturn) throws HttpException {
         String url = URL.build(env, String.format("application/%s/overview/", applicationNumber)).toString();
         return retrieveAPIData(url, jsonPath, defaultReturn);
     }
 
-    public String fetchTMApplicationInformation(String applicationNumber, String jsonPath, String defaultReturn) throws HttpException {
+    public synchronized String fetchTMApplicationInformation(String applicationNumber, String jsonPath, String defaultReturn) throws HttpException {
         String url = URL.build(env, String.format("transport-manager-application/%s", applicationNumber)).toString();
         return retrieveAPIData(url, jsonPath, defaultReturn);
     }
 
-    public String fetchInternalUserInformation(String userId, String jsonPath, String defaultReturn) throws HttpException {
+    public synchronized String fetchInternalUserInformation(String userId, String jsonPath, String defaultReturn) throws HttpException {
         String url = URL.build(env, String.format("user/internal/%s", userId)).toString();
         return retrieveAPIData(url, jsonPath, defaultReturn);
     }
 
-    public String retrieveAPIData(String url, String jsonPath, String defaultReturn) throws HttpException {
+    public synchronized String retrieveAPIData(String url, String jsonPath, String defaultReturn) throws HttpException {
         headers.getHeaders().put("Authorization", "Bearer " + adminJWT());
         ValidatableResponse response = RestUtils.get(url, headers.getHeaders());
         try {

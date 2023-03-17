@@ -13,15 +13,13 @@ import org.dvsa.testing.lib.url.utils.EnvironmentType;
 import java.util.HashMap;
 
 public class AccessToken {
-
     EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
-
+    HashMap<String, String> header = new HashMap<>();
+    TokenRequestBuilder tokenBody = new TokenRequestBuilder();
     public synchronized String getToken(String username, String password, String realm) throws HttpException {
         String jwtTokenResource;
-        HashMap<String, String> header = new HashMap<>();
-
         jwtTokenResource = URL.build(env).toString().concat("auth/login");
-        TokenRequestBuilder tokenBody = new TokenRequestBuilder().withUsername(username).withPassword(password).withRealm(realm);
+        tokenBody.withUsername(username).withPassword(password).withRealm(realm);
         ValidatableResponse tokenResponse = RestUtils.post(tokenBody, jwtTokenResource, header);
 
         Utils.checkHTTPStatusCode(tokenResponse, HttpStatus.SC_CREATED);
