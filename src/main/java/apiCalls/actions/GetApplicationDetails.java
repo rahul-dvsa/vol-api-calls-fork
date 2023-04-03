@@ -18,7 +18,7 @@ public class GetApplicationDetails {
     private String licenceId;
     private String licenceNumber;
 
-    private EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
+    private final EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
     Headers apiHeaders = new Headers();
 
     public GetApplicationDetails(CreateApplication application) {

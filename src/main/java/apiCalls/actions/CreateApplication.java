@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.LinkedHashMap;
 
-public class CreateApplication {
+public class CreateApplication extends BaseAPI{
     private static final Logger LOGGER = LogManager.getLogger(CreateApplication.class);
 
     FakerUtils faker = new FakerUtils();
@@ -134,8 +134,6 @@ public class CreateApplication {
     private int restrictedVehicles;
 
     private double hours;
-
-    private final BaseAPI baseAPI = new BaseAPI();
 
     public Headers apiHeaders = new Headers();
 
@@ -1104,7 +1102,7 @@ public class CreateApplication {
     }
 
     public synchronized ValidatableResponse addBusinessType() throws HttpException {
-        String organisationVersion = baseAPI.fetchApplicationInformation(getApplicationId(), "licence.organisation.version", "1");
+        String organisationVersion = fetchApplicationInformation(getApplicationId(), "licence.organisation.version", "1");
         LOGGER.info("AP Version Number: " + organisationVersion);
         String updateBusinessTypeResource = URL.build(env, String.format("organisation/%s/business-type/", getUserDetails().getOrganisationId())).toString();
 
@@ -1119,7 +1117,7 @@ public class CreateApplication {
     }
 
     public synchronized ValidatableResponse addBusinessDetails() throws HttpException {
-        String organisationVersion = baseAPI.fetchApplicationInformation(getApplicationId(), "licence.organisation.version", "1");
+        String organisationVersion = fetchApplicationInformation(getApplicationId(), "licence.organisation.version", "1");
         String updateBusinessDetailsResource = URL.build(env, String.format("organisation/business-details/application/%s", getApplicationId())).toString();
 
         AddressBuilder address = new AddressBuilder().withAddressLine1(registeredAddressLine1).withAddressLine2(registeredAddressLine2).withAddressLine3(registeredAddressLine3)
@@ -1210,7 +1208,7 @@ public class CreateApplication {
         if (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString())) {
             return null;
         }
-        int applicationVersion = Integer.parseInt(baseAPI.fetchApplicationInformation(getApplicationId(), "version", "1"));
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationId(), "version", "1"));
         String updateOperatingCentreResource = URL.build(env, String.format("application/%s/operating-centres", getApplicationId())).toString();
         OperatingCentreUpdater updateOperatingCentre = new OperatingCentreUpdater().withId(getApplicationId())
                 .withTrafficArea(getTrafficArea().value()).withEnforcementArea(getEnforcementArea().value()).withVersion(applicationVersion);
@@ -1248,7 +1246,7 @@ public class CreateApplication {
         }
 
         String financialEvidenceResource = URL.build(env, String.format("application/%s/financial-evidence", getApplicationId())).toString();
-        int applicationVersion = Integer.parseInt(baseAPI.fetchApplicationInformation(getApplicationId(), "version", "1"));
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationId(), "version", "1"));
 
         FinancialEvidenceBuilder financialEvidenceBuilder = new FinancialEvidenceBuilder().withId(getApplicationId())
                 .withVersion(applicationVersion).withFinancialEvidenceUploaded(0);
@@ -1288,7 +1286,7 @@ public class CreateApplication {
         if (operatorType.equals(OperatorType.PUBLIC.asString()) && (licenceType.equals(LicenceType.SPECIAL_RESTRICTED.asString()))) {
             return null;
         }
-        int TMApplicationVersion = Integer.parseInt(baseAPI.fetchTMApplicationInformation(getTransportManagerApplicationId(), "version", "1"));
+        int TMApplicationVersion = Integer.parseInt(fetchTMApplicationInformation(getTransportManagerApplicationId(), "version", "1"));
         String submitTransportManager = URL.build(env, String.format("transport-manager-application/%s/submit", getTransportManagerApplicationId())).toString();
         GenericBuilder genericBuilder = new GenericBuilder().withId(transportManagerApplicationId).withVersion(TMApplicationVersion);
         apiResponse = RestUtils.put(genericBuilder, submitTransportManager, apiHeaders.getHeaders());
@@ -1302,7 +1300,7 @@ public class CreateApplication {
             return null;
         }
         String addTMresp = URL.build(env, String.format("transport-manager-application/%s/update-details/", getTransportManagerApplicationId())).toString();
-        int TMApplicationVersion = Integer.parseInt(baseAPI.fetchTMApplicationInformation(getTransportManagerApplicationId(), "version", "1"));
+        int TMApplicationVersion = Integer.parseInt(fetchTMApplicationInformation(getTransportManagerApplicationId(), "version", "1"));
         AddressBuilder Address = new AddressBuilder().withAddressLine1(getTransportManagerAddressLine1()).withAddressLine2(getTransportManagerAddressLine2()).withAddressLine3(getTransportManagerAddressLine3())
                 .withAddressLine4(getTransportManagerAddressLine4()).withTown(getTransportManagerTown()).withPostcode(postCodeByTrafficArea).withCountryCode(getCountryCode());
         TmRespBuilder tmRespBuilder = new TmRespBuilder().withEmail(getTransportManagerEmailAddress()).withPlaceOfBirth(getTransportConsultantTown()).withHomeAddress(Address).withWorkAddress(Address).withTmType(getTransportManagerType()).withIsOwner(isOwner)
@@ -1321,7 +1319,7 @@ public class CreateApplication {
             return null;
         }
         String submitTmResp = URL.build(env, String.format("transport-manager-application/%s/submit", getTransportManagerApplicationId())).toString();
-        int TMApplicationVersion = Integer.parseInt(baseAPI.fetchTMApplicationInformation(getTransportManagerApplicationId(), "version", "1"));
+        int TMApplicationVersion = Integer.parseInt(fetchTMApplicationInformation(getTransportManagerApplicationId(), "version", "1"));
 
         GenericBuilder genericBuilder = new GenericBuilder().withId(transportManagerApplicationId).withVersion(TMApplicationVersion);
         apiResponse = RestUtils.put(genericBuilder, submitTmResp, apiHeaders.getHeaders());
@@ -1381,7 +1379,7 @@ public class CreateApplication {
         }
 
         String vehicleDeclarationResource = URL.build(env, String.format(String.format("application/%s/vehicle-declaration", applicationId))).toString();
-        int applicationVersion = Integer.parseInt(baseAPI.fetchApplicationInformation(getApplicationId(), "version", "1"));
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationId(), "version", "1"));
 
         VehicleDeclarationBuilder vehicleDeclarationBuilder = new VehicleDeclarationBuilder().withId(getApplicationId()
                 ).withPsvVehicleSize(psvVehicleSize)
@@ -1401,7 +1399,7 @@ public class CreateApplication {
         String financialHistoryAnswer = "N";
         String insolvencyAnswer = "false";
         String financialHistoryResource = URL.build(env, String.format("application/%s/financial-history", getApplicationId())).toString();
-        int applicationVersion = Integer.parseInt(baseAPI.fetchApplicationInformation(getApplicationId(), "version", "1"));
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationId(), "version", "1"));
 
         FinancialHistoryBuilder financialHistoryBuilder = new FinancialHistoryBuilder().withId(getApplicationId()).withVersion(String.valueOf(applicationVersion)).withBankrupt(financialHistoryAnswer)
                 .withLiquidation(financialHistoryAnswer).withReceivership(financialHistoryAnswer).withAdministration(financialHistoryAnswer).withAdministration(financialHistoryAnswer)
@@ -1421,7 +1419,7 @@ public class CreateApplication {
         String safetyInsVaries = "N";
         String safetyConfirmationOption = "Y";
         String applicationSafetyResource = URL.build(env, String.format("application/%s/safety", getApplicationId())).toString();
-        int applicationVersion = Integer.parseInt(baseAPI.fetchApplicationInformation(getApplicationId(), "version", "1"));
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationId(), "version", "1"));
         int numberOfWeeksUntilInspection = Int.random(1, 13);
 
         LicenceBuilder licence = new LicenceBuilder().withId(getLicenceId()).withVersion(version).withSafetyInsVaries(safetyInsVaries).withSafetyInsVehicles(String.valueOf(numberOfWeeksUntilInspection))
@@ -1456,7 +1454,7 @@ public class CreateApplication {
             return null;
         }
         String previousConvictionsResource = URL.build(env, String.format("application/%s/previous-convictions", applicationId)).toString();
-        int applicationVersion = Integer.parseInt(baseAPI.fetchApplicationInformation(applicationId, "version", "1"));
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationId, "version", "1"));
 
         CaseConvictionsPenaltiesBuilder convictionsPenaltiesBuilder = new CaseConvictionsPenaltiesBuilder().withId(applicationId).withConvictionsConfirmation("Y")
                 .withPrevConviction("N").withVersion(applicationVersion);
@@ -1473,7 +1471,7 @@ public class CreateApplication {
         }
         String optionResponse = "N";
         String licenceHistoryResource = URL.build(env, String.format("application/%s/licence-history", applicationId)).toString();
-        int applicationVersion = Integer.parseInt(baseAPI.fetchApplicationInformation(applicationId, "version", "1"));
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationId, "version", "1"));
 
         LicenceHistoryBuilder licenceHistoryBuilder = new LicenceHistoryBuilder().withId(applicationId).withPrevHadLicence(optionResponse).withPrevHasLicence(optionResponse)
                 .withPrevBeenAtPi(optionResponse).withPrevBeenDisqualifiedTc(optionResponse).withPrevBeenRefused(optionResponse).withPrevBeenRevoked(optionResponse).withPrevPurchasedAssets(optionResponse)
@@ -1504,7 +1502,7 @@ public class CreateApplication {
 
     public synchronized ValidatableResponse applicationReviewAndDeclare() throws HttpException {
 
-        int applicationVersion = Integer.parseInt(baseAPI.fetchApplicationInformation(getApplicationId(), "version", "1"));
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(getApplicationId(), "version", "1"));
         String reviewResource = URL.build(env, String.format("application/%s/declaration/", getApplicationId())).toString();
         DeclarationsAndUndertakings undertakings = new DeclarationsAndUndertakings().withId(getApplicationId()).withVersion(String.valueOf(applicationVersion))
                 .withSignatureType("sig_physical_signature").withDeclarationConfirmation("Y");
@@ -1519,7 +1517,7 @@ public class CreateApplication {
 
     public synchronized ValidatableResponse submitApplication() throws HttpException {
         String submitResource = URL.build(env, String.format("application/%s/submit", applicationId)).toString();
-        int applicationVersion = Integer.parseInt(baseAPI.fetchApplicationInformation(applicationId, "version", "1"));
+        int applicationVersion = Integer.parseInt(fetchApplicationInformation(applicationId, "version", "1"));
 
         GenericBuilder genericBuilder = new GenericBuilder().withId(applicationId).withVersion(applicationVersion);
         apiResponse = RestUtils.put(genericBuilder, submitResource, apiHeaders.getHeaders());
