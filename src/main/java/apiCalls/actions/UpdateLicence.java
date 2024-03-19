@@ -26,6 +26,7 @@ import java.util.*;
 
 public class UpdateLicence extends BaseAPI {
     private final CreateApplication application;
+    private final UserDetails userDetails;
     private ValidatableResponse apiResponse;
 
     private final Dates date = new Dates(new LocalDateCalendar());
@@ -662,8 +663,9 @@ public class UpdateLicence extends BaseAPI {
         }
     }
 
-    public UpdateLicence(CreateApplication application) {
+    public UpdateLicence(CreateApplication application, UserDetails userDetails) {
         this.application = application;
+        this.userDetails = userDetails;
         setVariationType(null);
 
         // Case Details
@@ -740,10 +742,8 @@ public class UpdateLicence extends BaseAPI {
         setInterimEndDate(date.getFormattedDate(0, 5, 0, "yyyy-MM-dd"));
     }
 
-    public synchronized HashMap<String, String> header() throws HttpException {
-        AccessToken accessToken = new AccessToken();
-        String header = accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString());
-        apiHeaders.getHeaders().put("Authorization", "Bearer " + header);
+    public synchronized HashMap<String, String> header() {
+        apiHeaders.getHeaders().put("Authorization", "Bearer " + userDetails.getAdminToken());
         return apiHeaders.headers;
     }
 
@@ -1047,9 +1047,9 @@ public class UpdateLicence extends BaseAPI {
                 .withLicenceType(application.getLicenceType()).withNiFlag(application.getNiFlag()).withStartNumber(getStartNumber());
         apiResponse = RestUtils.post(printDiscBuilder, discPrintResource, header());
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_CREATED);
-        if (apiResponse.extract().body().jsonPath().get("id.queue").toString() == null){
+        if (apiResponse.extract().body().jsonPath().get("id.queue").toString() == null) {
             throw new AssertionError("Queue id is empty");
-        }else {
+        } else {
             setQueueId(apiResponse.extract().jsonPath().get("id.queue").toString());
             confirmDiscPrint();
 

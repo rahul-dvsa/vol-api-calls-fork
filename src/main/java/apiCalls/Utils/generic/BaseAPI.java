@@ -1,22 +1,20 @@
 package apiCalls.Utils.generic;
 
-import activesupport.MissingRequiredArgument;
 import activesupport.http.RestUtils;
 import activesupport.system.Properties;
-import apiCalls.actions.AccessToken;
-import apiCalls.enums.UserRoles;
+import apiCalls.actions.UserDetails;
 import io.restassured.response.ValidatableResponse;
 import org.apache.hc.core5.http.HttpException;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
 
-public class BaseAPI extends AccessToken {
+public class BaseAPI extends UserDetails {
     protected static EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
     static Headers headers = new Headers();
 
-    public synchronized String adminJWT() throws HttpException {
-        return getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString());
+    public synchronized String adminJWT() {
+        return getAdminToken();
     }
 
     public synchronized String fetchApplicationInformation(String applicationNumber, String jsonPath, String defaultReturn) throws HttpException {
@@ -34,7 +32,7 @@ public class BaseAPI extends AccessToken {
         return retrieveAPIData(url, jsonPath, defaultReturn);
     }
 
-    public synchronized String retrieveAPIData(String url, String jsonPath, String defaultReturn) throws HttpException {
+    public synchronized String retrieveAPIData(String url, String jsonPath, String defaultReturn) {
         headers.getHeaders().put("Authorization", "Bearer " + adminJWT());
         ValidatableResponse response = RestUtils.get(url, headers.getHeaders());
         try {

@@ -13,15 +13,13 @@ import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
 import java.util.HashMap;
 
-public class InternalDetails {
+public class InternalDetails extends UserDetails {
 
-    private final AccessToken accessToken = new AccessToken();
     private final Headers apiHeaders = new Headers();
 
     EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
     public HashMap<String, String> header() throws HttpException {
-        String header = accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString());
-        apiHeaders.getHeaders().put("Authorization", "Bearer " + header);
+        apiHeaders.getHeaders().put("Authorization", "Bearer " + getAdminToken());
         return apiHeaders.headers;
     }
 

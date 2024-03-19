@@ -28,6 +28,7 @@ public class GrantLicence extends BaseAPI{
     private final Headers apiHeaders = new Headers();
     private ValidatableResponse apiResponse;
     private final CreateApplication application;
+    private final UserDetails userDetails;
     private List<Integer> outstandingFeesIds;
     private final List<Double> feesToPay = new ArrayList<>();
     private int feeId;
@@ -45,16 +46,15 @@ public class GrantLicence extends BaseAPI{
         this.dateState = dateState;
     }
 
-    public GrantLicence(CreateApplication application) {
+    public GrantLicence(CreateApplication application, UserDetails userDetails) {
         this.application = application;
+        this.userDetails = userDetails;
         Dates date = new Dates(LocalDate::new);
         setDateState(date.getFormattedDate(0, 0, 0, "yyyy-MM-dd"));
     }
 
     public HashMap<String, String> header() throws HttpException {
-        AccessToken accessToken = new AccessToken();
-        String header = accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString());
-        apiHeaders.getHeaders().put("Authorization", "Bearer " + header);
+        apiHeaders.getHeaders().put("Authorization", "Bearer " + userDetails.getAdminToken());
         return apiHeaders.headers;
     }
 

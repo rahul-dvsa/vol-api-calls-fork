@@ -15,9 +15,11 @@ import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
 
-public class GetUserDetails {
-
+public class UserDetails extends Token {
+    private Headers apiHeaders = new Headers();
     private String jwtToken;
+
+    private String adminToken;
     private String organisationId;
 
     EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
@@ -25,23 +27,24 @@ public class GetUserDetails {
     private ValidatableResponse apiResponse;
 
 
+
     public synchronized ValidatableResponse getUserDetails(String userType, String userId, String username, String password) throws HttpException {
         String userDetailsResource;
-        AccessToken accessToken = new AccessToken();
-        Headers apiHeaders = new Headers();
-        apiHeaders
-                .headers
-                .put("Authorization", "Bearer " + accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserType.INTERNAL.asString()));
-
+        if(getAdminToken().equals("")) {
+            setAdminToken(generateAdminToken());
+            apiHeaders
+                    .headers
+                    .put("Authorization", "Bearer " + getAdminToken());
+        }
         if (userType.equals(UserType.EXTERNAL.asString())) {
             userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, userId)).toString();
             apiResponse = RestUtils.get(userDetailsResource, apiHeaders.getHeaders());
-            setJwtToken(accessToken.getToken(username, password, Realm.SELF_SERVE.asString()));
+            setJwtToken(getToken(username, password, Realm.SELF_SERVE.asString()));
             setOrganisationId(apiResponse.extract().jsonPath().prettyPeek().getString("organisationUsers.organisation.id"));
         } else if (userType.equals(UserType.INTERNAL.asString())) {
             userDetailsResource = URL.build(env, String.format("user/%s/%s", userType, userId)).toString();
             apiResponse = RestUtils.get(userDetailsResource, apiHeaders.getHeaders());
-            setJwtToken(accessToken.getToken(username, password, Realm.INTERNAL.asString()));
+            setJwtToken(getToken(username, password, Realm.INTERNAL.asString()));
         }
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
         return apiResponse;
@@ -61,5 +64,14 @@ public class GetUserDetails {
 
     public void setOrganisationId(String organisationId) {
         this.organisationId = organisationId;
+    }
+
+    public String getAdminToken() {
+        return adminToken;
+    }
+
+    public String setAdminToken(String token) {
+        this.adminToken = token;
+        return token;
     }
 }

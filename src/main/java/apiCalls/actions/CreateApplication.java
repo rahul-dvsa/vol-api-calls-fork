@@ -25,7 +25,7 @@ public class CreateApplication extends BaseAPI{
     private static final int version = 1;
 
     private RegisterUser user;
-    private GetUserDetails userDetails;
+    private UserDetails userDetails;
     private String applicationId;
     private String licenceId;
     private String operatorType;
@@ -149,11 +149,11 @@ public class CreateApplication extends BaseAPI{
         this.user = user;
     }
 
-    public GetUserDetails getUserDetails() {
+    public UserDetails getUserDetails() {
         return userDetails;
     }
 
-    public void setUserDetails(GetUserDetails userDetails) {
+    public void setUserDetails(UserDetails userDetails) {
         this.userDetails = userDetails;
     }
 
@@ -953,7 +953,7 @@ public class CreateApplication extends BaseAPI{
         this.hours = hours;
     }
 
-    public CreateApplication(RegisterUser registerUser, GetUserDetails getUserDetails) {
+    public CreateApplication(RegisterUser registerUser, UserDetails getUserDetails) {
         // Classes
         setUser(registerUser);
         setUserDetails(getUserDetails);
