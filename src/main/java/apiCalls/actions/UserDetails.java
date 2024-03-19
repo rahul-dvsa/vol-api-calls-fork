@@ -27,10 +27,9 @@ public class UserDetails extends Token {
     private ValidatableResponse apiResponse;
 
 
-
     public synchronized ValidatableResponse getUserDetails(String userType, String userId, String username, String password) throws HttpException {
         String userDetailsResource;
-        if(getAdminToken().equals("")) {
+        if (getAdminToken() == null) {
             setAdminToken(generateAdminToken());
             apiHeaders
                     .headers
