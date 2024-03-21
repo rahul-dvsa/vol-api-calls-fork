@@ -25,7 +25,7 @@ public class IrhpPermitWindowAPI {
 
     public static OpenByCountryModel openByCountry(String[] countryIds) throws HttpException {
         Token accessToken = new Token();
-        apiHeaders.headers.put( "Authorization", "Bearer " + accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
+        apiHeaders.apiHeader.put( "Authorization", "Bearer " + accessToken.getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserRoles.INTERNAL.asString()));
         String openCountries = URL.build(env,"irhp-permit-window/open-by-country").toString();
 
         Map<String, String> map = new HashMap<>();
@@ -33,7 +33,7 @@ public class IrhpPermitWindowAPI {
             map.put(String.format("countries[%s]", i), String.format("%s", countryIds[i]));
         }
 
-        apiResponse = RestUtils.getWithQueryParams(openCountries, map, apiHeaders.getHeaders());
+        apiResponse = RestUtils.getWithQueryParams(openCountries, map, apiHeaders.getApiHeader());
 
         Utils.checkHTTPStatusCode(apiResponse, HttpStatus.SC_OK);
 

@@ -14,14 +14,18 @@ import org.dvsa.testing.lib.url.utils.EnvironmentType;
 import java.util.HashMap;
 
 public class Token {
-
+    private String adminToken;
     EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
     HashMap<String, String> header = new HashMap<>();
     TokenRequestBuilder tokenBody = new TokenRequestBuilder();
 
-    synchronized String generateAdminToken() throws HttpException {
-        return getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserType.INTERNAL.asString());
-
+    public synchronized String generateAdminToken() throws HttpException {
+        String adminToken = null;
+        if (getAdminToken() == null) {
+            adminToken = getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserType.INTERNAL.asString());;
+            setToken(adminToken);
+        }
+        return adminToken;
     }
 
     public synchronized String getToken(String username, String password, String realm) throws HttpException {
@@ -33,5 +37,13 @@ public class Token {
         Utils.checkHTTPStatusCode(tokenResponse, HttpStatus.SC_CREATED);
 
         return tokenResponse.extract().body().jsonPath().getString("flags.identity.Token.access_token");
+    }
+
+    public String getAdminToken() {
+        return adminToken;
+    }
+
+    public void setToken(String adminToken) {
+        this.adminToken = adminToken;
     }
 }

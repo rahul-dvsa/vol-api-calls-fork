@@ -8,7 +8,6 @@ import apiCalls.Utils.volBuilders.*;
 import apiCalls.Utils.generic.BaseAPI;
 import apiCalls.Utils.generic.Headers;
 import apiCalls.Utils.generic.Utils;
-import apiCalls.enums.UserRoles;
 import io.restassured.response.ValidatableResponse;
 import org.apache.hc.core5.http.HttpException;
 import org.apache.http.HttpStatus;
@@ -28,7 +27,6 @@ public class GrantLicence extends BaseAPI{
     private final Headers apiHeaders = new Headers();
     private ValidatableResponse apiResponse;
     private final CreateApplication application;
-    private final UserDetails userDetails;
     private List<Integer> outstandingFeesIds;
     private final List<Double> feesToPay = new ArrayList<>();
     private int feeId;
@@ -46,16 +44,15 @@ public class GrantLicence extends BaseAPI{
         this.dateState = dateState;
     }
 
-    public GrantLicence(CreateApplication application, UserDetails userDetails) {
+    public GrantLicence(CreateApplication application) {
         this.application = application;
-        this.userDetails = userDetails;
         Dates date = new Dates(LocalDate::new);
         setDateState(date.getFormattedDate(0, 0, 0, "yyyy-MM-dd"));
     }
 
     public HashMap<String, String> header() throws HttpException {
-        apiHeaders.getHeaders().put("Authorization", "Bearer " + userDetails.getAdminToken());
-        return apiHeaders.headers;
+        apiHeaders.getApiHeader().put("Authorization", "Bearer " + adminJWT());
+        return apiHeaders.apiHeader;
     }
 
     public synchronized ValidatableResponse grantLicence() throws HttpException {

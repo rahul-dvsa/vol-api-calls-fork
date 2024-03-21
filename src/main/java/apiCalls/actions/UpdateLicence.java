@@ -26,7 +26,6 @@ import java.util.*;
 
 public class UpdateLicence extends BaseAPI {
     private final CreateApplication application;
-    private final UserDetails userDetails;
     private ValidatableResponse apiResponse;
 
     private final Dates date = new Dates(new LocalDateCalendar());
@@ -663,9 +662,8 @@ public class UpdateLicence extends BaseAPI {
         }
     }
 
-    public UpdateLicence(CreateApplication application, UserDetails userDetails) {
+    public UpdateLicence(CreateApplication application) {
         this.application = application;
-        this.userDetails = userDetails;
         setVariationType(null);
 
         // Case Details
@@ -742,9 +740,9 @@ public class UpdateLicence extends BaseAPI {
         setInterimEndDate(date.getFormattedDate(0, 5, 0, "yyyy-MM-dd"));
     }
 
-    public synchronized HashMap<String, String> header() {
-        apiHeaders.getHeaders().put("Authorization", "Bearer " + userDetails.getAdminToken());
-        return apiHeaders.headers;
+    public synchronized HashMap<String, String> header() throws HttpException {
+        apiHeaders.getApiHeader().put("Authorization", "Bearer " + adminJWT());
+        return apiHeaders.apiHeader;
     }
 
     public synchronized void createVariation() throws HttpException {

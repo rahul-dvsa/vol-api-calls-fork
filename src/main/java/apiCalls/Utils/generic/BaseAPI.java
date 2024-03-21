@@ -2,18 +2,21 @@ package apiCalls.Utils.generic;
 
 import activesupport.http.RestUtils;
 import activesupport.system.Properties;
-import apiCalls.actions.UserDetails;
+import apiCalls.actions.Token;
 import io.restassured.response.ValidatableResponse;
 import org.apache.hc.core5.http.HttpException;
 import org.dvsa.testing.lib.url.api.URL;
 import org.dvsa.testing.lib.url.utils.EnvironmentType;
 
 
-public class BaseAPI extends UserDetails {
+public class BaseAPI extends Token {
     protected static EnvironmentType env = EnvironmentType.getEnum(Properties.get("env", true));
     static Headers headers = new Headers();
 
-    public synchronized String adminJWT() {
+    public synchronized String adminJWT() throws HttpException {
+        if(getAdminToken() == null){
+            generateAdminToken();
+        }
         return getAdminToken();
     }
 
@@ -32,9 +35,9 @@ public class BaseAPI extends UserDetails {
         return retrieveAPIData(url, jsonPath, defaultReturn);
     }
 
-    public synchronized String retrieveAPIData(String url, String jsonPath, String defaultReturn) {
-        headers.getHeaders().put("Authorization", "Bearer " + adminJWT());
-        ValidatableResponse response = RestUtils.get(url, headers.getHeaders());
+    public synchronized String retrieveAPIData(String url, String jsonPath, String defaultReturn) throws HttpException {
+        headers.apiHeader.put("Authorization", "Bearer " + adminJWT());
+        ValidatableResponse response = RestUtils.get(url, headers.getApiHeader());
         try {
             return response.extract().response().jsonPath().getString(jsonPath);
         } catch (NullPointerException ne) {
