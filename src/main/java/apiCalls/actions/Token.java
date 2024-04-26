@@ -22,7 +22,7 @@ public class Token {
     public synchronized String generateAdminToken() throws HttpException {
         String adminToken = null;
         if (getAdminToken() == null) {
-            adminToken = getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserType.INTERNAL.asString());;
+            adminToken = getToken(Utils.config.getString("adminUser"), Utils.config.getString("adminPassword"), UserType.INTERNAL.asString());
             setToken(adminToken);
         }
         return adminToken;
@@ -30,12 +30,15 @@ public class Token {
 
     public synchronized String getToken(String username, String password, String realm) throws HttpException {
         String jwtTokenResource;
+        ValidatableResponse tokenResponse;
         jwtTokenResource = URL.build(env).toString().concat("auth/login");
         tokenBody.withUsername(username).withPassword(password).withRealm(realm);
-        ValidatableResponse tokenResponse = RestUtils.post(tokenBody, jwtTokenResource, header);
-
-        Utils.checkHTTPStatusCode(tokenResponse, HttpStatus.SC_CREATED);
-
+        tokenResponse = RestUtils.post(tokenBody, jwtTokenResource, header);
+        try {
+            Utils.checkHTTPStatusCode(tokenResponse, HttpStatus.SC_CREATED);
+        } catch (Exception e) {
+            tokenResponse = RestUtils.post(tokenBody, jwtTokenResource, header);
+        }
         return tokenResponse.extract().body().jsonPath().getString("flags.identity.Token.access_token");
     }
 
