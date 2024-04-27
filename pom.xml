@@ -75,15 +75,17 @@
 
     <repositories>
         <repository>
-            <id>maven-releases</id>
-            <url>${nexus.releases}</url>
+            <id>github</id>
+            <name>GitHub dvsa Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/dvsa/vol-api-calls</url>
         </repository>
     </repositories>
-    <!--  Nexus Configuration  -->
+
     <distributionManagement>
         <repository>
-            <id>maven-releases</id>
-            <url>${nexus.releases}</url>
+            <id>github</id>
+            <name>GitHub dvsa Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/dvsa/vol-api-calls</url>
         </repository>
     </distributionManagement>
 </project>
