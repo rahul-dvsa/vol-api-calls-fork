@@ -75,27 +75,20 @@
 
     <repositories>
         <repository>
-            <id>github</id>
-            <name>GitHub dvsa Apache Maven Packages</name>
-            <url>${github.url}</url>
-        </repository>
-        <repository>
             <id>central</id>
             <url>https://repo1.maven.org/maven2</url>
         </repository>
         <repository>
-            <id>github active support</id>
+            <id>active-support</id>
             <url>https://maven.pkg.github.com/dvsa/vol-active-support</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
         </repository>
         <repository>
-            <id>github uri constructor</id>
-            <url>https://maven.pkg.github.com/dvsa/vol-uri-constructor</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
+            <id>github</id>
+            <name>GitHub dvsa Apache Maven Packages</name>
+            <url>${github.url}</url>
         </repository>
     </repositories>
 
