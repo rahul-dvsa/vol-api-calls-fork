@@ -13,8 +13,6 @@ public class Utils {
             int size = url.length();
             return url.substring(0, size - 1);
         }
-
         return url;
     }
-
 }
