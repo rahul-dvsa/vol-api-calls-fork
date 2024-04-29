@@ -75,18 +75,8 @@
 
     <repositories>
         <repository>
-            <id>central</id>
-            <url>https://repo1.maven.org/maven2</url>
-        </repository>
-        <repository>
-            <id>active-support</id>
-            <url>https://maven.pkg.github.com/dvsa/vol-active-support</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
         <repository>
             <id>github</id>
@@ -102,5 +92,4 @@
             <url>${github.url}</url>
         </repository>
     </distributionManagement>
-
 </project>
