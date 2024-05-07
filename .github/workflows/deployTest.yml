@@ -1,9 +1,7 @@
-name: CD
+name: deploy Test
 
 on:
     push:
-     branches:
-       - master
     
 jobs:
   build:
