@@ -22,6 +22,9 @@ jobs:
           release-type: maven
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     needs: release-please
     steps:
         - name: checkout code
