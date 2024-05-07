@@ -2,6 +2,8 @@ name: deploy Test
 
 on:
     push:
+     branches:
+       - nothing
     
 jobs:
   build:
