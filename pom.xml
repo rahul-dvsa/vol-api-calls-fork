@@ -16,7 +16,7 @@
         <uri-constructor.version>2.0.2</uri-constructor.version>
         <apache-http.version>5.2.1</apache-http.version>
         <maven.compiler.version>3.8.1</maven.compiler.version>
-        <github.url>https://maven.pkg.github.com/dvsa/vol-api-calls-fork</github.url>
+        <github.url>https://maven.pkg.github.com/rahul-dvsa/vol-api-calls-fork</github.url>
     </properties>
 
     <profiles>
