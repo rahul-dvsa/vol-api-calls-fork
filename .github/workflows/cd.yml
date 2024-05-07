@@ -37,18 +37,16 @@ jobs:
             distribution: 'temurin'
             cache: 'maven'
             
-        - name: build with Maven
-          uses: ./.github/workflows/maven_build.yml
-        
-        # - name: Build with Maven
-        #   run: |
-        #   mvn -B -P github package -file pom.xml
-         
         - name: Publish to GitHub Packages Apache Maven
           # if: ${{needs.release-please.outputs.release_created}}
           run: mvn --batch-mode deploy
           env:
             GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+            
+  call-build-maven:
+    needs: release-please
+    name: build with Maven
+    uses: ./.github/workflows/maven_build.yml
         
       
        
