@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.4](https://github.com/rahul-dvsa/vol-api-calls-fork/compare/v2.0.3...v2.0.4) (2024-05-07)
+
+
+### Bug Fixes
+
+* ci updated ([579bd10](https://github.com/rahul-dvsa/vol-api-calls-fork/commit/579bd1088287e4a74210ae82779fcb2e65d3c3b7))
+* ci workflow fixed ([88d98a0](https://github.com/rahul-dvsa/vol-api-calls-fork/commit/88d98a03a59dd89c3d0336a7475e4476601abd52))
+* updated workflows ([2023251](https://github.com/rahul-dvsa/vol-api-calls-fork/commit/2023251679f78d596f6f0b8ee3caa3043358ea34))
+* updated workflows ([33f5e06](https://github.com/rahul-dvsa/vol-api-calls-fork/commit/33f5e063fe782abba9ec6fe51ea2dc20c9b4497d))
+* updated workflows ([f969011](https://github.com/rahul-dvsa/vol-api-calls-fork/commit/f969011ce6436988f836eb8f0cdcbc4edfd037a6))
+* updated workflows ([5d9766e](https://github.com/rahul-dvsa/vol-api-calls-fork/commit/5d9766e15e1b783241528d6df2601dfcb7110b63))
+
 ## 1.0.0 (2024-05-07)
 
 
