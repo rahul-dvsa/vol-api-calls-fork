@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.1](https://github.com/rahul-dvsa/vol-api-calls-fork/compare/v1.0.0...v1.0.1) (2024-05-07)
+
+
+### Bug Fixes
+
+* updated cd workflow ([1704195](https://github.com/rahul-dvsa/vol-api-calls-fork/commit/1704195ac1768c5ede50e55ca415967f106efc9e))
+* updated cd workflow with permission ([cb449c4](https://github.com/rahul-dvsa/vol-api-calls-fork/commit/cb449c4ef8bb1e06c78157188d45256e17a948ad))
+* updated pom file ([8a01028](https://github.com/rahul-dvsa/vol-api-calls-fork/commit/8a010287f4ce4972231b52f051ba2aaafb3c15b6))
+* updated the cd ([7c83088](https://github.com/rahul-dvsa/vol-api-calls-fork/commit/7c83088fd56c3881a35b4f6b1fcc2bffb382c3b4))
+
 ## 1.0.0 (2024-05-07)
 
 
