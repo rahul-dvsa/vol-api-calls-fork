@@ -24,9 +24,9 @@ jobs:
         - name: Test
           run: mvn test
     
-    call-build-maven:      
-      name: build with Maven
-      uses: ./.github/workflows/maven_build.yml@feat/test
+  call-build-maven:      
+    name: build with Maven
+    uses: ./.github/workflows/maven_build.yml
         
         # - name: Build with Maven
         #   run: |
